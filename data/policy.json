@@ -1,0 +1,23 @@
+{
+  "language": "Answer in the customer's language. Default to English for English messages and Ukrainian otherwise, unless the customer asks for another language.",
+  "installment": {
+    "providers": ["monobank Pay in Parts"],
+    "min_payments": 2,
+    "max_payments": 3,
+    "min_order_uah": 3000,
+    "summary": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist."
+  },
+  "delivery": {
+    "carriers": ["Nova Poshta"],
+    "min_days": 1,
+    "max_days": 3,
+    "same_day": false,
+    "free_from_uah": 5000,
+    "summary": "Nova Poshta only, 1 to 3 days, no same-day dispatch. Free delivery from 5000 UAH."
+  },
+  "warranty": {
+    "months": 12,
+    "summary": "Manufacturer warranty 12 months."
+  },
+  "fallback": "If something is not in the catalog or policy, say you do not have confirmed information and offer to have a manager check."
+}

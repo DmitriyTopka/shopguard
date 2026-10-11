@@ -1,0 +1,94 @@
+{
+ "shop": "KitchenHub",
+ "currency": "UAH",
+ "note": "Fictional demo shop. Product models are real so that web fact-checks have something to find; prices and stock are invented. Specs are left empty until verified from manufacturer pages (TODO after Tavily key).",
+ "products": [
+  {
+   "sku": "KH-101",
+   "name": "Beko RCNA366I30W refrigerator",
+   "aliases": [
+    "beko",
+    "rcna366i30w",
+    "холодильник beko",
+    "холодильник"
+   ],
+   "price": 18999,
+   "in_stock": true,
+   "specs": {}
+  },
+  {
+   "sku": "KH-102",
+   "name": "Bosch WAN24263 washing machine",
+   "aliases": [
+    "bosch wan24263",
+    "wan24263",
+    "пральна машина bosch",
+    "стиральная машина bosch",
+    "стиралка bosch",
+    "пральна машина",
+    "стиральная машина",
+    "стиралка"
+   ],
+   "price": 21499,
+   "in_stock": true,
+   "specs": {}
+  },
+  {
+   "sku": "KH-103",
+   "name": "Samsung MS23K3513AW microwave",
+   "aliases": [
+    "samsung ms23k3513aw",
+    "ms23k3513aw",
+    "мікрохвильовка",
+    "микроволновка",
+    "мікрохвильова піч"
+   ],
+   "price": 4299,
+   "in_stock": true,
+   "specs": {}
+  },
+  {
+   "sku": "KH-104",
+   "name": "Philips FC9334 vacuum cleaner",
+   "aliases": [
+    "philips fc9334",
+    "fc9334",
+    "пилосос",
+    "пылесос"
+   ],
+   "price": 3899,
+   "in_stock": false,
+   "specs": {}
+  },
+  {
+   "sku": "KH-105",
+   "name": "Tefal KO2408 kettle",
+   "aliases": [
+    "tefal ko2408",
+    "ko2408",
+    "чайник",
+    "електрочайник",
+    "электрочайник"
+   ],
+   "price": 1199,
+   "in_stock": true,
+   "specs": {}
+  },
+  {
+   "sku": "KH-106",
+   "name": "Electrolux EEA17200L dishwasher",
+   "aliases": [
+    "electrolux eea17200l",
+    "eea17200l",
+    "посудомийка",
+    "посудомойка",
+    "посудомийна машина",
+    "посудомоечная машина",
+    "электролюкс"
+   ],
+   "price": 16999,
+   "in_stock": false,
+   "specs": {}
+  }
+ ]
+}

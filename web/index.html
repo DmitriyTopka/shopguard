@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShopGuard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5f1; --panel:#ffffff; --ink:#1c1d1f; --muted:#6b6d72; --line:#e3e1da;
+  --ok:#1f7a4d; --ok-bg:#e5f3ea; --bad:#b3261e; --bad-bg:#fbe7e5; --warn:#8a5a00; --warn-bg:#fdf1d8;
+  --accent:#76b900; --accent-ink:#2f4a00; --draft:#fff7f5;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --panel:#1b1c1e; --ink:#ececec; --muted:#9a9ca1; --line:#2c2e31;
+    --ok:#6fd39c; --ok-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; --warn:#f2c35b; --warn-bg:#3a2d10;
+    --accent:#8fd400; --accent-ink:#d9f5a6; --draft:#241a19;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:24px 16px 64px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:28px;margin:0;letter-spacing:-.01em}
+h1 span{color:var(--accent-ink);background:var(--accent);padding:0 6px;border-radius:4px;margin-left:6px;font-size:13px;vertical-align:middle;font-weight:600}
+.sub{color:var(--muted);max-width:640px;margin:6px 0 0}
+.status{font:12px "IBM Plex Mono",monospace;color:var(--muted);text-align:right}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.ask{display:grid;gap:10px}
+textarea{width:100%;min-height:64px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:13px;cursor:pointer}
+.chip:hover{border-color:var(--accent)}
+button.go{background:var(--ink);color:var(--panel);border:0;border-radius:8px;padding:10px 18px;font:600 15px "IBM Plex Sans";cursor:pointer}
+button.go:disabled{opacity:.5;cursor:wait}
+label.opt{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.bubble{border-radius:10px;padding:12px 14px;white-space:pre-wrap}
+.draft{background:var(--draft);border:1px dashed var(--bad)}
+.final{background:var(--ok-bg);border:1px solid var(--ok)}
+.label{font:500 12px "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.badge{font:600 12px "IBM Plex Mono",monospace;padding:2px 8px;border-radius:4px}
+.b-pass{background:var(--ok-bg);color:var(--ok)} .b-rewritten{background:var(--warn-bg);color:var(--warn)} .b-fallback{background:var(--bad-bg);color:var(--bad)}
+.claims{display:grid;gap:8px;margin-top:16px}
+.claim{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:start;border-left:4px solid var(--line);padding:8px 12px;background:var(--panel);border-radius:6px;border:1px solid var(--line)}
+.claim.violation{border-left:4px solid var(--bad)} .claim.ok{border-left:4px solid var(--ok)} .claim.unverified{border-left:4px solid var(--warn)}
+.claim .t{font:500 12px "IBM Plex Mono",monospace;text-transform:uppercase}
+.claim q{font-style:italic}
+.claim .src{font-size:12px;color:var(--muted);word-break:break-all}
+.pipe{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;font:12px "IBM Plex Mono",monospace;color:var(--muted)}
+.pipe div{border:1px solid var(--line);border-radius:6px;padding:4px 8px;background:var(--panel)}
+.err{color:var(--bad);margin-top:12px}
+.hidden{display:none}
+h2{font-size:16px;margin:28px 0 8px}
+.how{color:var(--muted);font-size:14px}
+.how ol{padding-left:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>ShopGuard <span>Nemotron</span></h1>
+      <p class="sub">An honesty guard for shop chatbots. Before a bot's reply reaches the customer, every promise in it (price, stock, installments, delivery, product specs) is checked against the shop's own data and the open web, and fixed if it is not true.</p>
+    </div>
+    <div class="status" id="status">loading...</div>
+  </header>
+
+  <div class="card ask">
+    <textarea id="msg" maxlength="500" placeholder="Ask the shop something, in any language..."></textarea>
+    <div class="row" id="samples"></div>
+    <div class="row">
+      <label class="opt"><input type="checkbox" id="byo"> check my own bot's reply</label>
+      <label class="opt">bot style
+        <select id="persona"><option value="eager">eager seller</option><option value="standard">standard</option></select>
+      </label>
+      <span style="flex:1"></span>
+      <button class="go" id="go">Ask the shop</button>
+    </div>
+    <div class="row" id="recorded"><span class="opt" style="font-size:13px;color:var(--muted)">Recorded runs (free, instant):</span></div>
+    <textarea id="draftIn" class="hidden" maxlength="1500" placeholder="Paste the reply your bot produced..."></textarea>
+  </div>
+
+  <div id="out" class="hidden">
+    <div class="cols">
+      <div>
+        <div class="label"><span>Bot draft (never sent)</span></div>
+        <div class="bubble draft" id="draft"></div>
+      </div>
+      <div>
+        <div class="label"><span>Sent to the customer</span><span class="badge" id="action"></span></div>
+        <div class="bubble final" id="final"></div>
+      </div>
+    </div>
+    <div class="claims" id="claims"></div>
+    <div class="pipe" id="pipe"></div>
+  </div>
+  <div class="err" id="err"></div>
+
+  <h2>How it works</h2>
+  <div class="how">
+    <ol>
+      <li><b>Draft.</b> A sales bot (NVIDIA Nemotron Nano on Nebius Token Factory) writes a reply. Or paste a reply from any bot you already run.</li>
+      <li><b>Extract.</b> Nemotron Nano lists every promise in the reply as JSON. A regex net also catches any amount of money or number of payments, so nothing slips through if extraction misses it.</li>
+      <li><b>Check.</b> Prices, stock, installments and delivery are checked by plain code against the catalog and the policy: exact and free. Product specs are looked up on the web with Tavily, and Nemotron Super judges whether the sources back the claim.</li>
+      <li><b>Fix.</b> If anything is wrong or unconfirmed, Nemotron Super rewrites the reply using only the correct facts, and the rewrite is checked again. If it still fails, a safe hand-off to a manager is sent instead.</li>
+    </ol>
+    <p>The shop, prices and stock are fictional. No real customer data is used.</p>
+  </div>
+</div>
+<script>
+const SAMPLES = [
+  "Can I get the Beko fridge in 12 monthly payments?",
+  "Does the Beko RCNA366I30W fridge have Wi-Fi?",
+  "Пылесос Philips FC9334 есть в наличии? Хочу сегодня забрать",
+  "Скільки коштує кавоварка DeLonghi Magnifica S?",
+  "Шо по ціні стиралка Bosch WAN24263, і доставка завтра буде?",
+];
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const judgeKey = new URLSearchParams(location.search).get("pass") || "";
+const headers = {"Content-Type": "application/json", ...(judgeKey ? {"X-Judge-Key": judgeKey} : {})};
+
+SAMPLES.forEach(s => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.textContent = s;
+  b.onclick = () => { $("msg").value = s; };
+  $("samples").appendChild(b);
+});
+$("byo").onchange = e => $("draftIn").classList.toggle("hidden", !e.target.checked);
+
+async function loadStatus(){
+  try{
+    const s = await (await fetch("/api/status", {headers})).json();
+    const b = s.budget;
+    const pool = s.judge ? `judge pool $${b.judge_usd}/${b.judge_cap_usd}` : `today $${b.public_usd}/${b.public_cap_usd}`;
+    $("status").innerHTML = `${s.live ? "LIVE · Nebius Token Factory" : "OFFLINE STUB (no API key)"}<br>${esc(s.models.fast)} · ${esc(s.models.smart)}<br>web check: ${s.web_check ? "Tavily on" : "off"} · ${pool}`;
+  }catch(e){ $("status").textContent = "status unavailable"; }
+}
+
+function render(r){
+  $("out").classList.remove("hidden");
+  $("draft").textContent = r.draft;
+  $("final").textContent = r.final;
+  const a = $("action");
+  a.textContent = {pass:"passed as is", rewritten:"fixed", fallback:"handed to manager"}[r.action] || r.action;
+  a.className = "badge b-" + r.action;
+  $("claims").innerHTML = r.verdicts.length ? r.verdicts.map(v => `
+    <div class="claim ${v.status}">
+      <div class="t">${esc(v.claim.type)}<br>${esc(v.status)}</div>
+      <div><q>${esc(v.claim.text)}</q><br>${esc(v.reason)}
+        ${v.source && v.source.startsWith("http") ? `<div class="src">source: <a href="${esc(v.source)}" target="_blank" rel="noopener">${esc(v.source)}</a></div>` : `<div class="src">checked against: ${esc(v.source)}${v.claim.source === "regex" ? " · caught by regex net" : ""}</div>`}
+      </div>
+    </div>`).join("") : `<div class="claim ok"><div class="t">no promises</div><div>The reply makes no checkable promises.</div></div>`;
+  const ms = (r.stages || []).map(s => `<div>${esc(s.name)} ${s.ms} ms${s.detail ? " · " + esc(s.detail) : ""}</div>`).join("");
+  $("pipe").innerHTML = ms + `<div>${r.calls.length} model calls · $${r.cost_usd.toFixed(4)}</div>`;
+}
+
+$("go").onclick = async () => {
+  const message = $("msg").value.trim();
+  if(!message) return;
+  $("go").disabled = true; $("err").textContent = "";
+  try{
+    const body = {message, persona: $("persona").value};
+    if($("byo").checked && $("draftIn").value.trim()) body.draft = $("draftIn").value.trim();
+    const res = await fetch("/api/check", {method:"POST", headers, body: JSON.stringify(body)});
+    const data = await res.json();
+    if(!res.ok) throw new Error((data.detail || res.statusText) + (data.replay ? " Pick a recorded run below the box." : ""));
+    render(data);
+  }catch(e){ $("err").textContent = String(e.message || e); }
+  finally{ $("go").disabled = false; loadStatus(); }
+};
+async function loadRecorded(){
+  try{
+    const list = await (await fetch("/api/scenarios")).json();
+    list.forEach(r => {
+      const b = document.createElement("button");
+      b.className = "chip"; b.textContent = "▶ " + r.customer.slice(0, 48) + (r.customer.length > 48 ? "…" : "");
+      b.onclick = () => { $("msg").value = r.customer; $("err").textContent = ""; render(r); };
+      $("recorded").appendChild(b);
+    });
+    if(!list.length) $("recorded").classList.add("hidden");
+  }catch(e){ $("recorded").classList.add("hidden"); }
+}
+loadStatus(); loadRecorded();
+</script>
+</body>
+</html>
