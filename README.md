@@ -48,8 +48,9 @@ All model calls go through the hosted gateway at `https://api.otari.ai/api/v1` w
 | Open models, several roles | Gemma 3 27B writes the demo seller's reply; Nemotron 3 Nano extracts promises; Nemotron 3 Super judges web evidence and rewrites | `shopguard/llm.py`, `guard.py`, `claims.py`, `facts.py` |
 | Web search | the judge searches by itself through the built-in `otari_web_search` tool, one gateway call per claim, sources come back in `otari_tool_calls`; verdicts are cached per claim | `shopguard/facts.py`, `OtariWebSearch` |
 | Usage and cost | each call's cost is taken from Otari's `usage.cost_usd` (tool charges included) and shown under every result in the demo | `shopguard/llm.py` |
-| Routing and fallbacks | _in progress_ | |
-| Budgets and per-user limits | _in progress_ | |
+| Routing and fallbacks | Super is served by four providers behind one catalog id, so Otari moves to the next one when a provider fails (the `Otari-Provider` and `Otari-Fallback` headers are logged per call). On top of that ShopGuard hops from Nano to Super when the small model times out (20 s) or answers with broken JSON, which Otari does not treat as a failure. If both fail, the reply is not sent unchecked: the customer gets the hand-off | `shopguard/claims.py`, `shopguard/llm.py` |
+| Budgets and limits | an organization ceiling of $15 for the whole hackathon, set on otari.ai; when Otari refuses a call (403 `budget_exceeded`, 402 `insufficient_funds`) the demo switches to recorded runs instead of failing. ShopGuard's own daily USD cap was deleted in favor of these ceilings | `app.py`, `shopguard/llm.py` |
+| Per-user budgets | two keys with their own daily ceilings: the public demo key ($0.50 a day) and the judges' key ($2 a day, reached with `?pass=`). Per-IP rate limits stay in ShopGuard, since Otari only sees one caller | `app.py`, `shopguard/budget.py` |
 
 What did not work as documented is collected for the feedback, not hidden here: see "Notes on Otari" below.
 
@@ -96,15 +97,14 @@ python eval/run_eval.py --live --persona pushy --record data/scenarios.json
 SHOPGUARD_WEB_SEARCH=off python eval/run_eval.py --live  # skip the paid web check
 ```
 
-Configuration (see `deploy/shopguard.env.example`): model ids, prices per 1M tokens (used only when the gateway does not report cost), daily USD cap, per-IP rate limit, daily web-check cap, and a separate judge key with its own quota.
+Configuration (see `deploy/shopguard.env.example`): the Otari keys (public and judges), model ids, prices per 1M tokens (used only when the gateway does not report cost), per-IP rate limit, daily web-check cap, and the judge pass for the demo.
 
 ## Keeping a public demo alive
 
-The demo stays open until the end of judging, so spending is capped in code (`shopguard/budget.py`, SQLite):
+The demo stays open until the end of judging. Money is capped by Otari (ceilings above); the rest lives in `shopguard/budget.py` (SQLite):
 
 - per-IP rate limit (default 20 requests per hour) with HTTP 429;
-- daily USD cap for the public pool, from the cost Otari reports for each call;
-- a separate judge pool reached with `?pass=<key>`;
+- a separate judge pool reached with `?pass=<key>`, on its own Otari key;
 - daily cap on web checks plus a per-claim cache;
 - recorded runs that replay instantly and cost nothing when the live budget is used up.
 

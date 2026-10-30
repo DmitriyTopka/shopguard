@@ -32,9 +32,21 @@ def test_rate_limit_returns_429(tmp_path, monkeypatch):
     assert codes == [200, 200, 429]
 
 
-def test_judge_key_bypasses_public_pool(tmp_path, monkeypatch):
-    client, app = make_client(tmp_path, monkeypatch, SHOPGUARD_JUDGE_KEY="secret", SHOPGUARD_DAILY_USD_CAP="0")
-    assert client.post("/api/check", json={"message": "hi"}).status_code == 503
+def test_otari_spend_ceiling_turns_into_replay_and_judges_have_their_own_pool(tmp_path, monkeypatch):
+    from shopguard.llm import SpendLimitReached
+    from shopguard.stub import demo_stub
+
+    client, app = make_client(tmp_path, monkeypatch, SHOPGUARD_JUDGE_KEY="secret")
+    exhausted = demo_stub()
+
+    def refuse(*a, **kw):
+        raise SpendLimitReached("budget_exceeded", "api_token")
+
+    exhausted.complete = refuse
+    monkeypatch.setattr(app, "llm", exhausted)  # the public key hit its daily ceiling
+    monkeypatch.setattr(app, "judge_llm", demo_stub())
+    r = client.post("/api/check", json={"message": "hi"})
+    assert r.status_code == 503 and r.json()["replay"] and r.json()["otari_code"] == "budget_exceeded"
     assert client.post("/api/check", json={"message": "hi"}, headers={"X-Judge-Key": "secret"}).status_code == 200
     assert client.post("/api/check", json={"message": "hi"}, headers={"X-Judge-Key": "wrong"}).status_code == 503
 

@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 from shopguard.budget import Budget
 from shopguard.facts import make_searcher
 from shopguard.guard import Guard
-from shopguard.llm import MODEL_FAST, MODEL_SELLER, MODEL_SMART, OtariLLM, default_llm
+from shopguard.llm import MODEL_FAST, MODEL_SELLER, MODEL_SMART, OtariLLM, SpendLimitReached, default_llm
 from shopguard.shop import DATA_DIR, Shop
 
 ROOT = Path(__file__).resolve().parent
@@ -25,6 +25,9 @@ app = FastAPI(title="ShopGuard", docs_url=None, redoc_url=None)
 shop = Shop.load()
 llm = default_llm()
 LIVE = isinstance(llm, OtariLLM)
+# Two Otari keys, two daily spend ceilings set on otari.ai: the public pool and the judges' pool.
+# Without a judges' key both pools share the public one.
+judge_llm = OtariLLM(api_key=os.environ["OTARI_JUDGE_API_KEY"]) if LIVE and os.getenv("OTARI_JUDGE_API_KEY") else llm
 budget = Budget(os.getenv("SHOPGUARD_DB", str(ROOT / "shopguard.db")))
 
 
@@ -83,14 +86,15 @@ def check(body: CheckIn, req: Request):
     who = "judge" if judge else client_ip(req)
     if not budget.allow_request(who, judge=judge):
         raise HTTPException(429, "Too many requests from your address. Try the recorded scenarios or come back in an hour.")
-    if not budget.can_spend(judge=judge):
-        return JSONResponse(status_code=503, content={
-            "detail": "Today's live budget for the public demo is used up. Recorded scenarios still work.",
-            "replay": True,
-        })
-    guard = Guard(shop, llm, searcher if budget.can_search() else None)
+    guard = Guard(shop, judge_llm if judge else llm, searcher if budget.can_search() else None)
     searches_before = getattr(searcher, "calls", 0)
-    result = guard.run(body.message, draft=body.draft or None, persona=body.persona)
+    try:
+        result = guard.run(body.message, draft=body.draft or None, persona=body.persona)
+    except SpendLimitReached as e:
+        return JSONResponse(status_code=503, content={
+            "detail": "Today's live budget for this demo is used up (Otari spend ceiling). Recorded scenarios still work.",
+            "replay": True, "otari_code": e.code,
+        })
     searches = getattr(searcher, "calls", 0) - searches_before
     budget.record(result.log.cost_usd, searches=searches, judge=judge)
     out = result.to_dict()

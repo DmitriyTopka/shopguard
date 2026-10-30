@@ -130,6 +130,10 @@ def parse_llm_json(text: str) -> list[dict]:
 EXTRACT_TIMEOUT_S = 20.0
 
 
+class ExtractionFailed(Exception):
+    """Neither model returned the promises; the guard must not pass the reply unchecked."""
+
+
 def _extract_items(reply: str, customer_msg: str, llm: LLM, log: CallLog) -> list[dict]:
     """Nano extracts; on a timeout, a gateway error or an answer that is not our JSON, Super retries.
 
@@ -152,11 +156,14 @@ def _extract_items(reply: str, customer_msg: str, llm: LLM, log: CallLog) -> lis
         reason = f"{type(e).__name__} from the small model"
     try:
         res = llm.complete(messages, model=MODEL_SMART, task="extract", max_tokens=600, json_mode=True)
-    except httpx.HTTPError:
-        return []  # the regex net below still catches money and payment counts
+    except httpx.HTTPError as e:
+        raise ExtractionFailed(f"{reason}; big model: {type(e).__name__}") from e
     res.note = f"fallback to {MODEL_SMART}: {reason}"
     log.calls.append(res)
-    return parse_llm_json(res.text)
+    items = parse_claims_json(res.text)
+    if items is None:
+        raise ExtractionFailed(f"{reason}; big model answer was not valid JSON either")
+    return items
 
 
 def extract_claims(reply: str, customer_msg: str, shop: Shop, llm: LLM, log: CallLog) -> list[Claim]:

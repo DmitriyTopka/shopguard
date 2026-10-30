@@ -8,13 +8,12 @@ def test_rate_limit_per_ip(tmp_path, monkeypatch):
     assert bud.allow_request("2.2.2.2")
 
 
-def test_daily_cap_and_judge_pool(tmp_path, monkeypatch):
-    monkeypatch.setattr(b, "DAILY_USD_CAP", 0.01)
+def test_spend_log_per_pool(tmp_path):
     bud = b.Budget(str(tmp_path / "t.db"))
-    assert bud.can_spend()
     bud.record(0.011)
-    assert not bud.can_spend()
-    assert bud.can_spend(judge=True)  # judges have their own pool
+    bud.record(0.5, judge=True)
+    s = bud.status()
+    assert s["public_usd"] == 0.011 and s["judge_usd"] == 0.5
 
 
 def test_search_cap_and_cache(tmp_path, monkeypatch):

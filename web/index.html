@@ -136,7 +136,7 @@ async function loadStatus(){
   try{
     const s = await (await fetch("/api/status", {headers})).json();
     const b = s.budget;
-    const pool = s.judge ? `judge pool $${b.judge_usd}/${b.judge_cap_usd}` : `today $${b.public_usd}/${b.public_cap_usd}`;
+    const pool = s.judge ? `judge pool, today $${b.judge_usd}` : `today $${b.public_usd}`;
     $("status").innerHTML = `${s.live ? "LIVE · Otari" : "OFFLINE STUB (no API key)"}<br>${esc(s.models.seller)} · ${esc(s.models.fast)} · ${esc(s.models.smart)}<br>web check: ${s.web_check ? "on" : "off"} · ${pool}`;
   }catch(e){ $("status").textContent = "status unavailable"; }
 }

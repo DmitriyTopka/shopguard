@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from .checks import OK, UNVERIFIED, VIOLATION, Verdict, check_claim
 from .claims import Claim, extract_claims
 from .facts import Searcher, fact_check
+from .claims import ExtractionFailed
 from .llm import LLM, MODEL_FAST, MODEL_SELLER, MODEL_SMART, CallLog
 from .shop import Shop
 
@@ -149,23 +150,32 @@ class Guard:
         t = time.monotonic()
         if draft is None:
             draft = self.draft(customer, persona, log)
-            stages.append(Stage("draft", _ms(t), "Nemotron Nano"))
+            stages.append(Stage("draft", _ms(t), MODEL_SELLER))
         t = time.monotonic()
-        verdicts = self.check(draft, customer, log, web=web)
+        handoff = FALLBACK[detect_lang(customer)]
+        try:
+            verdicts = self.check(draft, customer, log, web=web)
+        except ExtractionFailed as e:
+            # fail closed: a reply whose promises could not be read is never sent unchecked
+            stages.append(Stage("check", _ms(t), f"extraction failed: {e}"))
+            return GuardResult(customer, draft, [], handoff, "fallback", stages=stages, log=log)
         stages.append(Stage("check", _ms(t), f"{len(verdicts)} promises"))
         problems = [v for v in verdicts if _is_problem(v)]
         if not problems:
             return GuardResult(customer, draft, verdicts, draft, "pass", stages=stages, log=log)
         t = time.monotonic()
         fixed = self.rewrite(customer, draft, problems, log)
-        stages.append(Stage("rewrite", _ms(t), "Nemotron Super"))
+        stages.append(Stage("rewrite", _ms(t), MODEL_SMART))
         t = time.monotonic()
         # re-check without new web searches: a rewrite may only remove or correct, never add
-        recheck = self.check(fixed, customer, log, web=False) if fixed else []
+        try:
+            recheck = self.check(fixed, customer, log, web=False) if fixed else []
+        except ExtractionFailed:
+            fixed, recheck = "", []
         stages.append(Stage("recheck", _ms(t)))
         if fixed and not any(_is_problem(v) for v in recheck):
             return GuardResult(customer, draft, verdicts, fixed, "rewritten", recheck, stages, log)
-        return GuardResult(customer, draft, verdicts, FALLBACK[detect_lang(customer)], "fallback", recheck, stages, log)
+        return GuardResult(customer, draft, verdicts, handoff, "fallback", recheck, stages, log)
 
 
 def _ms(t: float) -> int:

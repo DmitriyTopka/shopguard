@@ -1,6 +1,8 @@
-"""Spend guard for the public demo: per-IP rate limit, daily USD cap, daily web-search cap.
+"""Demo limits Otari cannot know about: per-IP rate limit, daily web-check cap, spend log.
 
-Everything lives in one SQLite file so limits survive restarts. Days are UTC.
+Money is capped by Otari itself: each pool (public, judges) has its own key with a daily
+spend ceiling, and the organization has a total ceiling; see app.py. Everything here lives
+in one SQLite file so limits survive restarts. Days are UTC.
 """
 from __future__ import annotations
 
@@ -11,10 +13,8 @@ import time
 from datetime import datetime, timezone
 
 RATE_PER_IP_HOUR = int(os.getenv("SHOPGUARD_RATE_PER_IP_HOUR", "20"))
-DAILY_USD_CAP = float(os.getenv("SHOPGUARD_DAILY_USD_CAP", "0.40"))
 DAILY_SEARCH_CAP = int(os.getenv("SHOPGUARD_DAILY_SEARCH_CAP", "25"))
 JUDGE_RATE_PER_HOUR = int(os.getenv("SHOPGUARD_JUDGE_RATE_PER_HOUR", "60"))
-JUDGE_DAILY_USD_CAP = float(os.getenv("SHOPGUARD_JUDGE_DAILY_USD_CAP", "0.30"))
 
 
 def today() -> str:
@@ -56,12 +56,6 @@ class Budget:
         row = self.db.execute("SELECT usd, searches FROM spend WHERE day = ? AND pool = ?", (today(), pool)).fetchone()
         return (row[0], row[1]) if row else (0.0, 0)
 
-    def can_spend(self, judge: bool = False) -> bool:
-        pool, cap = ("judge", JUDGE_DAILY_USD_CAP) if judge else ("public", DAILY_USD_CAP)
-        with self.lock:
-            usd, _ = self._row(pool)
-        return usd < cap
-
     def can_search(self) -> bool:
         with self.lock:
             total = sum(r[0] for r in self.db.execute("SELECT searches FROM spend WHERE day = ?", (today(),)))
@@ -83,8 +77,7 @@ class Budget:
             jud, jud_s = self._row("judge")
         return {
             "day_utc": today(),
-            "public_usd": round(pub, 4), "public_cap_usd": DAILY_USD_CAP,
-            "judge_usd": round(jud, 4), "judge_cap_usd": JUDGE_DAILY_USD_CAP,
+            "public_usd": round(pub, 4), "judge_usd": round(jud, 4),
             "searches": pub_s + jud_s, "search_cap": DAILY_SEARCH_CAP,
         }
 

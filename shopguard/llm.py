@@ -59,6 +59,17 @@ class CallLog:
         return sum(c.cost_usd for c in self.calls)
 
 
+class SpendLimitReached(Exception):
+    """Otari refused the call: a spend ceiling (403 budget_exceeded) or an empty balance (402)."""
+
+    def __init__(self, code: str, detail: str = ""):
+        super().__init__(f"{code}: {detail}")
+        self.code, self.detail = code, detail
+
+
+SPEND_CODES = {"budget_exceeded", "insufficient_funds"}
+
+
 class LLM:
     def complete(self, messages: list[dict], *, model: str, task: str, max_tokens: int = 512,
                  temperature: float = 0.0, json_mode: bool = False, tools: list[dict] | None = None,
@@ -103,6 +114,15 @@ class OtariLLM(LLM):
             self.no_json_mode.add(model)
             del body["response_format"]
             r = self._post(body, timeout)
+        if r.status_code in (402, 403):
+            code = r.headers.get("otari-error-code", "")
+            try:
+                payload = r.json()
+            except ValueError:
+                payload = {}
+            code = code or str(payload.get("code", ""))
+            if code in SPEND_CODES:
+                raise SpendLimitReached(code, str(payload.get("detail", ""))[:200])
         r.raise_for_status()
         data = r.json()
         usage = data.get("usage") or {}

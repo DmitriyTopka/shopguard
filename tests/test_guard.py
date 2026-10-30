@@ -65,11 +65,11 @@ def test_web_check_supported_and_contradicted():
     assert "Wi-Fi and app control" not in r.final
 
 
-def test_extractor_failure_still_caught_by_regex():
+def test_extractor_failure_fails_closed():
     stub = demo_stub()
-    stub.handlers["extract"] = lambda m: "not json at all"
+    stub.handlers["extract"] = lambda m: "not json at all"  # both the small and the big model
     r = Guard(shop, stub).run("Скільки коштує кавоварка DeLonghi Magnifica S?")
-    assert any(v.claim.source == "regex" and v.status == "violation" for v in r.verdicts)
+    assert r.action == "fallback" and r.final == FALLBACK["uk"]
     assert "15999" not in r.final
 
 
