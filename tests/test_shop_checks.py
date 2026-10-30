@@ -79,6 +79,7 @@ def test_regex_net_skips_refused_terms():
         "На жаль, інформація про 10 платежів не відповідає дійсності. Ми пропонуємо 2 або 3 платежі.",
         "Рассрочка на 10 платежей на холодильник не предусмотрена.",
         "Instalments over 12 months are not available.",
+        "We only offer 2 or 3 payments, we don’t support 12 installments.",
     ]
     for text in refusals:
         assert all(c.value.get("payments") not in (10, 12) and c.value.get("months") not in (10, 12)

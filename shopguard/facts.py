@@ -135,20 +135,17 @@ def _gateway_check(c: Claim, name: str, attr: str, claim_text: str, searcher: "O
     if cached is not None:
         data = json.loads(cached)
     else:
-        call = lambda: llm.complete(
-            [{"role": "system", "content": GATEWAY_JUDGE_SYSTEM}, {"role": "user", "content": f"Claim: {claim_text}"}],
-            model=MODEL_SMART, task="factcheck", max_tokens=400,
-            tools=[{"type": "otari_web_search", "max_uses": searcher.max_searches}],
-        )
         try:
-            try:
-                res = call()
-            except httpx.HTTPStatusError as e:
-                # seen once per few dozen calls: 400 "The toolConfig field must be defined when using
-                # toolUse and toolResult content blocks" from Bedrock; a second try usually passes
-                print(f"web check retry after {e.response.status_code}: {e.response.text[:200]}", file=sys.stderr)
-                res = call()
+            res = llm.complete(
+                [{"role": "system", "content": GATEWAY_JUDGE_SYSTEM}, {"role": "user", "content": f"Claim: {claim_text}"}],
+                model=MODEL_SMART, task="factcheck", max_tokens=400,
+                tools=[{"type": "otari_web_search", "max_uses": searcher.max_searches}],
+            )
         except httpx.HTTPError as e:
+            # Otari bug, reproducible for some claims: 400 "The toolConfig field must be defined when using
+            # toolUse and toolResult content blocks" (Bedrock). Retrying the same request fails the same way.
+            if isinstance(e, httpx.HTTPStatusError):
+                print(f"web check failed {e.response.status_code}: {e.response.text[:200]}", file=sys.stderr)
             code = e.response.status_code if isinstance(e, httpx.HTTPStatusError) else type(e).__name__
             return Verdict(c, UNVERIFIED, f"Web check failed ({code}).",
                            truth="Characteristic not confirmed.", source="web")

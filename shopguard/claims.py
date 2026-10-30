@@ -65,7 +65,8 @@ def parse_amount(s: str) -> int:
 # reassurances ("no problem", "не хвилюйтесь", "без переплати") are ignored, so a promise is never
 # dropped because of an unrelated "no" in the same sentence.
 NEGATION_RE = re.compile(
-    r"(?<!\w)(?:не|ні|нет|немає|нема|відсутн\w*|отсутств\w*|not|no|cannot|can't|isn't|unavailable)(?!\w)",
+    r"(?<!\w)(?:не|ні|нет|немає|нема|відсутн\w*|отсутств\w*|not|no|never|cannot|unavailable|"
+    r"(?:can|don|doesn|isn|aren|won|didn)['’]t)(?!\w)",
     re.IGNORECASE,
 )
 REASSURANCE_RE = re.compile(
