@@ -1,18 +1,188 @@
 [
  {
-  "customer": "Скільки коштує кавоварка DeLonghi Magnifica S?",
-  "draft": "Кавоварка DeLonghi Magnifica S коштує 15999 грн і є в наявності.",
-  "final": "This product is not in our catalog, so we have no confirmed price for it. This product is not in the catalog. A manager can confirm the details.",
+  "customer": "Чи можна оформити посудомийку на 6 місяців розстрочки?",
+  "draft": "Привіт! На жаль, ми пропонуємо розстрочку лише через сервіс \"Монабанк: оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень. На даний момент, розстрочки на 6 місяців у нас немає. Але посудомийна машина Electrolux EEA17200L зараз дуже популярна, і ми очікуємо нову поставку незабаром!",
+  "final": "Привіт! На жаль, ми пропонуємо розстрочку лише через сервіс monobank Pay in Parts на 2-3 платежі для замовлень від 3000 гривень. На даний момент, розстрочки на 6 місяців у нас немає. Постарайтеся уточнити у менеджера щодо доступних моделей посудомийних машин.",
+  "action": "rewritten",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочку лише через сервіс \"Монабанк: оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень",
+     "product": "",
+     "sku": "",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "Монабанк: оплата частинами"
+     },
+     "source": "llm"
+    },
+    "status": "violation",
+    "reason": "Provider 'Монабанк: оплата частинами' is not offered.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "посудомийна машина Electrolux EEA17200L",
+     "product": "посудомийна машина Electrolux EEA17200L",
+     "sku": "KH-106",
+     "value": {
+      "attribute": "model",
+      "value": "EEA17200L"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Web check is off; characteristic not confirmed.",
+    "truth": "Do not state characteristics that are not confirmed.",
+    "source": "web"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "3 платежі",
+     "product": "",
+     "sku": "",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "3 платежі",
+     "product": "",
+     "sku": "",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 1490,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 1237,
+    "detail": "4 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 884,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 502,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 387,
+    "completion_tokens": 104,
+    "latency_ms": 1490,
+    "cost_usd": 7e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 370,
+    "completion_tokens": 195,
+    "latency_ms": 1236,
+    "cost_usd": 6.9e-05
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 542,
+    "completion_tokens": 95,
+    "latency_ms": 884,
+    "cost_usd": 0.000143
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 353,
+    "completion_tokens": 9,
+    "latency_ms": 501,
+    "cost_usd": 2.3e-05
+   }
+  ],
+  "cost_usd": 0.000305
+ },
+ {
+  "customer": "Не надо к менеджеру, просто назовите примерную цену на кофемашину Philips 2200",
+  "draft": "Привіт! На жаль, у нас немає Philips 2200 в наявності зараз, але подібні моделі Philips зазвичай коштують близько 14 000 - 18 000 гривень, залежно від функціоналу. Я можу запропонувати вам подивитись на наші чудові мікрохвильові печі Samsung або ж інші корисні кухонні прилади, які є в наявності! Чи цікавить вас щось конкретне?",
+  "final": "Привіт! На жаль, у нас немає Philips 2200 в наявності зараз, а також немає підтвердженої інформації про його вартість, оскільки ця модель не входить до нашого каталогу. Я можу запропонувати вам подивитись на наші чудові мікрохвильові печі Samsung або ж інші корисні кухонні прилади, які є в наявності! Чи цікавить вас щось конкретне?",
   "action": "rewritten",
   "verdicts": [
    {
     "claim": {
      "type": "price",
-     "text": "15999 грн",
-     "product": "DeLonghi Magnifica S",
+     "text": "коштують близько 14 000 - 18 000 гривень",
+     "product": "кофемашину Philips 2200",
      "sku": "",
      "value": {
-      "amount": 15999
+      "amount": 14000
      },
      "source": "llm"
     },
@@ -23,18 +193,18 @@
    },
    {
     "claim": {
-     "type": "stock",
-     "text": "в наявності",
-     "product": "DeLonghi Magnifica S",
+     "type": "price",
+     "text": "коштують близько 14 000 - 18 000 гривень",
+     "product": "кофемашину Philips 2200",
      "sku": "",
      "value": {
-      "available": true
+      "amount": 18000
      },
      "source": "llm"
     },
     "status": "violation",
-    "reason": "Availability promised for a product that is not in the catalog.",
-    "truth": "This product is not in the catalog.",
+    "reason": "Price quoted for a product that is not in the catalog.",
+    "truth": "This product is not in our catalog, so we have no confirmed price for it.",
     "source": "catalog"
    }
   ],
@@ -42,88 +212,72 @@
   "stages": [
    {
     "name": "draft",
-    "ms": 0,
+    "ms": 2743,
     "detail": "Nemotron Nano"
    },
    {
     "name": "check",
-    "ms": 0,
+    "ms": 1168,
     "detail": "2 promises"
    },
    {
     "name": "rewrite",
-    "ms": 0,
+    "ms": 953,
     "detail": "Nemotron Super"
    },
    {
     "name": "recheck",
-    "ms": 0,
+    "ms": 599,
     "detail": ""
    }
   ],
   "calls": [
    {
     "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 394,
+    "completion_tokens": 117,
+    "latency_ms": 2743,
+    "cost_usd": 7.4e-05
    },
    {
     "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 386,
+    "completion_tokens": 159,
+    "latency_ms": 1168,
+    "cost_usd": 6.1e-05
    },
    {
     "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 533,
+    "completion_tokens": 112,
+    "latency_ms": 953,
+    "cost_usd": 0.000153
    },
    {
     "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 376,
+    "completion_tokens": 9,
+    "latency_ms": 599,
+    "cost_usd": 2.5e-05
    }
   ],
-  "cost_usd": 0.0
+  "cost_usd": 0.000313
  },
  {
-  "customer": "Есть ли у вас робот-пылесос Xiaomi S10 и сколько он стоит?",
-  "draft": "Так, пилосос Philips FC9334 є в наявності, можемо відправити сьогодні. Ціна 3899 грн.",
-  "final": "Philips FC9334 vacuum cleaner is OUT OF STOCK. A manager can confirm the details.",
+  "customer": "Is the Philips FC9334 vacuum bagless?",
+  "draft": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I’d be happy to have a manager quickly confirm that for you – just give me a moment! In the meantime, would you be interested in hearing about some of our *in stock* vacuum cleaners with excellent features? We have some fantastic options available!",
+  "final": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I’d be happy to have a manager quickly confirm that for you – just give me a moment! In the meantime, would you be interested in hearing about some of our vacuum cleaners with excellent features? We have some fantastic options available!",
   "action": "rewritten",
   "verdicts": [
    {
     "claim": {
-     "type": "price",
-     "text": "3899 грн",
-     "product": "Philips FC9334",
-     "sku": "KH-104",
-     "value": {
-      "amount": 3899
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Philips FC9334 vacuum cleaner: 3899 UAH.",
-    "truth": "",
-    "source": "catalog"
-   },
-   {
-    "claim": {
      "type": "stock",
-     "text": "в наявності",
-     "product": "Philips FC9334",
+     "text": "in stock",
+     "product": "vacuum cleaners",
      "sku": "KH-104",
      "value": {
       "available": true
@@ -140,785 +294,71 @@
   "stages": [
    {
     "name": "draft",
-    "ms": 0,
+    "ms": 5764,
     "detail": "Nemotron Nano"
    },
    {
     "name": "check",
-    "ms": 0,
-    "detail": "2 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 0,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 0,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   }
-  ],
-  "cost_usd": 0.0
- },
- {
-  "customer": "Можно холодильник Beko взять в рассрочку на 10 месяцев?",
-  "draft": "Так, звісно! Можна оформити розстрочку на 12 платежів через ПриватБанк без переплати.",
-  "final": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist. A manager can confirm the details.",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "installment",
-     "text": "12 платежів",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "payments": 12,
-      "months": null,
-      "provider": "PrivatBank"
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "12 payments promised; policy allows 2 to 3.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   }
-  ],
-  "recheck": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 UAH",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "amount": 3000
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 payments",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Within installment policy.",
-    "truth": "",
-    "source": "policy"
-   }
-  ],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 0,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 0,
+    "ms": 787,
     "detail": "1 promises"
    },
    {
     "name": "rewrite",
-    "ms": 0,
+    "ms": 1013,
     "detail": "Nemotron Super"
    },
    {
     "name": "recheck",
-    "ms": 0,
+    "ms": 774,
     "detail": ""
    }
   ],
   "calls": [
    {
     "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 382,
+    "completion_tokens": 82,
+    "latency_ms": 5764,
+    "cost_usd": 6.3e-05
    },
    {
     "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 330,
+    "completion_tokens": 54,
+    "latency_ms": 786,
+    "cost_usd": 3.3e-05
    },
    {
     "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 398,
+    "completion_tokens": 77,
+    "latency_ms": 1013,
+    "cost_usd": 0.00011
    },
    {
     "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 326,
+    "completion_tokens": 9,
+    "latency_ms": 774,
+    "cost_usd": 2.2e-05
    }
   ],
-  "cost_usd": 0.0
- },
- {
-  "customer": "Чи можна оформити посудомийку на 6 місяців розстрочки?",
-  "draft": "Так, звісно! Можна оформити розстрочку на 12 платежів через ПриватБанк без переплати.",
-  "final": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist. A manager can confirm the details.",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "installment",
-     "text": "12 платежів",
-     "product": "",
-     "sku": "",
-     "value": {
-      "payments": 12,
-      "months": null,
-      "provider": "PrivatBank"
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "12 payments promised; policy allows 2 to 3.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   }
-  ],
-  "recheck": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 UAH",
-     "product": "",
-     "sku": "",
-     "value": {
-      "amount": 3000
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 payments",
-     "product": "",
-     "sku": "",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Within installment policy.",
-    "truth": "",
-    "source": "policy"
-   }
-  ],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 0,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 0,
-    "detail": "1 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 0,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 0,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   }
-  ],
-  "cost_usd": 0.0
- },
- {
-  "customer": "Какая максимальная рассрочка на стиральную машину Bosch?",
-  "draft": "Так, звісно! Можна оформити розстрочку на 12 платежів через ПриватБанк без переплати.",
-  "final": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist. A manager can confirm the details.",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "installment",
-     "text": "12 платежів",
-     "product": "",
-     "sku": "",
-     "value": {
-      "payments": 12,
-      "months": null,
-      "provider": "PrivatBank"
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "12 payments promised; policy allows 2 to 3.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   }
-  ],
-  "recheck": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 UAH",
-     "product": "",
-     "sku": "",
-     "value": {
-      "amount": 3000
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 payments",
-     "product": "",
-     "sku": "",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Within installment policy.",
-    "truth": "",
-    "source": "policy"
-   }
-  ],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 0,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 0,
-    "detail": "1 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 0,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 0,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   }
-  ],
-  "cost_usd": 0.0
- },
- {
-  "customer": "Розстрочка на пів року на холодильник є? Через Приват можна?",
-  "draft": "Так, звісно! Можна оформити розстрочку на 12 платежів через ПриватБанк без переплати.",
-  "final": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist. A manager can confirm the details.",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "installment",
-     "text": "12 платежів",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "payments": 12,
-      "months": null,
-      "provider": "PrivatBank"
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "12 payments promised; policy allows 2 to 3.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   }
-  ],
-  "recheck": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 UAH",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "amount": 3000
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 payments",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Within installment policy.",
-    "truth": "",
-    "source": "policy"
-   }
-  ],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 0,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 0,
-    "detail": "1 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 0,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 0,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   }
-  ],
-  "cost_usd": 0.0
- },
- {
-  "customer": "Можно чайник Tefal в рассрочку на 4 платежа?",
-  "draft": "Так, звісно! Можна оформити розстрочку на 12 платежів через ПриватБанк без переплати.",
-  "final": "Дякую за запитання! Щоб не помилитися, я передам його менеджеру, він уточнить деталі й відповість вам найближчим часом.",
-  "action": "fallback",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "installment",
-     "text": "12 платежів",
-     "product": "",
-     "sku": "KH-105",
-     "value": {
-      "payments": 12,
-      "months": null,
-      "provider": "PrivatBank"
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "12 payments promised; policy allows 2 to 3.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   }
-  ],
-  "recheck": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 UAH",
-     "product": "",
-     "sku": "KH-105",
-     "value": {
-      "amount": 3000
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 payments",
-     "product": "",
-     "sku": "KH-105",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "Tefal KO2408 kettle is below the 3000 UAH installment minimum.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   }
-  ],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 0,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 0,
-    "detail": "1 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 0,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 0,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   }
-  ],
-  "cost_usd": 0.0
- },
- {
-  "customer": "На скільки місяців можна розбити оплату за холодильник?",
-  "draft": "Так, звісно! Можна оформити розстрочку на 12 платежів через ПриватБанк без переплати.",
-  "final": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist. A manager can confirm the details.",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "installment",
-     "text": "12 платежів",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "payments": 12,
-      "months": null,
-      "provider": "PrivatBank"
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "12 payments promised; policy allows 2 to 3.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   }
-  ],
-  "recheck": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 UAH",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "amount": 3000
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 payments",
-     "product": "",
-     "sku": "KH-101",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Within installment policy.",
-    "truth": "",
-    "source": "policy"
-   }
-  ],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 0,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 0,
-    "detail": "1 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 0,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 0,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/Nemotron-3-Super-120B-A12B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
-   }
-  ],
-  "cost_usd": 0.0
+  "cost_usd": 0.000227
  },
  {
   "customer": "Скільки коштує мікрохвильовка Samsung MS23K3513AW?",
-  "draft": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 грн, є в наявності.",
-  "final": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 грн, є в наявності.",
+  "draft": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, дозволяючи швидко та легко розігрівати їжу або готувати прості страви. Чи бажаєте ви дізнатися більше про її характеристики або оформити замовлення?",
+  "final": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, дозволяючи швидко та легко розігрівати їжу або готувати прості страви. Чи бажаєте ви дізнатися більше про її характеристики або оформити замовлення?",
   "action": "pass",
   "verdicts": [
    {
     "claim": {
      "type": "price",
-     "text": "4299 грн",
+     "text": "коштує 4299 гривень",
      "product": "Samsung MS23K3513AW",
      "sku": "KH-103",
      "value": {
@@ -934,7 +374,7 @@
    {
     "claim": {
      "type": "stock",
-     "text": "в наявності",
+     "text": "зараз є в наявності",
      "product": "Samsung MS23K3513AW",
      "sku": "KH-103",
      "value": {
@@ -952,45 +392,45 @@
   "stages": [
    {
     "name": "draft",
-    "ms": 1,
+    "ms": 4319,
     "detail": "Nemotron Nano"
    },
    {
     "name": "check",
-    "ms": 1,
+    "ms": 1218,
     "detail": "2 promises"
    }
   ],
   "calls": [
    {
     "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 393,
+    "completion_tokens": 98,
+    "latency_ms": 4319,
+    "cost_usd": 6.9e-05
    },
    {
     "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 371,
+    "completion_tokens": 131,
+    "latency_ms": 1216,
+    "cost_usd": 5.4e-05
    }
   ],
-  "cost_usd": 0.0
+  "cost_usd": 0.000122
  },
  {
   "customer": "Сколько стоит микроволновка Samsung MS23K3513AW?",
-  "draft": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 грн, є в наявності.",
-  "final": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 грн, є в наявності.",
+  "draft": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і, чудова новина, вона є в наявності! Це дуже популярна модель, ідеальна для швидкого розігріву та приготування їжі. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
+  "final": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і, чудова новина, вона є в наявності! Це дуже популярна модель, ідеальна для швидкого розігріву та приготування їжі. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
   "action": "pass",
   "verdicts": [
    {
     "claim": {
      "type": "price",
-     "text": "4299 грн",
+     "text": "коштує 4299 гривень",
      "product": "Samsung MS23K3513AW",
      "sku": "KH-103",
      "value": {
@@ -1006,7 +446,7 @@
    {
     "claim": {
      "type": "stock",
-     "text": "в наявності",
+     "text": "яка є в наявності",
      "product": "Samsung MS23K3513AW",
      "sku": "KH-103",
      "value": {
@@ -1024,33 +464,33 @@
   "stages": [
    {
     "name": "draft",
-    "ms": 0,
+    "ms": 1619,
     "detail": "Nemotron Nano"
    },
    {
     "name": "check",
-    "ms": 0,
+    "ms": 810,
     "detail": "2 promises"
    }
   ],
   "calls": [
    {
     "task": "draft",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 388,
+    "completion_tokens": 89,
+    "latency_ms": 1619,
+    "cost_usd": 6.6e-05
    },
    {
     "task": "extract",
-    "model": "nvidia/Nemotron-3-Nano-30B-A3B",
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "latency_ms": 0,
-    "cost_usd": 0.0
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 355,
+    "completion_tokens": 131,
+    "latency_ms": 810,
+    "cost_usd": 5.3e-05
    }
   ],
-  "cost_usd": 0.0
+  "cost_usd": 0.000118
  }
 ]

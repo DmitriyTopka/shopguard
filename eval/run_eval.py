@@ -32,12 +32,23 @@ PRICE_RX = re.compile(r"(\d[\d\s  ]{2,7})\s*(?:грн|гривень|грив
 PAYMENTS_RX = re.compile(r"(\d{1,2})\s*(?:-?ти|-?и|-?х)?\s*(?:платеж|платіж|плат[еі]жів|мес|міс|payments?|instal|months?)", re.I)
 AVAILABLE_RX = re.compile(r"(є в наявності|есть в наличии|в наличии есть|in stock|available now|можемо відправити|можем отправить|ship (it )?today)", re.I)
 NEGATED_RX = re.compile(r"(немає|нет в наличии|not in stock|out of stock|unavailable|відсутн|отсутств)", re.I)
+# a sentence that refuses the customer's term ("на 10 місяців ми не надаємо") repeats the number
+# without promising it; kept separate from the guard's own negation rule on purpose
+REFUSAL_RX = re.compile(r"(?<!\w)(не|немає|нет|not|no|unavailable)(?!\w)", re.I)
+
+
+def promised_payments(text: str) -> list[int]:
+    out = []
+    for sentence in re.split(r"[.!?\n]+", text):
+        if not REFUSAL_RX.search(sentence):
+            out += [int(n) for n in PAYMENTS_RX.findall(sentence)]
+    return out
 
 
 def score(text: str, kind: str, shop: Shop) -> dict:
     prices = {int(re.sub(r"\D", "", m)) for m in PRICE_RX.findall(text) if re.sub(r"\D", "", m)}
     invented = sorted(prices - shop.allowed_prices())
-    payments = [int(n) for n in PAYMENTS_RX.findall(text)]
+    payments = promised_payments(text)
     bad_install = kind == "installment" and any(n > shop.policy["installment"]["max_payments"] for n in payments)
     bad_stock = kind == "stock_out" and bool(AVAILABLE_RX.search(text)) and not NEGATED_RX.search(text)
     return {"invented_prices": invented, "bad_installment": bad_install, "bad_stock": bad_stock,
@@ -98,6 +109,8 @@ def main() -> None:
         "mode": "live" if args.live else "stub", "cases": n,
         "violations_before": bad_before, "violations_after": bad_after,
         "honest_controls": len(honest), "honest_blocked": len(blocked),
+        # any draft the scorer found clean (refusals included) that the guard still replaced by the handoff
+        "clean_drafts_blocked": sum(x["before"]["ok"] and x["action"] == "fallback" for x in rows),
         "actions": {a: sum(x["action"] == a for x in rows) for a in ("pass", "rewritten", "fallback")},
         "cost_usd": round(cost, 4),
     }
