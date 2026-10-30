@@ -16,11 +16,15 @@ import httpx
 # the Nano id with response_format support is `nemotron-nano-3-30b`, not `nemotron-3-nano-30b-a3b`.
 MODEL_FAST = os.getenv("SHOPGUARD_MODEL_FAST", "nvidia/nemotron-nano-3-30b")
 MODEL_SMART = os.getenv("SHOPGUARD_MODEL_SMART", "nvidia/nemotron-3-super-120b-a12b")
+# The demo shop bot that ShopGuard checks. Not part of the guard; Nano's Ukrainian was broken
+# ("частkami", "замовžiти") in the first live run, Gemma 3 27B writes it cleanly.
+MODEL_SELLER = os.getenv("SHOPGUARD_MODEL_SELLER", "google/gemma-3-27b-it")
 
 # USD per 1M tokens (input, output), from the same catalog.
 PRICES = {
     MODEL_FAST: (float(os.getenv("SHOPGUARD_PRICE_FAST_IN", "0.06")), float(os.getenv("SHOPGUARD_PRICE_FAST_OUT", "0.24"))),
     MODEL_SMART: (float(os.getenv("SHOPGUARD_PRICE_SMART_IN", "0.15")), float(os.getenv("SHOPGUARD_PRICE_SMART_OUT", "0.65"))),
+    MODEL_SELLER: (float(os.getenv("SHOPGUARD_PRICE_SELLER_IN", "0.10")), float(os.getenv("SHOPGUARD_PRICE_SELLER_OUT", "0.30"))),
 }
 
 
