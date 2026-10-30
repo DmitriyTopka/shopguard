@@ -58,18 +58,28 @@ def parse_amount(s: str) -> int:
     return int(re.sub(r"[   ]", "", s))
 
 
-# "10 payments are not available", "розстрочки на 24 місяці у нас немає": a refusal repeats the
-# customer's number, it does not promise it
+# "10 payments are not available", "на 10 місяців ми не надаємо": a refusal repeats the customer's
+# number without promising it. Only a negator within a few words of the term counts, and
+# reassurances ("no problem", "не хвилюйтесь", "без переплати") are ignored, so a promise is never
+# dropped because of an unrelated "no" in the same sentence.
 NEGATION_RE = re.compile(
     r"(?<!\w)(?:не|ні|нет|немає|нема|відсутн\w*|отсутств\w*|not|no|cannot|can't|isn't|unavailable)(?!\w)",
     re.IGNORECASE,
 )
+REASSURANCE_RE = re.compile(
+    r"no problem|не проблема|не хвилюйте\w*|не переживайте|не волнуйтесь|без переплат\w*|"
+    r"переплат\w* (?:немає|нет|не буде|не будет)|(?:немає|нет) переплат\w*",
+    re.IGNORECASE,
+)
+NEAR_WORDS = 4
 
 
-def _sentence(text: str, start: int, end: int) -> str:
+def _refused(text: str, start: int, end: int) -> bool:
     left = max(text.rfind(ch, 0, start) for ch in ".!?\n")
     rights = [i for i in (text.find(ch, end) for ch in ".!?\n") if i >= 0]
-    return text[left + 1: min(rights) if rights else len(text)]
+    before = REASSURANCE_RE.sub(" ", text[left + 1:start]).split()[-NEAR_WORDS:]
+    after = REASSURANCE_RE.sub(" ", text[end:min(rights) if rights else len(text)]).split()[:NEAR_WORDS]
+    return bool(NEGATION_RE.search(" ".join(before + after)))
 
 
 def regex_claims(reply: str) -> list[Claim]:
@@ -80,8 +90,8 @@ def regex_claims(reply: str) -> list[Claim]:
         window = reply[max(0, m.start() - 30): m.end() + 30].lower()
         if re.search(r"гарант|warrant", window):
             continue  # "12 months warranty" is not an installment plan
-        if NEGATION_RE.search(_sentence(reply, m.start(), m.end())):
-            continue  # the sentence refuses this term
+        if _refused(reply, m.start(), m.end()):
+            continue  # the reply refuses this term
         n = int(m.group(1))
         unit = m.group(2).lower()
         months = unit.startswith(("міс", "мес", "month"))

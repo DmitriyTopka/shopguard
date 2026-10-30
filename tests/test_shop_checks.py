@@ -83,6 +83,12 @@ def test_regex_net_skips_refused_terms():
     for text in refusals:
         assert all(c.value.get("payments") not in (10, 12) and c.value.get("months") not in (10, 12)
                    for c in regex_claims(text) if c.type == "installment"), text
-    # a promise in the same reply is still caught
-    found = regex_claims("Ні, переплати немає. Оформимо на 10 платежів!")
-    assert any(c.value.get("payments") == 10 for c in found)
+    # a promise is still caught when an unrelated negator or a reassurance shares its sentence
+    promises = [
+        "Ні, переплати немає. Оформимо на 10 платежів!",
+        "Не хвилюйтесь, оформимо на 10 платежів без переплати.",
+        "No problem, we can do 10 payments for you.",
+        "Без переплати, на 10 платежів, і ніяких довідок не треба.",
+    ]
+    for text in promises:
+        assert any(c.value.get("payments") == 10 for c in regex_claims(text)), text
