@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -134,14 +135,22 @@ def _gateway_check(c: Claim, name: str, attr: str, claim_text: str, searcher: "O
     if cached is not None:
         data = json.loads(cached)
     else:
+        call = lambda: llm.complete(
+            [{"role": "system", "content": GATEWAY_JUDGE_SYSTEM}, {"role": "user", "content": f"Claim: {claim_text}"}],
+            model=MODEL_SMART, task="factcheck", max_tokens=400,
+            tools=[{"type": "otari_web_search", "max_uses": searcher.max_searches}],
+        )
         try:
-            res = llm.complete(
-                [{"role": "system", "content": GATEWAY_JUDGE_SYSTEM}, {"role": "user", "content": f"Claim: {claim_text}"}],
-                model=MODEL_SMART, task="factcheck", max_tokens=400,
-                tools=[{"type": "otari_web_search", "max_uses": searcher.max_searches}],
-            )
+            try:
+                res = call()
+            except httpx.HTTPStatusError as e:
+                # seen once per few dozen calls: 400 "The toolConfig field must be defined when using
+                # toolUse and toolResult content blocks" from Bedrock; a second try usually passes
+                print(f"web check retry after {e.response.status_code}: {e.response.text[:200]}", file=sys.stderr)
+                res = call()
         except httpx.HTTPError as e:
-            return Verdict(c, UNVERIFIED, f"Web check failed ({type(e).__name__}).",
+            code = e.response.status_code if isinstance(e, httpx.HTTPStatusError) else type(e).__name__
+            return Verdict(c, UNVERIFIED, f"Web check failed ({code}).",
                            truth="Characteristic not confirmed.", source="web")
         log.calls.append(res)
         searcher.calls += 1
