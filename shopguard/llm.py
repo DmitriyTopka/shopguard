@@ -1,4 +1,4 @@
-"""LLM access: Otari gateway, Nebius Token Factory (both OpenAI-compatible) and an offline stub.
+"""LLM access: the Otari gateway (OpenAI-compatible) and an offline stub.
 
 Every call carries a `task` tag ("draft", "extract", "judge", "rewrite") so that
 cost can be attributed per stage and the stub can answer deterministically.
@@ -62,8 +62,14 @@ class LLM:
         raise NotImplementedError
 
 
-class TokenFactoryLLM(LLM):
-    KEY_ENV, BASE_ENV, BASE_DEFAULT = "NEBIUS_API_KEY", "NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1"
+class OtariLLM(LLM):
+    """Mozilla.ai Otari hosted gateway: OpenAI-compatible chat completions, workspace token `otk_...`.
+
+    Model ids are `vendor/model` as listed by GET /api/v1/models; set them in
+    SHOPGUARD_MODEL_SELLER / SHOPGUARD_MODEL_FAST / SHOPGUARD_MODEL_SMART.
+    """
+
+    KEY_ENV, BASE_ENV, BASE_DEFAULT = "OTARI_API_KEY", "OTARI_BASE_URL", "https://api.otari.ai/api/v1"
 
     def __init__(self, api_key: str | None = None, base_url: str | None = None, timeout: float = 60.0,
                  http: httpx.Client | None = None):
@@ -106,16 +112,6 @@ class TokenFactoryLLM(LLM):
         )
 
 
-class OtariLLM(TokenFactoryLLM):
-    """Mozilla.ai Otari hosted gateway: same OpenAI-compatible wire format, workspace token `otk_...`.
-
-    Model ids are `provider/model` as listed in the workspace Models tab; set them in
-    SHOPGUARD_MODEL_FAST / SHOPGUARD_MODEL_SMART.
-    """
-
-    KEY_ENV, BASE_ENV, BASE_DEFAULT = "OTARI_API_KEY", "OTARI_BASE_URL", "https://api.otari.ai/api/v1"
-
-
 def strip_reasoning(text: str) -> str:
     """Drop a <think>...</think> block if the model returns its reasoning inline."""
     if "</think>" in text:
@@ -137,13 +133,9 @@ class StubLLM(LLM):
         return LLMResult(text=text, model=model, task=task)
 
 
-def live_llm() -> TokenFactoryLLM | None:
-    """The live gateway configured in env: Otari first, Nebius as the legacy path."""
-    if os.getenv("OTARI_API_KEY"):
-        return OtariLLM()
-    if os.getenv("NEBIUS_API_KEY"):
-        return TokenFactoryLLM()
-    return None
+def live_llm() -> OtariLLM | None:
+    """The live gateway if OTARI_API_KEY is set."""
+    return OtariLLM() if os.getenv("OTARI_API_KEY") else None
 
 
 def default_llm() -> LLM:

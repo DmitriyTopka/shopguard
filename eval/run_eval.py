@@ -7,7 +7,7 @@ grading itself. Stock and spec cases also get a human-review flag in the output.
     python eval/run_eval.py                 # offline stub
     python eval/run_eval.py --live --limit 5   # Otari: OTARI_API_KEY or the macOS keychain item otari-api/shopguard
     SHOPGUARD_WEB_SEARCH=off python eval/run_eval.py --live   # skip the paid web check
-    NEBIUS_API_KEY=... python eval/run_eval.py --live --record data/scenarios.json
+    python eval/run_eval.py --live --persona pushy --record data/scenarios.json
 """
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def keychain_otari_key() -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--live", action="store_true", help="use the live gateway: Otari (OTARI_API_KEY) or Nebius (NEBIUS_API_KEY)")
+    ap.add_argument("--live", action="store_true", help="use Otari (OTARI_API_KEY or the macOS keychain)")
     ap.add_argument("--persona", default="eager")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--out", default=str(ROOT / "eval" / "results.json"))
@@ -77,7 +77,7 @@ def main() -> None:
     args = ap.parse_args()
 
     shop = Shop.load()
-    if args.live and not os.getenv("OTARI_API_KEY") and not os.getenv("NEBIUS_API_KEY"):
+    if args.live and not os.getenv("OTARI_API_KEY"):
         os.environ["OTARI_API_KEY"] = keychain_otari_key()
     llm = (live_llm() or sys.exit("no live key: set OTARI_API_KEY or add keychain item otari-api/shopguard")) \
         if args.live else demo_stub()

@@ -3,14 +3,10 @@ import httpx
 from shopguard import llm as L
 
 
-def test_live_llm_prefers_otari(monkeypatch):
+def test_live_llm_needs_otari_key(monkeypatch):
     monkeypatch.setenv("OTARI_API_KEY", "otk_test")
-    monkeypatch.setenv("NEBIUS_API_KEY", "nb_test")
     assert isinstance(L.live_llm(), L.OtariLLM)
     monkeypatch.delenv("OTARI_API_KEY")
-    got = L.live_llm()
-    assert type(got) is L.TokenFactoryLLM
-    monkeypatch.delenv("NEBIUS_API_KEY")
     assert L.live_llm() is None
     assert isinstance(L.default_llm(), L.StubLLM)
 

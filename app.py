@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 from shopguard.budget import Budget
 from shopguard.facts import make_searcher
 from shopguard.guard import Guard
-from shopguard.llm import MODEL_FAST, MODEL_SELLER, MODEL_SMART, TokenFactoryLLM, default_llm
+from shopguard.llm import MODEL_FAST, MODEL_SELLER, MODEL_SMART, OtariLLM, default_llm
 from shopguard.shop import DATA_DIR, Shop
 
 ROOT = Path(__file__).resolve().parent
@@ -24,7 +24,7 @@ TRUST_PROXY = os.getenv("SHOPGUARD_TRUST_PROXY", "1") == "1"
 app = FastAPI(title="ShopGuard", docs_url=None, redoc_url=None)
 shop = Shop.load()
 llm = default_llm()
-LIVE = isinstance(llm, TokenFactoryLLM)
+LIVE = isinstance(llm, OtariLLM)
 budget = Budget(os.getenv("SHOPGUARD_DB", str(ROOT / "shopguard.db")))
 
 

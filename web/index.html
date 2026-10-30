@@ -103,9 +103,9 @@ h2{font-size:16px;margin:28px 0 8px}
   <h2>How it works</h2>
   <div class="how">
     <ol>
-      <li><b>Draft.</b> A sales bot (NVIDIA Nemotron Nano on Nebius Token Factory) writes a reply. Or paste a reply from any bot you already run.</li>
+      <li><b>Draft.</b> A sales bot (Gemma 3 27B through Otari) writes a reply. Or paste a reply from any bot you already run.</li>
       <li><b>Extract.</b> Nemotron Nano lists every promise in the reply as JSON. A regex net also catches any amount of money or number of payments, so nothing slips through if extraction misses it.</li>
-      <li><b>Check.</b> Prices, stock, installments and delivery are checked by plain code against the catalog and the policy: exact and free. Product specs are looked up on the web with Tavily, and Nemotron Super judges whether the sources back the claim.</li>
+      <li><b>Check.</b> Prices, stock, installments and delivery are checked by plain code against the catalog and the policy: exact and free. For product specs Nemotron Super searches the web through Otari's built-in web search tool and judges whether the sources back the claim.</li>
       <li><b>Fix.</b> If anything is wrong or unconfirmed, Nemotron Super rewrites the reply using only the correct facts, and the rewrite is checked again. If it still fails, a safe hand-off to a manager is sent instead.</li>
     </ol>
     <p>The shop, prices and stock are fictional. No real customer data is used.</p>
@@ -137,7 +137,7 @@ async function loadStatus(){
     const s = await (await fetch("/api/status", {headers})).json();
     const b = s.budget;
     const pool = s.judge ? `judge pool $${b.judge_usd}/${b.judge_cap_usd}` : `today $${b.public_usd}/${b.public_cap_usd}`;
-    $("status").innerHTML = `${s.live ? "LIVE · Nebius Token Factory" : "OFFLINE STUB (no API key)"}<br>${esc(s.models.fast)} · ${esc(s.models.smart)}<br>web check: ${s.web_check ? "Tavily on" : "off"} · ${pool}`;
+    $("status").innerHTML = `${s.live ? "LIVE · Otari" : "OFFLINE STUB (no API key)"}<br>${esc(s.models.seller)} · ${esc(s.models.fast)} · ${esc(s.models.smart)}<br>web check: ${s.web_check ? "on" : "off"} · ${pool}`;
   }catch(e){ $("status").textContent = "status unavailable"; }
 }
 
