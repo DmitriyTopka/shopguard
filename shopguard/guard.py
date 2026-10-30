@@ -80,7 +80,8 @@ class GuardResult:
             "stages": [s.__dict__ for s in self.stages],
             "calls": [
                 {"task": c.task, "model": c.model, "prompt_tokens": c.prompt_tokens,
-                 "completion_tokens": c.completion_tokens, "latency_ms": c.latency_ms, "cost_usd": round(c.cost_usd, 6)}
+                 "completion_tokens": c.completion_tokens, "latency_ms": c.latency_ms, "cost_usd": round(c.cost_usd, 6),
+                 "provider": c.provider, "gateway_fallback": c.gateway_fallback, "note": c.note}
                 for c in self.log.calls
             ],
             "cost_usd": round(self.log.cost_usd, 6),

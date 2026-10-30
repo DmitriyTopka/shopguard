@@ -121,3 +121,31 @@ def test_gateway_web_check_uses_otari_tool_and_caches():
         calls_after.append(web.calls)
     assert seen and all(t == [{"type": "otari_web_search", "max_uses": 2}] for t in seen)
     assert calls_after[0] >= 1 and calls_after[1] == calls_after[0]  # the repeat is served from cache
+
+
+def test_extract_falls_back_to_big_model_on_broken_json_and_timeout():
+    import httpx
+    from shopguard.llm import MODEL_FAST, MODEL_SMART
+
+    for broken in ("Sure! Here are the claims: price 999", httpx.ReadTimeout("slow")):
+        stub = demo_stub()
+        good = stub.handlers["extract"]
+        base = stub.complete
+        models = []
+
+        def complete(messages, broken=broken, good=good, base=base, models=models, **kw):
+            if kw["task"] == "extract":
+                models.append(kw["model"])
+                if kw["model"] == MODEL_FAST:
+                    if isinstance(broken, Exception):
+                        raise broken
+                    return base(messages, **{**kw, "task": "extract-broken"})
+                return base(messages, **kw)
+            return base(messages, **kw)
+
+        stub.handlers["extract-broken"] = lambda m, b=broken: b
+        stub.complete = complete
+        r = Guard(shop, stub).run("Можна чайник Tefal на 10 платежів?")
+        assert models[:2] == [MODEL_FAST, MODEL_SMART]
+        assert any(c["note"].startswith("fallback to") for c in r.to_dict()["calls"])
+        assert any(v.claim.source == "llm" for v in r.verdicts)  # the big model's claims reach the checks

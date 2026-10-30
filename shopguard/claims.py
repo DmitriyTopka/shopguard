@@ -11,7 +11,9 @@ import json
 import re
 from dataclasses import dataclass, field, asdict
 
-from .llm import LLM, MODEL_FAST, CallLog
+import httpx
+
+from .llm import LLM, MODEL_FAST, MODEL_SMART, CallLog
 from .shop import Shop
 
 CLAIM_TYPES = ("price", "stock", "installment", "delivery", "spec")
@@ -103,35 +105,65 @@ def regex_claims(reply: str) -> list[Claim]:
     return out
 
 
-def parse_llm_json(text: str) -> list[dict]:
+def parse_claims_json(text: str) -> list[dict] | None:
+    """Claims from the extractor's answer; None if the answer is not the JSON we asked for."""
     text = text.strip()
     if text.startswith("```"):
         text = text.strip("`")
         text = text[text.find("{"):]
     start, end = text.find("{"), text.rfind("}")
     if start < 0 or end < 0:
-        return []
+        return None
     try:
         data = json.loads(text[start:end + 1])
     except json.JSONDecodeError:
-        return []
-    items = data.get("claims", []) if isinstance(data, dict) else []
-    return [i for i in items if isinstance(i, dict) and i.get("type") in CLAIM_TYPES]
+        return None
+    if not isinstance(data, dict) or not isinstance(data.get("claims", []), list):
+        return None
+    return [i for i in data.get("claims", []) if isinstance(i, dict) and i.get("type") in CLAIM_TYPES]
+
+
+def parse_llm_json(text: str) -> list[dict]:
+    return parse_claims_json(text) or []
+
+
+EXTRACT_TIMEOUT_S = 20.0
+
+
+def _extract_items(reply: str, customer_msg: str, llm: LLM, log: CallLog) -> list[dict]:
+    """Nano extracts; on a timeout, a gateway error or an answer that is not our JSON, Super retries.
+
+    Otari's own fallback moves between providers of one model only on provider errors, and an
+    answer that arrives with HTTP 200 but broken JSON is not an error to it, so this hop is ours.
+    """
+    messages = [
+        {"role": "system", "content": EXTRACT_SYSTEM},
+        {"role": "user", "content": f"Customer: {customer_msg}\n\nAssistant reply:\n{reply}"},
+    ]
+    try:
+        res = llm.complete(messages, model=MODEL_FAST, task="extract", max_tokens=600, json_mode=True,
+                           timeout=EXTRACT_TIMEOUT_S)
+        log.calls.append(res)
+        items = parse_claims_json(res.text)
+        if items is not None:
+            return items
+        reason = "answer was not valid JSON"
+    except httpx.HTTPError as e:
+        reason = f"{type(e).__name__} from the small model"
+    try:
+        res = llm.complete(messages, model=MODEL_SMART, task="extract", max_tokens=600, json_mode=True)
+    except httpx.HTTPError:
+        return []  # the regex net below still catches money and payment counts
+    res.note = f"fallback to {MODEL_SMART}: {reason}"
+    log.calls.append(res)
+    return parse_llm_json(res.text)
 
 
 def extract_claims(reply: str, customer_msg: str, shop: Shop, llm: LLM, log: CallLog) -> list[Claim]:
-    res = llm.complete(
-        [
-            {"role": "system", "content": EXTRACT_SYSTEM},
-            {"role": "user", "content": f"Customer: {customer_msg}\n\nAssistant reply:\n{reply}"},
-        ],
-        model=MODEL_FAST, task="extract", max_tokens=600, json_mode=True,
-    )
-    log.calls.append(res)
     claims = [
         Claim(type=i["type"], text=str(i.get("text", "")), product=str(i.get("product", "")),
               value=i.get("value") if isinstance(i.get("value"), dict) else {})
-        for i in parse_llm_json(res.text)
+        for i in _extract_items(reply, customer_msg, llm, log)
     ]
     # attach catalog SKUs; if the reply names no product, fall back to the customer's message
     for c in claims:

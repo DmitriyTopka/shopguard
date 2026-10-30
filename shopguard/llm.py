@@ -38,6 +38,9 @@ class LLMResult:
     latency_ms: int = 0
     billed_usd: float | None = None  # what the gateway charged (Otari: usage.cost_usd, tools included)
     sources: list[str] = field(default_factory=list)  # URLs from gateway-run web searches
+    provider: str = ""  # Otari-Provider: which provider actually served the call
+    gateway_fallback: bool = False  # Otari-Fallback: the gateway moved to another offering of the model
+    note: str = ""  # e.g. why ShopGuard moved this task to the bigger model
 
     @property
     def cost_usd(self) -> float:
@@ -58,7 +61,8 @@ class CallLog:
 
 class LLM:
     def complete(self, messages: list[dict], *, model: str, task: str, max_tokens: int = 512,
-                 temperature: float = 0.0, json_mode: bool = False, tools: list[dict] | None = None) -> LLMResult:
+                 temperature: float = 0.0, json_mode: bool = False, tools: list[dict] | None = None,
+                 timeout: float | None = None) -> LLMResult:
         raise NotImplementedError
 
 
@@ -78,25 +82,27 @@ class OtariLLM(LLM):
         self.http = http or httpx.Client(timeout=timeout)
         self.no_json_mode: set[str] = set()  # models whose provider rejected response_format
 
-    def _post(self, body: dict) -> httpx.Response:
+    def _post(self, body: dict, timeout: float | None = None) -> httpx.Response:
         return self.http.post(f"{self.base_url}/chat/completions",
-                              headers={"Authorization": f"Bearer {self.api_key}"}, json=body)
+                              headers={"Authorization": f"Bearer {self.api_key}"}, json=body,
+                              timeout=timeout if timeout is not None else self.http.timeout)
 
-    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None):
+    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
+                 timeout=None):
         body = {"model": model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
         if tools:
             body["tools"] = tools
         if json_mode and model not in self.no_json_mode:
             body["response_format"] = {"type": "json_object"}
         t0 = time.monotonic()
-        r = self._post(body)
+        r = self._post(body, timeout)
         if r.status_code == 400 and "response_format" in body and "response_format" in r.text:
             # Otari lists Nemotron Nano with structured_output, but its Bedrock offering returns
             # 400 "'response_format' is not supported for bedrock". The prompt already asks for
             # JSON and parse_llm_json tolerates prose, so retry once without it (400s are not billed).
             self.no_json_mode.add(model)
             del body["response_format"]
-            r = self._post(body)
+            r = self._post(body, timeout)
         r.raise_for_status()
         data = r.json()
         usage = data.get("usage") or {}
@@ -107,6 +113,8 @@ class OtariLLM(LLM):
             completion_tokens=int(usage.get("completion_tokens", 0)),
             latency_ms=int((time.monotonic() - t0) * 1000),
             billed_usd=float(usage["cost_usd"]) if usage.get("cost_usd") is not None else None,
+            provider=r.headers.get("otari-provider", ""),
+            gateway_fallback=r.headers.get("otari-fallback", "").lower() == "true",
             sources=[src["url"] for call in data.get("otari_tool_calls") or [] if call.get("status") == "completed"
                      for src in call.get("sources") or [] if src.get("url")],
         )
@@ -126,7 +134,8 @@ class StubLLM(LLM):
         self.handlers = handlers or {}
         self.calls: list[tuple[str, list[dict]]] = []
 
-    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None):
+    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
+                 timeout=None):
         self.calls.append((task, messages))
         fn = self.handlers.get(task)
         text = fn(messages) if fn else ""
