@@ -58,6 +58,20 @@ def parse_amount(s: str) -> int:
     return int(re.sub(r"[   ]", "", s))
 
 
+# "10 payments are not available", "розстрочки на 24 місяці у нас немає": a refusal repeats the
+# customer's number, it does not promise it
+NEGATION_RE = re.compile(
+    r"(?<!\w)(?:не|ні|нет|немає|нема|відсутн\w*|отсутств\w*|not|no|cannot|can't|isn't|unavailable)(?!\w)",
+    re.IGNORECASE,
+)
+
+
+def _sentence(text: str, start: int, end: int) -> str:
+    left = max(text.rfind(ch, 0, start) for ch in ".!?\n")
+    rights = [i for i in (text.find(ch, end) for ch in ".!?\n") if i >= 0]
+    return text[left + 1: min(rights) if rights else len(text)]
+
+
 def regex_claims(reply: str) -> list[Claim]:
     out: list[Claim] = []
     for m in MONEY_RE.finditer(reply):
@@ -66,6 +80,8 @@ def regex_claims(reply: str) -> list[Claim]:
         window = reply[max(0, m.start() - 30): m.end() + 30].lower()
         if re.search(r"гарант|warrant", window):
             continue  # "12 months warranty" is not an installment plan
+        if NEGATION_RE.search(_sentence(reply, m.start(), m.end())):
+            continue  # the sentence refuses this term
         n = int(m.group(1))
         unit = m.group(2).lower()
         months = unit.startswith(("міс", "мес", "month"))

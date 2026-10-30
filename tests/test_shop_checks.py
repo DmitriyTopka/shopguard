@@ -72,3 +72,17 @@ def test_delivery_carrier_in_cyrillic_is_ok():
 def test_spec_without_web_is_unverified():
     v = check_claim(Claim("spec", "Wi-Fi", sku="KH-101", value={"attribute": "wifi", "value": "yes"}), shop)
     assert v.status == UNVERIFIED
+
+
+def test_regex_net_skips_refused_terms():
+    refusals = [
+        "На жаль, інформація про 10 платежів не відповідає дійсності. Ми пропонуємо 2 або 3 платежі.",
+        "Рассрочка на 10 платежей на холодильник не предусмотрена.",
+        "Instalments over 12 months are not available.",
+    ]
+    for text in refusals:
+        assert all(c.value.get("payments") not in (10, 12) and c.value.get("months") not in (10, 12)
+                   for c in regex_claims(text) if c.type == "installment"), text
+    # a promise in the same reply is still caught
+    found = regex_claims("Ні, переплати немає. Оформимо на 10 платежів!")
+    assert any(c.value.get("payments") == 10 for c in found)

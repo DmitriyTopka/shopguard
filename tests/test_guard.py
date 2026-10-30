@@ -78,3 +78,12 @@ def test_cost_is_reported():
     d = r.to_dict()
     assert {c["task"] for c in d["calls"]} >= {"draft", "extract", "rewrite"}
     assert d["cost_usd"] == 0
+
+
+def test_fallback_language():
+    from shopguard.guard import detect_lang
+    assert detect_lang("Розстрочка на 24 місяці є?") == "uk"
+    assert detect_lang("Можно чайник в рассрочку?") == "ru"
+    assert detect_lang("Пишите по-русски. Рассрочка есть?") == "ru"
+    assert detect_lang("Слухайте а без переплати можна оформить?") == "uk"
+    assert detect_lang("Can I pay in 12 parts?") == "en"

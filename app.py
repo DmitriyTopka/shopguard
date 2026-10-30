@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 
 from shopguard.budget import Budget
 from shopguard.guard import Guard
-from shopguard.llm import MODEL_FAST, MODEL_SMART, TokenFactoryLLM, default_llm
+from shopguard.llm import MODEL_FAST, MODEL_SELLER, MODEL_SMART, TokenFactoryLLM, default_llm
 from shopguard.shop import DATA_DIR, Shop
 
 ROOT = Path(__file__).resolve().parent
@@ -40,7 +40,7 @@ searcher = make_searcher()
 class CheckIn(BaseModel):
     message: str = Field(min_length=1, max_length=500)
     draft: str | None = Field(default=None, max_length=1500)
-    persona: str = Field(default="eager", pattern="^(standard|eager)$")
+    persona: str = Field(default="eager", pattern="^(standard|eager|pushy)$")
 
 
 def client_ip(req: Request) -> str:
@@ -71,7 +71,7 @@ def index():
 def status(req: Request):
     return {
         "live": LIVE,
-        "models": {"fast": MODEL_FAST, "smart": MODEL_SMART},
+        "models": {"fast": MODEL_FAST, "smart": MODEL_SMART, "seller": MODEL_SELLER},
         "web_check": searcher is not None,
         "judge": is_judge(req),
         "budget": budget.status(),
