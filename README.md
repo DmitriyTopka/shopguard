@@ -41,7 +41,7 @@ Design choices:
 
 ## Otari: what we use and how
 
-All model calls go through the hosted gateway at `https://api.otari.ai/api/v1` with one workspace key (`shopguard/llm.py`, class `OtariLLM`). The first commit where Otari came in: `d0920d9` on branch `otari-hackathon`.
+All model calls go through the hosted gateway at `https://api.otari.ai/api/v1` with one workspace key (`shopguard/llm.py`, class `OtariLLM`). The first commit where Otari came in: [`d0920d9`](https://github.com/DmitriyTopka/shopguard/commit/d0920d9221602e1482c65f4962d40e9424a37123) on branch `otari-hackathon`.
 
 | Otari feature | How ShopGuard uses it | Where |
 |---|---|---|
