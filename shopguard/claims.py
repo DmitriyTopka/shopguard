@@ -70,7 +70,9 @@ NEGATION_RE = re.compile(
     re.IGNORECASE,
 )
 REASSURANCE_RE = re.compile(
-    r"no problem|не проблема|не хвилюйте\w*|не переживайте|не волнуйтесь|без переплат\w*|"
+    r"no problem|no worries|don['’]t worry|never (?:over)?pay\w*(?: (?:more|extra))?|"
+    r"won['’]t (?:cost|pay|be charged)\w*(?: (?:more|extra))?|no (?:extra|hidden|additional) (?:fees?|charges?|costs?)|"
+    r"не проблема|не хвилюйте\w*|не переживайте|не волнуйтесь|без переплат\w*|"
     r"переплат\w* (?:немає|нет|не буде|не будет)|(?:немає|нет) переплат\w*",
     re.IGNORECASE,
 )

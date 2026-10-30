@@ -65,7 +65,7 @@ class OtariWebSearch:
 
     via_gateway = True
 
-    def __init__(self, max_searches: int = 2, cache=None):
+    def __init__(self, max_searches: int = 3, cache=None):
         self.max_searches = max_searches
         self.cache = cache
         self.calls = 0
@@ -189,7 +189,7 @@ def make_searcher(llm: LLM, cache=None):
     from .llm import OtariLLM
     mode = os.getenv("SHOPGUARD_WEB_SEARCH", "otari" if isinstance(llm, OtariLLM) else "tavily")
     if mode == "otari" and isinstance(llm, OtariLLM):
-        return OtariWebSearch(max_searches=int(os.getenv("SHOPGUARD_WEB_MAX_SEARCHES", "2")), cache=cache)
+        return OtariWebSearch(max_searches=int(os.getenv("SHOPGUARD_WEB_MAX_SEARCHES", "3")), cache=cache)
     if mode == "tavily" and os.getenv("TAVILY_API_KEY"):
         return TavilySearcher(cache=cache)
     return None

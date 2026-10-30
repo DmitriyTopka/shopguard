@@ -90,6 +90,9 @@ def test_regex_net_skips_refused_terms():
         "Не хвилюйтесь, оформимо на 10 платежів без переплати.",
         "No problem, we can do 10 payments for you.",
         "Без переплати, на 10 платежів, і ніяких довідок не треба.",
+        "Don't worry, 10 payments is fine.",
+        "You won't pay extra: 10 payments, no hidden fees.",
+        "No worries, we never overpay, 10 payments works.",
     ]
     for text in promises:
         assert any(c.value.get("payments") == 10 for c in regex_claims(text)), text

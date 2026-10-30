@@ -119,7 +119,7 @@ def test_gateway_web_check_uses_otari_tool_and_caches():
         spec = [v for v in r.verdicts if v.claim.type == "spec"][0]
         assert spec.status == "violation" and spec.source == "https://bosch.example/spec"
         calls_after.append(web.calls)
-    assert seen and all(t == [{"type": "otari_web_search", "max_uses": 2}] for t in seen)
+    assert seen and all(t == [{"type": "otari_web_search", "max_uses": 3}] for t in seen)
     assert calls_after[0] >= 1 and calls_after[1] == calls_after[0]  # the repeat is served from cache
 
 
