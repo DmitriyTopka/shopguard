@@ -36,7 +36,7 @@ AVAILABLE_RX = re.compile(r"(є в наявності|есть в наличии
 NEGATED_RX = re.compile(r"(немає|нет в наличии|not in stock|out of stock|unavailable|відсутн|отсутств)", re.I)
 # a sentence that refuses the customer's term ("на 10 місяців ми не надаємо") repeats the number
 # without promising it; kept separate from the guard's own negation rule on purpose
-REFUSAL_RX = re.compile(r"(?<!\w)(не|немає|нет|not|no|never|unavailable|(?:can|don|doesn|isn|won)['’]t)(?!\w)", re.I)
+REFUSAL_RX = re.compile(r"(?<!\w)(не|немає|нет|not|no|never|unavailable|(?:can|don|doesn|isn|aren|won)['’]t)(?!\w)", re.I)
 
 
 def promised_payments(text: str) -> list[int]:

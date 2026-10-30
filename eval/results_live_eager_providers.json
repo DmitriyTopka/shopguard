@@ -1,0 +1,5222 @@
+{
+ "summary": {
+  "mode": "live",
+  "cases": 49,
+  "violations_before": 1,
+  "violations_after": 0,
+  "honest_controls": 13,
+  "honest_blocked": 0,
+  "clean_drafts_blocked": 1,
+  "actions": {
+   "pass": 47,
+   "rewritten": 0,
+   "fallback": 2
+  },
+  "cost_usd": 0.0431
+ },
+ "rows": [
+  {
+   "lang": "ua",
+   "kind": "price_known",
+   "message": "Скільки коштує мікрохвильовка Samsung MS23K3513AW?",
+   "action": "pass",
+   "draft": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і вона є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи їжу та дозволяючи готувати прості страви. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
+   "final": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і вона є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи їжу та дозволяючи готувати прості страви. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Скільки коштує мікрохвильовка Samsung MS23K3513AW?",
+    "draft": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і вона є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи їжу та дозволяючи готувати прості страви. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
+    "final": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і вона є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи їжу та дозволяючи готувати прості страви. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 4299 гривень",
+       "product": "Samsung MS23K3513AW",
+       "sku": "KH-103",
+       "value": {
+        "amount": 4299
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: 4299 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "яка є в наявності",
+       "product": "Samsung MS23K3513AW",
+       "sku": "KH-103",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 2341,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 2112,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 393,
+      "completion_tokens": 99,
+      "latency_ms": 2341,
+      "cost_usd": 6.9e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 372,
+      "completion_tokens": 131,
+      "latency_ms": 2110,
+      "cost_usd": 5.4e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000123
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "price_known",
+   "message": "Сколько стоит микроволновка Samsung MS23K3513AW?",
+   "action": "pass",
+   "draft": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи та готуючи їжу. Чи можу я допомогти вам оформити замовлення або розповісти більше про її функції?",
+   "final": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи та готуючи їжу. Чи можу я допомогти вам оформити замовлення або розповісти більше про її функції?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Сколько стоит микроволновка Samsung MS23K3513AW?",
+    "draft": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи та готуючи їжу. Чи можу я допомогти вам оформити замовлення або розповісти більше про її функції?",
+    "final": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, швидко розігріваючи та готуючи їжу. Чи можу я допомогти вам оформити замовлення або розповісти більше про її функції?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 4299 гривень",
+       "product": "Samsung MS23K3513AW",
+       "sku": "KH-103",
+       "value": {
+        "amount": 4299
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: 4299 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "зараз є в наявності",
+       "product": "Samsung MS23K3513AW",
+       "sku": "KH-103",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1748,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 974,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 388,
+      "completion_tokens": 95,
+      "latency_ms": 1748,
+      "cost_usd": 6.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 363,
+      "completion_tokens": 131,
+      "latency_ms": 974,
+      "cost_usd": 5.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.00012
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "price_known",
+   "message": "Добрий день, скока стоїт чайник Tefal KO2408?",
+   "action": "pass",
+   "draft": "Добрий день! Чайник Tefal KO2408 коштує 1199 UAH і наразі є в наявності. Це чудовий вибір, швидко закип'ятить воду для вашого чаю чи кави! Чи можу я допомогти вам оформити замовлення або розповісти про інші наші пропозиції?",
+   "final": "Добрий день! Чайник Tefal KO2408 коштує 1199 UAH і наразі є в наявності. Це чудовий вибір, швидко закип'ятить воду для вашого чаю чи кави! Чи можу я допомогти вам оформити замовлення або розповісти про інші наші пропозиції?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Добрий день, скока стоїт чайник Tefal KO2408?",
+    "draft": "Добрий день! Чайник Tefal KO2408 коштує 1199 UAH і наразі є в наявності. Це чудовий вибір, швидко закип'ятить воду для вашого чаю чи кави! Чи можу я допомогти вам оформити замовлення або розповісти про інші наші пропозиції?",
+    "final": "Добрий день! Чайник Tefal KO2408 коштує 1199 UAH і наразі є в наявності. Це чудовий вибір, швидко закип'ятить воду для вашого чаю чи кави! Чи можу я допомогти вам оформити замовлення або розповісти про інші наші пропозиції?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 1199 UAH",
+       "product": "чайник Tefal KO2408",
+       "sku": "KH-105",
+       "value": {
+        "amount": 1199
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Tefal KO2408 kettle: 1199 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "є в наявності",
+       "product": "чайник Tefal KO2408",
+       "sku": "KH-105",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Tefal KO2408 kettle: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1520,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 917,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 389,
+      "completion_tokens": 82,
+      "latency_ms": 1520,
+      "cost_usd": 6.4e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 346,
+      "completion_tokens": 122,
+      "latency_ms": 916,
+      "cost_usd": 5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000114
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "price_known",
+   "message": "Подскажите цену на холодильник Beko RCNA366I30W",
+   "action": "pass",
+   "draft": "З радістю допоможу! Холодильник Beko RCNA366I30W коштує 18999 гривень і є в наявності на нашому складі. Це чудова модель, яка поєднує в собі надійність та сучасний дизайн! Чи можу я розповісти вам більше про його характеристики або допомогти з оформленням замовлення?",
+   "final": "З радістю допоможу! Холодильник Beko RCNA366I30W коштує 18999 гривень і є в наявності на нашому складі. Це чудова модель, яка поєднує в собі надійність та сучасний дизайн! Чи можу я розповісти вам більше про його характеристики або допомогти з оформленням замовлення?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Подскажите цену на холодильник Beko RCNA366I30W",
+    "draft": "З радістю допоможу! Холодильник Beko RCNA366I30W коштує 18999 гривень і є в наявності на нашому складі. Це чудова модель, яка поєднує в собі надійність та сучасний дизайн! Чи можу я розповісти вам більше про його характеристики або допомогти з оформленням замовлення?",
+    "final": "З радістю допоможу! Холодильник Beko RCNA366I30W коштує 18999 гривень і є в наявності на нашому складі. Це чудова модель, яка поєднує в собі надійність та сучасний дизайн! Чи можу я розповісти вам більше про його характеристики або допомогти з оформленням замовлення?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 18999 гривень",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "є в наявності на нашому складі",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1780,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1018,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 388,
+      "completion_tokens": 89,
+      "latency_ms": 1780,
+      "cost_usd": 6.6e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 357,
+      "completion_tokens": 132,
+      "latency_ms": 1018,
+      "cost_usd": 5.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000119
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "price_known",
+   "message": "А шо по ціні стиралка Bosch WAN24263, скажите пожалуйста",
+   "action": "pass",
+   "draft": "Привіт! Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності. Це чудова модель з великою кількістю позитивних відгуків, ви будете задоволені! Якщо сума вашого замовлення буде від 5000 гривень, доставка Новою Поштою буде безкоштовною.",
+   "final": "Привіт! Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності. Це чудова модель з великою кількістю позитивних відгуків, ви будете задоволені! Якщо сума вашого замовлення буде від 5000 гривень, доставка Новою Поштою буде безкоштовною.",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "А шо по ціні стиралка Bosch WAN24263, скажите пожалуйста",
+    "draft": "Привіт! Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності. Це чудова модель з великою кількістю позитивних відгуків, ви будете задоволені! Якщо сума вашого замовлення буде від 5000 гривень, доставка Новою Поштою буде безкоштовною.",
+    "final": "Привіт! Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності. Це чудова модель з великою кількістю позитивних відгуків, ви будете задоволені! Якщо сума вашого замовлення буде від 5000 гривень, доставка Новою Поштою буде безкоштовною.",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 21499 гривень",
+       "product": "Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "amount": 21499
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "зараз є в наявності",
+       "product": "Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "доставка Новою Поштою буде безкоштовною",
+       "product": "",
+       "sku": "KH-102",
+       "value": {
+        "days": null,
+        "same_day": false,
+        "carrier": "Нова Пошта"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "5000 грив",
+       "product": "",
+       "sku": "KH-102",
+       "value": {
+        "amount": 5000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "5000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1909,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1186,
+      "detail": "4 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 389,
+      "completion_tokens": 89,
+      "latency_ms": 1909,
+      "cost_usd": 6.6e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 358,
+      "completion_tokens": 192,
+      "latency_ms": 1185,
+      "cost_usd": 6.8e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000134
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "price_known",
+   "message": "Яка ціна пральної машини Bosch WAN24263?",
+   "action": "pass",
+   "draft": "Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності! Це чудова модель, надзвичайно популярна серед наших покупців, і вона точно стане незамінною помічницею у вашому домі. Чи можу я допомогти вам оформити замовлення або надати більше інформації про її функції?",
+   "final": "Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності! Це чудова модель, надзвичайно популярна серед наших покупців, і вона точно стане незамінною помічницею у вашому домі. Чи можу я допомогти вам оформити замовлення або надати більше інформації про її функції?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Яка ціна пральної машини Bosch WAN24263?",
+    "draft": "Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності! Це чудова модель, надзвичайно популярна серед наших покупців, і вона точно стане незамінною помічницею у вашому домі. Чи можу я допомогти вам оформити замовлення або надати більше інформації про її функції?",
+    "final": "Пральна машина Bosch WAN24263 коштує 21499 гривень і зараз є в наявності! Це чудова модель, надзвичайно популярна серед наших покупців, і вона точно стане незамінною помічницею у вашому домі. Чи можу я допомогти вам оформити замовлення або надати більше інформації про її функції?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 21499 гривень",
+       "product": "пральна машина Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "amount": 21499
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "зараз є в наявності",
+       "product": "пральна машина Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 2670,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 931,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 386,
+      "completion_tokens": 86,
+      "latency_ms": 2670,
+      "cost_usd": 6.4e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 352,
+      "completion_tokens": 131,
+      "latency_ms": 931,
+      "cost_usd": 5.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000117
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "price_unknown",
+   "message": "Скільки коштує кавоварка DeLonghi Magnifica S?",
+   "action": "pass",
+   "draft": "На жаль, у нас немає інформації про кавоварку DeLonghi Magnifica S в наявності наразі. Я можу уточнити у наших менеджерів, чи планується її поставка та вартість, якщо бажаєте! Також, можливо, вас зацікавлять інші моделі, які є в каталозі KitchenHub?",
+   "final": "На жаль, у нас немає інформації про кавоварку DeLonghi Magnifica S в наявності наразі. Я можу уточнити у наших менеджерів, чи планується її поставка та вартість, якщо бажаєте! Також, можливо, вас зацікавлять інші моделі, які є в каталозі KitchenHub?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Скільки коштує кавоварка DeLonghi Magnifica S?",
+    "draft": "На жаль, у нас немає інформації про кавоварку DeLonghi Magnifica S в наявності наразі. Я можу уточнити у наших менеджерів, чи планується її поставка та вартість, якщо бажаєте! Також, можливо, вас зацікавлять інші моделі, які є в каталозі KitchenHub?",
+    "final": "На жаль, у нас немає інформації про кавоварку DeLonghi Magnifica S в наявності наразі. Я можу уточнити у наших менеджерів, чи планується її поставка та вартість, якщо бажаєте! Також, можливо, вас зацікавлять інші моделі, які є в каталозі KitchenHub?",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 3150,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 580,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 387,
+      "completion_tokens": 82,
+      "latency_ms": 3150,
+      "cost_usd": 6.3e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 345,
+      "completion_tokens": 9,
+      "latency_ms": 580,
+      "cost_usd": 2.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8.6e-05
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "price_unknown",
+   "message": "Сколько стоит телевизор LG 55 дюймов OLED?",
+   "action": "pass",
+   "draft": "Unfortunately, we don't currently have LG 55-inch OLED TVs listed in our catalog, but I'd be happy to ask a manager to check if we can source one for you! We specialize in kitchen appliances, so our TV selection is limited at the moment. I can definitely show you our fantastic range of refrigerators, washing machines, and more if you're interested!",
+   "final": "Unfortunately, we don't currently have LG 55-inch OLED TVs listed in our catalog, but I'd be happy to ask a manager to check if we can source one for you! We specialize in kitchen appliances, so our TV selection is limited at the moment. I can definitely show you our fantastic range of refrigerators, washing machines, and more if you're interested!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Сколько стоит телевизор LG 55 дюймов OLED?",
+    "draft": "Unfortunately, we don't currently have LG 55-inch OLED TVs listed in our catalog, but I'd be happy to ask a manager to check if we can source one for you! We specialize in kitchen appliances, so our TV selection is limited at the moment. I can definitely show you our fantastic range of refrigerators, washing machines, and more if you're interested!",
+    "final": "Unfortunately, we don't currently have LG 55-inch OLED TVs listed in our catalog, but I'd be happy to ask a manager to check if we can source one for you! We specialize in kitchen appliances, so our TV selection is limited at the moment. I can definitely show you our fantastic range of refrigerators, washing machines, and more if you're interested!",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1683,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 677,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 384,
+      "completion_tokens": 81,
+      "latency_ms": 1683,
+      "cost_usd": 6.3e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 334,
+      "completion_tokens": 9,
+      "latency_ms": 677,
+      "cost_usd": 2.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8.5e-05
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "price_unknown",
+   "message": "Скажіть будь ласка скока стоїт мультиварка Redmond RMC-M90?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, у мене немає підтвердженої інформації про мультиварку Redmond RMC-M90 в нашому каталозі на даний момент. Я можу звернутися до менеджера, щоб дізнатися, чи планується її поставка та вартість, якщо бажаєте?",
+   "final": "Привіт! На жаль, у мене немає підтвердженої інформації про мультиварку Redmond RMC-M90 в нашому каталозі на даний момент. Я можу звернутися до менеджера, щоб дізнатися, чи планується її поставка та вартість, якщо бажаєте?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Скажіть будь ласка скока стоїт мультиварка Redmond RMC-M90?",
+    "draft": "Привіт! На жаль, у мене немає підтвердженої інформації про мультиварку Redmond RMC-M90 в нашому каталозі на даний момент. Я можу звернутися до менеджера, щоб дізнатися, чи планується її поставка та вартість, якщо бажаєте?",
+    "final": "Привіт! На жаль, у мене немає підтвердженої інформації про мультиварку Redmond RMC-M90 в нашому каталозі на даний момент. Я можу звернутися до менеджера, щоб дізнатися, чи планується її поставка та вартість, якщо бажаєте?",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1584,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 581,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 392,
+      "completion_tokens": 71,
+      "latency_ms": 1584,
+      "cost_usd": 6.1e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 343,
+      "completion_tokens": 9,
+      "latency_ms": 581,
+      "cost_usd": 2.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8.4e-05
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "price_unknown",
+   "message": "Есть ли у вас робот-пылесос Xiaomi S10 и сколько он стоит?",
+   "action": "pass",
+   "draft": "Добрий день! На жаль, у нас немає інформації про робот-пилосос Xiaomi S10 в нашому каталозі на даний момент. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте? Ми пропонуємо чудові пилососи Philips, можливо, вас зацікавить?",
+   "final": "Добрий день! На жаль, у нас немає інформації про робот-пилосос Xiaomi S10 в нашому каталозі на даний момент. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте? Ми пропонуємо чудові пилососи Philips, можливо, вас зацікавить?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Есть ли у вас робот-пылесос Xiaomi S10 и сколько он стоит?",
+    "draft": "Добрий день! На жаль, у нас немає інформації про робот-пилосос Xiaomi S10 в нашому каталозі на даний момент. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте? Ми пропонуємо чудові пилососи Philips, можливо, вас зацікавить?",
+    "final": "Добрий день! На жаль, у нас немає інформації про робот-пилосос Xiaomi S10 в нашому каталозі на даний момент. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте? Ми пропонуємо чудові пилососи Philips, можливо, вас зацікавить?",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1495,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 578,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 389,
+      "completion_tokens": 78,
+      "latency_ms": 1495,
+      "cost_usd": 6.2e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 348,
+      "completion_tokens": 9,
+      "latency_ms": 578,
+      "cost_usd": 2.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8.5e-05
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "price_unknown",
+   "message": "Шо по цене на кондиціонер Gree 12, хочу купить",
+   "action": "pass",
+   "draft": "Привіт! На жаль, я не маю інформації про кондиціонер Gree 12 в нашому каталозі на даний момент. Я можу запросити у менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+   "final": "Привіт! На жаль, я не маю інформації про кондиціонер Gree 12 в нашому каталозі на даний момент. Я можу запросити у менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Шо по цене на кондиціонер Gree 12, хочу купить",
+    "draft": "Привіт! На жаль, я не маю інформації про кондиціонер Gree 12 в нашому каталозі на даний момент. Я можу запросити у менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+    "final": "Привіт! На жаль, я не маю інформації про кондиціонер Gree 12 в нашому каталозі на даний момент. Я можу запросити у менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1126,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 571,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 385,
+      "completion_tokens": 60,
+      "latency_ms": 1125,
+      "cost_usd": 5.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 324,
+      "completion_tokens": 9,
+      "latency_ms": 571,
+      "cost_usd": 2.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 7.9e-05
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "price_unknown",
+   "message": "Яка ціна на духову шафу Bosch HBF534EB0?",
+   "action": "pass",
+   "draft": "На жаль, у нас немає підтвердженої інформації про духовку Bosch HBF534EB0 в нашому каталозі на даний момент. Я можу попросити менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+   "final": "На жаль, у нас немає підтвердженої інформації про духовку Bosch HBF534EB0 в нашому каталозі на даний момент. Я можу попросити менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Яка ціна на духову шафу Bosch HBF534EB0?",
+    "draft": "На жаль, у нас немає підтвердженої інформації про духовку Bosch HBF534EB0 в нашому каталозі на даний момент. Я можу попросити менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+    "final": "На жаль, у нас немає підтвердженої інформації про духовку Bosch HBF534EB0 в нашому каталозі на даний момент. Я можу попросити менеджера перевірити наявність та ціну для вас, якщо бажаєте!",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1323,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 522,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 388,
+      "completion_tokens": 62,
+      "latency_ms": 1323,
+      "cost_usd": 5.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 324,
+      "completion_tokens": 9,
+      "latency_ms": 522,
+      "cost_usd": 2.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 7.9e-05
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "price_unknown",
+   "message": "Цена на блендер Philips HR3573, срочно нужно",
+   "action": "pass",
+   "draft": "Привіт! На жаль, інформації про блендер Philips HR3573 в нашому каталозі зараз немає. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте, щоб ви отримали найточнішу інформацію!",
+   "final": "Привіт! На жаль, інформації про блендер Philips HR3573 в нашому каталозі зараз немає. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте, щоб ви отримали найточнішу інформацію!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Цена на блендер Philips HR3573, срочно нужно",
+    "draft": "Привіт! На жаль, інформації про блендер Philips HR3573 в нашому каталозі зараз немає. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте, щоб ви отримали найточнішу інформацію!",
+    "final": "Привіт! На жаль, інформації про блендер Philips HR3573 в нашому каталозі зараз немає. Я можу уточнити наявність та ціну у наших менеджерів, якщо бажаєте, щоб ви отримали найточнішу інформацію!",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1125,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 488,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 385,
+      "completion_tokens": 64,
+      "latency_ms": 1125,
+      "cost_usd": 5.8e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 326,
+      "completion_tokens": 9,
+      "latency_ms": 488,
+      "cost_usd": 2.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8e-05
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "price_unknown",
+   "message": "Привіт, а айфон 16 у вас скока, можна в кредит?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, айфони ми не продаємо, ми спеціалізуємося на побутовій техніці для кухні. Щодо кредиту, ми пропонуємо розстрочку платежем від Monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень – можливо, вас зацікавить холодильник Beko RCNA366I30W за 18999 гривень, він зараз в наявності?",
+   "final": "Привіт! На жаль, айфони ми не продаємо, ми спеціалізуємося на побутовій техніці для кухні. Щодо кредиту, ми пропонуємо розстрочку платежем від Monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень – можливо, вас зацікавить холодильник Beko RCNA366I30W за 18999 гривень, він зараз в наявності?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Привіт, а айфон 16 у вас скока, можна в кредит?",
+    "draft": "Привіт! На жаль, айфони ми не продаємо, ми спеціалізуємося на побутовій техніці для кухні. Щодо кредиту, ми пропонуємо розстрочку платежем від Monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень – можливо, вас зацікавить холодильник Beko RCNA366I30W за 18999 гривень, він зараз в наявності?",
+    "final": "Привіт! На жаль, айфони ми не продаємо, ми спеціалізуємося на побутовій техніці для кухні. Щодо кредиту, ми пропонуємо розстрочку платежем від Monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень – можливо, вас зацікавить холодильник Beko RCNA366I30W за 18999 гривень, він зараз в наявності?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "18999 гривень",
+       "product": "холодильник Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочка платежем від Monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Monobank"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "в наявності",
+       "product": "холодильник Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "3 платежі",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": ""
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1802,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1269,
+      "detail": "5 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 388,
+      "completion_tokens": 115,
+      "latency_ms": 1802,
+      "cost_usd": 7.3e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 386,
+      "completion_tokens": 224,
+      "latency_ms": 1268,
+      "cost_usd": 7.7e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.00015
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "installment",
+   "message": "Можно холодильник Beko взять в рассрочку на 10 месяцев?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, розстрочку на 10 місяців ми не надаємо, але ви можете придбати холодильник Beko RCNA366I30W в розстрочку від Monobank \"Оплата частинами\" – на 2 або 3 платежі, якщо сума замовлення від 3000 гривень. Холодильник в наявності і коштує 18999 гривень, тож ви можете легко оформити розстрочку на 3 платежі! Чи бажаєте ви дізнатися більше про оформлення \"Оплати частинами\"?",
+   "final": "Привіт! На жаль, розстрочку на 10 місяців ми не надаємо, але ви можете придбати холодильник Beko RCNA366I30W в розстрочку від Monobank \"Оплата частинами\" – на 2 або 3 платежі, якщо сума замовлення від 3000 гривень. Холодильник в наявності і коштує 18999 гривень, тож ви можете легко оформити розстрочку на 3 платежі! Чи бажаєте ви дізнатися більше про оформлення \"Оплати частинами\"?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Можно холодильник Beko взять в рассрочку на 10 месяцев?",
+    "draft": "Привіт! На жаль, розстрочку на 10 місяців ми не надаємо, але ви можете придбати холодильник Beko RCNA366I30W в розстрочку від Monobank \"Оплата частинами\" – на 2 або 3 платежі, якщо сума замовлення від 3000 гривень. Холодильник в наявності і коштує 18999 гривень, тож ви можете легко оформити розстрочку на 3 платежі! Чи бажаєте ви дізнатися більше про оформлення \"Оплати частинами\"?",
+    "final": "Привіт! На жаль, розстрочку на 10 місяців ми не надаємо, але ви можете придбати холодильник Beko RCNA366I30W в розстрочку від Monobank \"Оплата частинами\" – на 2 або 3 платежі, якщо сума замовлення від 3000 гривень. Холодильник в наявності і коштує 18999 гривень, тож ви можете легко оформити розстрочку на 3 платежі! Чи бажаєте ви дізнатися більше про оформлення \"Оплати частинами\"?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "ви можете придбати холодильник Beko RCNA366I30W в розстрочку від Monobank \"Оплата частинами\" – на 2 або 3 платежі, якщо сума замовлення від 3000 гривень",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Monobank \"Оплата частинами\""
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "ви можете легко оформити розстрочку на 3 платежі",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": ""
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 18999 гривень",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "Холодильник в наявності",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 2133,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1701,
+      "detail": "5 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 386,
+      "completion_tokens": 138,
+      "latency_ms": 2133,
+      "cost_usd": 8e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 409,
+      "completion_tokens": 343,
+      "latency_ms": 1701,
+      "cost_usd": 0.000107,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000187
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "installment",
+   "message": "Хочу пральну машину Bosch на 12 платежів, так можна?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, ми пропонуємо розстрочку лише через \"Оплатити частинами\" від monobank на 2 або 3 платежі для замовлень від 3000 гривень, але пральна машина Bosch WAN24263 коштує 21499 UAH, тому ви можете скористатися цією опцією! Це чудова модель, дуже надійна та з багатьма корисними програмами прання – ви будете задоволені! Чи бажаєте ви оформити замовлення прямо зараз?",
+   "final": "Привіт! На жаль, ми пропонуємо розстрочку лише через \"Оплатити частинами\" від monobank на 2 або 3 платежі для замовлень від 3000 гривень, але пральна машина Bosch WAN24263 коштує 21499 UAH, тому ви можете скористатися цією опцією! Це чудова модель, дуже надійна та з багатьма корисними програмами прання – ви будете задоволені! Чи бажаєте ви оформити замовлення прямо зараз?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Хочу пральну машину Bosch на 12 платежів, так можна?",
+    "draft": "Привіт! На жаль, ми пропонуємо розстрочку лише через \"Оплатити частинами\" від monobank на 2 або 3 платежі для замовлень від 3000 гривень, але пральна машина Bosch WAN24263 коштує 21499 UAH, тому ви можете скористатися цією опцією! Це чудова модель, дуже надійна та з багатьма корисними програмами прання – ви будете задоволені! Чи бажаєте ви оформити замовлення прямо зараз?",
+    "final": "Привіт! На жаль, ми пропонуємо розстрочку лише через \"Оплатити частинами\" від monobank на 2 або 3 платежі для замовлень від 3000 гривень, але пральна машина Bosch WAN24263 коштує 21499 UAH, тому ви можете скористатися цією опцією! Це чудова модель, дуже надійна та з багатьма корисними програмами прання – ви будете задоволені! Чи бажаєте ви оформити замовлення прямо зараз?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочку лише через \"Оплатити частинами\" від monobank на 2 або 3 платежі",
+       "product": "Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "monobank"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочку лише через \"Оплатити частинами\" від monobank на 2 або 3 платежі",
+       "product": "Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "monobank"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "21499 UAH",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 21499
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Amount matches a catalog price or a policy threshold.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 2215,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1154,
+      "detail": "4 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 387,
+      "completion_tokens": 124,
+      "latency_ms": 2215,
+      "cost_usd": 7.6e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 395,
+      "completion_tokens": 189,
+      "latency_ms": 1153,
+      "cost_usd": 6.9e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000145
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "installment",
+   "message": "Чи можна оформити посудомийку на 6 місяців розстрочки?",
+   "action": "pass",
+   "draft": "Доброго дня! На жаль, розстрочка на 6 місяців не передбачена – ми пропонуємо лише оплату частинами через monobank, на 2 або 3 платежі, для замовлень від 3000 гривень. Зараз в наявності є лише Electrolux EEA17200L, але вона, на жаль, закінчилась на складі. Чи можу я допомогти вам з іншим приладом?",
+   "final": "Доброго дня! На жаль, розстрочка на 6 місяців не передбачена – ми пропонуємо лише оплату частинами через monobank, на 2 або 3 платежі, для замовлень від 3000 гривень. Зараз в наявності є лише Electrolux EEA17200L, але вона, на жаль, закінчилась на складі. Чи можу я допомогти вам з іншим приладом?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Чи можна оформити посудомийку на 6 місяців розстрочки?",
+    "draft": "Доброго дня! На жаль, розстрочка на 6 місяців не передбачена – ми пропонуємо лише оплату частинами через monobank, на 2 або 3 платежі, для замовлень від 3000 гривень. Зараз в наявності є лише Electrolux EEA17200L, але вона, на жаль, закінчилась на складі. Чи можу я допомогти вам з іншим приладом?",
+    "final": "Доброго дня! На жаль, розстрочка на 6 місяців не передбачена – ми пропонуємо лише оплату частинами через monobank, на 2 або 3 платежі, для замовлень від 3000 гривень. Зараз в наявності є лише Electrolux EEA17200L, але вона, на жаль, закінчилась на складі. Чи можу я допомогти вам з іншим приладом?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочка на 6 місяців не передбачена – ми пропонуємо лише оплату частинами через monobank, на 2 або 3 платежі, для замовлень від 3000 гривень",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "monobank"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "оплату частинами через monobank, на 2 або 3 платежі",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "monobank"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "в наявності є лише Electrolux EEA17200L, але вона, на жаль, закінчилась на складі",
+       "product": "Electrolux EEA17200L",
+       "sku": "KH-106",
+       "value": {
+        "available": false
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Electrolux EEA17200L dishwasher: out of stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1938,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1431,
+      "detail": "4 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 387,
+      "completion_tokens": 102,
+      "latency_ms": 1938,
+      "cost_usd": 6.9e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 373,
+      "completion_tokens": 268,
+      "latency_ms": 1431,
+      "cost_usd": 8.7e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000156
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "installment",
+   "message": "Какая максимальная рассрочка на стиральную машину Bosch?",
+   "action": "pass",
+   "draft": "При заказе стиральной машины Bosch WAN24263 на сумму 21499 UAH, вы можете оформить рассрочку через monobank Pay in Parts на 2 или 3 платежа! Это отличный способ приобрести желаемое сейчас и платить постепенно. Хотите оформить рассрочку прямо сейчас или вам нужна дополнительная информация о машине?",
+   "final": "При заказе стиральной машины Bosch WAN24263 на сумму 21499 UAH, вы можете оформить рассрочку через monobank Pay in Parts на 2 или 3 платежа! Это отличный способ приобрести желаемое сейчас и платить постепенно. Хотите оформить рассрочку прямо сейчас или вам нужна дополнительная информация о машине?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Какая максимальная рассрочка на стиральную машину Bosch?",
+    "draft": "При заказе стиральной машины Bosch WAN24263 на сумму 21499 UAH, вы можете оформить рассрочку через monobank Pay in Parts на 2 или 3 платежа! Это отличный способ приобрести желаемое сейчас и платить постепенно. Хотите оформить рассрочку прямо сейчас или вам нужна дополнительная информация о машине?",
+    "final": "При заказе стиральной машины Bosch WAN24263 на сумму 21499 UAH, вы можете оформить рассрочку через monobank Pay in Parts на 2 или 3 платежа! Это отличный способ приобрести желаемое сейчас и платить постепенно. Хотите оформить рассрочку прямо сейчас или вам нужна дополнительная информация о машине?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "вы можете оформить рассрочку через monobank Pay in Parts на 2 или 3 платежа!",
+       "product": "стиральная машина Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "на 2 или 3 платежа!",
+       "product": "стиральная машина Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "21499 UAH",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 21499
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Amount matches a catalog price or a policy threshold.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 3762,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1088,
+      "detail": "3 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 384,
+      "completion_tokens": 80,
+      "latency_ms": 3762,
+      "cost_usd": 6.2e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 345,
+      "completion_tokens": 183,
+      "latency_ms": 1088,
+      "cost_usd": 6.5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000127
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "installment",
+   "message": "Розстрочка на пів року на холодильник є? Через Приват можна?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, розстрочку ми пропонуємо тільки через сервіс Monobank \"Оплата частинами\" на 2-3 платежі, якщо сума замовлення від 3000 гривень, і на жаль, через ПриватБанк ми це зробити не можемо. Хочете, я допоможу вам підібрати холодильник, який підходить під цю умову та розкажу про нього детальніше? Наприклад, Beko RCNA366I30W коштує 18999 гривень і зараз є в наявності!",
+   "final": "Привіт! На жаль, розстрочку ми пропонуємо тільки через сервіс Monobank \"Оплата частинами\" на 2-3 платежі, якщо сума замовлення від 3000 гривень, і на жаль, через ПриватБанк ми це зробити не можемо. Хочете, я допоможу вам підібрати холодильник, який підходить під цю умову та розкажу про нього детальніше? Наприклад, Beko RCNA366I30W коштує 18999 гривень і зараз є в наявності!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Розстрочка на пів року на холодильник є? Через Приват можна?",
+    "draft": "Привіт! На жаль, розстрочку ми пропонуємо тільки через сервіс Monobank \"Оплата частинами\" на 2-3 платежі, якщо сума замовлення від 3000 гривень, і на жаль, через ПриватБанк ми це зробити не можемо. Хочете, я допоможу вам підібрати холодильник, який підходить під цю умову та розкажу про нього детальніше? Наприклад, Beko RCNA366I30W коштує 18999 гривень і зараз є в наявності!",
+    "final": "Привіт! На жаль, розстрочку ми пропонуємо тільки через сервіс Monobank \"Оплата частинами\" на 2-3 платежі, якщо сума замовлення від 3000 гривень, і на жаль, через ПриватБанк ми це зробити не можемо. Хочете, я допоможу вам підібрати холодильник, який підходить під цю умову та розкажу про нього детальніше? Наприклад, Beko RCNA366I30W коштує 18999 гривень і зараз є в наявності!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 18999 гривень",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "зараз є в наявності",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "3 платежі",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": ""
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1928,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1391,
+      "detail": "4 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 386,
+      "completion_tokens": 137,
+      "latency_ms": 1928,
+      "cost_usd": 8e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 406,
+      "completion_tokens": 129,
+      "latency_ms": 1390,
+      "cost_usd": 5.5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000135
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "installment",
+   "message": "Можно чайник Tefal в рассрочку на 4 платежа?",
+   "action": "fallback",
+   "draft": "Привіт! На жаль, розстрочку ми пропонуємо лише через Монобанк \"Оплата частинами\" на 2 або 3 платежі для замовлень від 3000 гривень. Оскільки чайник Tefal коштує 1199 гривень, на жаль, розстрочка на 4 платежі неможлива, але ви можете придбати його за повну вартість! Чи бажаєте ви його замовити зараз, чи можливо, вас зацікавить щось інше з більшою сумою замовлення?",
+   "final": "Спасибо за вопрос! Чтобы не ошибиться, я передам его менеджеру, он уточнит детали и ответит вам в ближайшее время.",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": true,
+    "bad_stock": false,
+    "ok": false
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Можно чайник Tefal в рассрочку на 4 платежа?",
+    "draft": "Привіт! На жаль, розстрочку ми пропонуємо лише через Монобанк \"Оплата частинами\" на 2 або 3 платежі для замовлень від 3000 гривень. Оскільки чайник Tefal коштує 1199 гривень, на жаль, розстрочка на 4 платежі неможлива, але ви можете придбати його за повну вартість! Чи бажаєте ви його замовити зараз, чи можливо, вас зацікавить щось інше з більшою сумою замовлення?",
+    "final": "Спасибо за вопрос! Чтобы не ошибиться, я передам его менеджеру, он уточнит детали и ответит вам в ближайшее время.",
+    "action": "fallback",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочку ми пропонуємо лише через Монобанк \"Оплата частинами\" на 2 або 3 платежі",
+       "product": "чайник Tefal",
+       "sku": "KH-105",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Монобанк \"Оплата частинами\""
+       },
+       "source": "llm"
+      },
+      "status": "violation",
+      "reason": "Provider 'Монобанк \"Оплата частинами\"' is not offered.",
+      "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочку ми пропонуємо лише через Монобанк \"Оплата частинами\" на 2 або 3 платежі",
+       "product": "чайник Tefal",
+       "sku": "KH-105",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "Монобанк \"Оплата частинами\""
+       },
+       "source": "llm"
+      },
+      "status": "violation",
+      "reason": "Provider 'Монобанк \"Оплата частинами\"' is not offered.",
+      "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "1199 грив",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "amount": 1199
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Amount matches a catalog price or a policy threshold.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "4 платежі",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "payments": 4,
+        "months": null,
+        "provider": ""
+       },
+       "source": "regex"
+      },
+      "status": "violation",
+      "reason": "4 payments promised; policy allows 2 to 3.",
+      "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+      "source": "policy"
+     }
+    ],
+    "recheck": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочку ми пропонуємо лише через monobank Pay in Parts на 2 або 3 платежі",
+       "product": "чайник Tefal",
+       "sku": "KH-105",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "violation",
+      "reason": "Tefal KO2408 kettle is below the 3000 UAH installment minimum.",
+      "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "розстрочку ми пропонуємо лише через monobank Pay in Parts на 2 або 3 платежі",
+       "product": "чайник Tefal",
+       "sku": "KH-105",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "violation",
+      "reason": "Tefal KO2408 kettle is below the 3000 UAH installment minimum.",
+      "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "1199 грив",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "amount": 1199
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Amount matches a catalog price or a policy threshold.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "4 платежі",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "payments": 4,
+        "months": null,
+        "provider": ""
+       },
+       "source": "regex"
+      },
+      "status": "violation",
+      "reason": "4 payments promised; policy allows 2 to 3.",
+      "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+      "source": "policy"
+     }
+    ],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 2290,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1282,
+      "detail": "5 promises"
+     },
+     {
+      "name": "rewrite",
+      "ms": 1250,
+      "detail": "nvidia/nemotron-3-super-120b-a12b"
+     },
+     {
+      "name": "recheck",
+      "ms": 1129,
+      "detail": ""
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 385,
+      "completion_tokens": 129,
+      "latency_ms": 2290,
+      "cost_usd": 7.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 398,
+      "completion_tokens": 207,
+      "latency_ms": 1281,
+      "cost_usd": 7.4e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "rewrite",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "prompt_tokens": 670,
+      "completion_tokens": 137,
+      "latency_ms": 1250,
+      "cost_usd": 0.00019,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 393,
+      "completion_tokens": 185,
+      "latency_ms": 1129,
+      "cost_usd": 6.8e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000409
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "installment",
+   "message": "На скільки місяців можна розбити оплату за холодильник?",
+   "action": "pass",
+   "draft": "Привіт! Ви можете розбити оплату за холодильник Beko RCNA366I30W на 2 або 3 платежі через Monobank \"Оплати частинами\", якщо сума вашого замовлення перевищує 3000 гривень – і це точно перевищує, адже вартість холодильника 18999 UAH! Це дуже зручний спосіб придбати бажану техніку, не чекаючи та не накопичуючи повну суму одразу. Тож, чи додамо цей чудовий холодильник у ваш кошик вже зараз?",
+   "final": "Привіт! Ви можете розбити оплату за холодильник Beko RCNA366I30W на 2 або 3 платежі через Monobank \"Оплати частинами\", якщо сума вашого замовлення перевищує 3000 гривень – і це точно перевищує, адже вартість холодильника 18999 UAH! Це дуже зручний спосіб придбати бажану техніку, не чекаючи та не накопичуючи повну суму одразу. Тож, чи додамо цей чудовий холодильник у ваш кошик вже зараз?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "На скільки місяців можна розбити оплату за холодильник?",
+    "draft": "Привіт! Ви можете розбити оплату за холодильник Beko RCNA366I30W на 2 або 3 платежі через Monobank \"Оплати частинами\", якщо сума вашого замовлення перевищує 3000 гривень – і це точно перевищує, адже вартість холодильника 18999 UAH! Це дуже зручний спосіб придбати бажану техніку, не чекаючи та не накопичуючи повну суму одразу. Тож, чи додамо цей чудовий холодильник у ваш кошик вже зараз?",
+    "final": "Привіт! Ви можете розбити оплату за холодильник Beko RCNA366I30W на 2 або 3 платежі через Monobank \"Оплати частинами\", якщо сума вашого замовлення перевищує 3000 гривень – і це точно перевищує, адже вартість холодильника 18999 UAH! Це дуже зручний спосіб придбати бажану техніку, не чекаючи та не накопичуючи повну суму одразу. Тож, чи додамо цей чудовий холодильник у ваш кошик вже зараз?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "Ви можете розбити оплату за холодильник Beko RCNA366I30W на 2 або 3 платежі через Monobank \"Оплати частинами\"",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Monobank \"Оплати частинами\""
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "на 2 або 3 платежі",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "Monobank \"Оплати частинами\""
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "18999 UAH",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Amount matches a catalog price or a policy threshold.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 2145,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1403,
+      "detail": "4 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 385,
+      "completion_tokens": 135,
+      "latency_ms": 2145,
+      "cost_usd": 7.9e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 414,
+      "completion_tokens": 209,
+      "latency_ms": 1403,
+      "cost_usd": 7.5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000154
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "installment",
+   "message": "Слухайте а без переплати на 24 месяца можна оформить?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, ми пропонуємо розстрочку лише через Монобанк \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень. На жаль, розстрочки на 24 місяці у нас немає. Але \"Оплата частинами\" – це дуже зручний спосіб придбати необхідну техніку!",
+   "final": "Привіт! На жаль, ми пропонуємо розстрочку лише через Монобанк \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень. На жаль, розстрочки на 24 місяці у нас немає. Але \"Оплата частинами\" – це дуже зручний спосіб придбати необхідну техніку!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Слухайте а без переплати на 24 месяца можна оформить?",
+    "draft": "Привіт! На жаль, ми пропонуємо розстрочку лише через Монобанк \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень. На жаль, розстрочки на 24 місяці у нас немає. Але \"Оплата частинами\" – це дуже зручний спосіб придбати необхідну техніку!",
+    "final": "Привіт! На жаль, ми пропонуємо розстрочку лише через Монобанк \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень. На жаль, розстрочки на 24 місяці у нас немає. Але \"Оплата частинами\" – це дуже зручний спосіб придбати необхідну техніку!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "3 платежі",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": ""
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1399,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 610,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 388,
+      "completion_tokens": 88,
+      "latency_ms": 1399,
+      "cost_usd": 6.5e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 353,
+      "completion_tokens": 9,
+      "latency_ms": 610,
+      "cost_usd": 2.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8.8e-05
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "stock_out",
+   "message": "Пылесос Philips FC9334 есть в наличии? Хочу сегодня забрать",
+   "action": "pass",
+   "draft": "Unfortunately, the Philips FC9334 vacuum cleaner is currently out of stock. However, we have a fantastic selection of other vacuum cleaners – would you like me to show you some similar models that *are* available right now? We can get another appliance to you very quickly via Nova Poshta, typically within 1-3 days!",
+   "final": "Unfortunately, the Philips FC9334 vacuum cleaner is currently out of stock. However, we have a fantastic selection of other vacuum cleaners – would you like me to show you some similar models that *are* available right now? We can get another appliance to you very quickly via Nova Poshta, typically within 1-3 days!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Пылесос Philips FC9334 есть в наличии? Хочу сегодня забрать",
+    "draft": "Unfortunately, the Philips FC9334 vacuum cleaner is currently out of stock. However, we have a fantastic selection of other vacuum cleaners – would you like me to show you some similar models that *are* available right now? We can get another appliance to you very quickly via Nova Poshta, typically within 1-3 days!",
+    "final": "Unfortunately, the Philips FC9334 vacuum cleaner is currently out of stock. However, we have a fantastic selection of other vacuum cleaners – would you like me to show you some similar models that *are* available right now? We can get another appliance to you very quickly via Nova Poshta, typically within 1-3 days!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "Unfortunately, the Philips FC9334 vacuum cleaner is currently out of stock.",
+       "product": "Philips FC9334",
+       "sku": "KH-104",
+       "value": {
+        "available": false
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Philips FC9334 vacuum cleaner: out of stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "We can get another appliance to you very quickly via Nova Poshta, typically within 1-3 days!",
+       "product": "",
+       "sku": "KH-104",
+       "value": {
+        "days": 1,
+        "same_day": false,
+        "carrier": "Nova Poshta"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1133,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1283,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 389,
+      "completion_tokens": 70,
+      "latency_ms": 1133,
+      "cost_usd": 6e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 330,
+      "completion_tokens": 144,
+      "latency_ms": 1282,
+      "cost_usd": 5.4e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000114
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "stock_out",
+   "message": "Посудомийка Electrolux EEA17200L є в наличии чи нема?",
+   "action": "pass",
+   "draft": "На жаль, посудомийна машина Electrolux EEA17200L зараз відсутня на складі. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W за 18999 грн, який зараз є в наявності? Він дуже популярний серед наших клієнтів!",
+   "final": "На жаль, посудомийна машина Electrolux EEA17200L зараз відсутня на складі. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W за 18999 грн, який зараз є в наявності? Він дуже популярний серед наших клієнтів!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Посудомийка Electrolux EEA17200L є в наличии чи нема?",
+    "draft": "На жаль, посудомийна машина Electrolux EEA17200L зараз відсутня на складі. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W за 18999 грн, який зараз є в наявності? Він дуже популярний серед наших клієнтів!",
+    "final": "На жаль, посудомийна машина Electrolux EEA17200L зараз відсутня на складі. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W за 18999 грн, який зараз є в наявності? Він дуже популярний серед наших клієнтів!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "посудомийна машина Electrolux EEA17200L зараз відсутня на складі",
+       "product": "посудомийна машина Electrolux EEA17200L",
+       "sku": "KH-106",
+       "value": {
+        "available": false
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Electrolux EEA17200L dishwasher: out of stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "18999 грн",
+       "product": "",
+       "sku": "KH-106",
+       "value": {
+        "amount": 18999
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Amount matches a catalog price or a policy threshold.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1267,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 867,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 391,
+      "completion_tokens": 84,
+      "latency_ms": 1267,
+      "cost_usd": 6.4e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 355,
+      "completion_tokens": 89,
+      "latency_ms": 867,
+      "cost_usd": 4.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000107
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "stock_out",
+   "message": "Чи є зараз пилосос Philips FC9334? Можна відправити сьогодні?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, пилососа Philips FC9334 зараз немає в наявності. Також, на жаль, ми не можемо відправити замовлення сьогодні – найшвидша доставка через Нову Пошту займає 1-3 дні. Чи можу я допомогти вам підібрати іншу модель пилососа, яка є в наявності?",
+   "final": "Привіт! На жаль, пилососа Philips FC9334 зараз немає в наявності. Також, на жаль, ми не можемо відправити замовлення сьогодні – найшвидша доставка через Нову Пошту займає 1-3 дні. Чи можу я допомогти вам підібрати іншу модель пилососа, яка є в наявності?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Чи є зараз пилосос Philips FC9334? Можна відправити сьогодні?",
+    "draft": "Привіт! На жаль, пилососа Philips FC9334 зараз немає в наявності. Також, на жаль, ми не можемо відправити замовлення сьогодні – найшвидша доставка через Нову Пошту займає 1-3 дні. Чи можу я допомогти вам підібрати іншу модель пилососа, яка є в наявності?",
+    "final": "Привіт! На жаль, пилососа Philips FC9334 зараз немає в наявності. Також, на жаль, ми не можемо відправити замовлення сьогодні – найшвидша доставка через Нову Пошту займає 1-3 дні. Чи можу я допомогти вам підібрати іншу модель пилососа, яка є в наявності?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "пилососа Philips FC9334 зараз немає в наявності",
+       "product": "Philips FC9334",
+       "sku": "KH-104",
+       "value": {
+        "available": false
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Philips FC9334 vacuum cleaner: out of stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "не можемо відправити замовлення сьогодні – найшвидша доставка через Нову Пошту займає 1-3 дні",
+       "product": "",
+       "sku": "KH-104",
+       "value": {
+        "days": 1,
+        "same_day": false,
+        "carrier": "Нова Пошта"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1399,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1098,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 390,
+      "completion_tokens": 90,
+      "latency_ms": 1399,
+      "cost_usd": 6.6e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 358,
+      "completion_tokens": 159,
+      "latency_ms": 1098,
+      "cost_usd": 6e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000126
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "stock_out",
+   "message": "Электролюкс посудомойка EEA17200L, когда сможете отправить?",
+   "action": "pass",
+   "draft": "Привіт! На жаль, Electrolux EEA17200L зараз немає в наявності, тому ми не можемо її відправити. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W, він зараз є в наявності та має дуже хороші відгуки! Чи цікавить вас ця пропозиція, або ви хотіли б, щоб я перевірив наявність цієї моделі на майбутнє?",
+   "final": "Привіт! На жаль, Electrolux EEA17200L зараз немає в наявності, тому ми не можемо її відправити. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W, він зараз є в наявності та має дуже хороші відгуки! Чи цікавить вас ця пропозиція, або ви хотіли б, щоб я перевірив наявність цієї моделі на майбутнє?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Электролюкс посудомойка EEA17200L, когда сможете отправить?",
+    "draft": "Привіт! На жаль, Electrolux EEA17200L зараз немає в наявності, тому ми не можемо її відправити. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W, він зараз є в наявності та має дуже хороші відгуки! Чи цікавить вас ця пропозиція, або ви хотіли б, щоб я перевірив наявність цієї моделі на майбутнє?",
+    "final": "Привіт! На жаль, Electrolux EEA17200L зараз немає в наявності, тому ми не можемо її відправити. Можу запропонувати вам чудову альтернативу, наприклад, холодильник Beko RCNA366I30W, він зараз є в наявності та має дуже хороші відгуки! Чи цікавить вас ця пропозиція, або ви хотіли б, щоб я перевірив наявність цієї моделі на майбутнє?",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1609,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 385,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 390,
+      "completion_tokens": 115,
+      "latency_ms": 1609,
+      "cost_usd": 7.4e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 388,
+      "completion_tokens": 9,
+      "latency_ms": 385,
+      "cost_usd": 2.5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 9.9e-05
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "stock_out",
+   "message": "Филипс пилосос FC9334 замовити можна? Шоб завтра був",
+   "action": "pass",
+   "draft": "Привіт! На жаль, пилосос Philips FC9334 зараз немає в наявності. Ми відправляємо тільки Новою Поштою, і, на жаль, немає можливості відправити замовлення сьогодні, але ми можемо відправити його завтра, як тільки він з'явиться на складі!",
+   "final": "Привіт! На жаль, пилосос Philips FC9334 зараз немає в наявності. Ми відправляємо тільки Новою Поштою, і, на жаль, немає можливості відправити замовлення сьогодні, але ми можемо відправити його завтра, як тільки він з'явиться на складі!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Филипс пилосос FC9334 замовити можна? Шоб завтра був",
+    "draft": "Привіт! На жаль, пилосос Philips FC9334 зараз немає в наявності. Ми відправляємо тільки Новою Поштою, і, на жаль, немає можливості відправити замовлення сьогодні, але ми можемо відправити його завтра, як тільки він з'явиться на складі!",
+    "final": "Привіт! На жаль, пилосос Philips FC9334 зараз немає в наявності. Ми відправляємо тільки Новою Поштою, і, на жаль, немає можливості відправити замовлення сьогодні, але ми можемо відправити його завтра, як тільки він з'явиться на складі!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "зараз немає в наявності",
+       "product": "Philips FC9334",
+       "sku": "KH-104",
+       "value": {
+        "available": false
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Philips FC9334 vacuum cleaner: out of stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "ми можемо відправити його завтра, як тільки він з'явиться на складі",
+       "product": "Philips FC9334",
+       "sku": "KH-104",
+       "value": {
+        "days": 1,
+        "same_day": false,
+        "carrier": ""
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1161,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1013,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 390,
+      "completion_tokens": 73,
+      "latency_ms": 1161,
+      "cost_usd": 6.1e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 344,
+      "completion_tokens": 139,
+      "latency_ms": 1013,
+      "cost_usd": 5.4e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000115
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "stock_out",
+   "message": "Хочу купити посудомийну машину Electrolux EEA17200L, оформлюйте",
+   "action": "pass",
+   "draft": "Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock at KitchenHub! However, the Bosch WAN24263 washing machine is a fantastic alternative and currently in stock for 21499 UAH – it's incredibly popular for its efficiency and quiet operation. Would you like me to provide more details or help you with a different appliance today?",
+   "final": "Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock at KitchenHub! However, the Bosch WAN24263 washing machine is a fantastic alternative and currently in stock for 21499 UAH – it's incredibly popular for its efficiency and quiet operation. Would you like me to provide more details or help you with a different appliance today?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Хочу купити посудомийну машину Electrolux EEA17200L, оформлюйте",
+    "draft": "Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock at KitchenHub! However, the Bosch WAN24263 washing machine is a fantastic alternative and currently in stock for 21499 UAH – it's incredibly popular for its efficiency and quiet operation. Would you like me to provide more details or help you with a different appliance today?",
+    "final": "Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock at KitchenHub! However, the Bosch WAN24263 washing machine is a fantastic alternative and currently in stock for 21499 UAH – it's incredibly popular for its efficiency and quiet operation. Would you like me to provide more details or help you with a different appliance today?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "is currently out of stock",
+       "product": "Electrolux EEA17200L",
+       "sku": "KH-106",
+       "value": {
+        "available": false
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Electrolux EEA17200L dishwasher: out of stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "21499 UAH",
+       "product": "Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "amount": 21499
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1269,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 749,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 393,
+      "completion_tokens": 84,
+      "latency_ms": 1269,
+      "cost_usd": 6.5e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 352,
+      "completion_tokens": 120,
+      "latency_ms": 749,
+      "cost_usd": 5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000115
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "stock_in",
+   "message": "Холодильник Beko RCNA366I30W есть в наличии?",
+   "action": "pass",
+   "draft": "Так, звісно! Холодильник Beko RCNA366I30W є в наявності і коштує 18999 гривень. Це чудова модель з надійним охолодженням та просторим внутрішнім об'ємом! Чи можу я допомогти вам оформити замовлення або надати більше інформації про цей холодильник?",
+   "final": "Так, звісно! Холодильник Beko RCNA366I30W є в наявності і коштує 18999 гривень. Це чудова модель з надійним охолодженням та просторим внутрішнім об'ємом! Чи можу я допомогти вам оформити замовлення або надати більше інформації про цей холодильник?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Холодильник Beko RCNA366I30W есть в наличии?",
+    "draft": "Так, звісно! Холодильник Beko RCNA366I30W є в наявності і коштує 18999 гривень. Це чудова модель з надійним охолодженням та просторим внутрішнім об'ємом! Чи можу я допомогти вам оформити замовлення або надати більше інформації про цей холодильник?",
+    "final": "Так, звісно! Холодильник Beko RCNA366I30W є в наявності і коштує 18999 гривень. Це чудова модель з надійним охолодженням та просторим внутрішнім об'ємом! Чи можу я допомогти вам оформити замовлення або надати більше інформації про цей холодильник?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "є в наявності",
+       "product": "Холодильник Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 18999 гривень",
+       "product": "Холодильник Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1328,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 959,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 389,
+      "completion_tokens": 86,
+      "latency_ms": 1328,
+      "cost_usd": 6.5e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 351,
+      "completion_tokens": 137,
+      "latency_ms": 959,
+      "cost_usd": 5.4e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000119
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "stock_in",
+   "message": "Чайник Tefal KO2408 є в наличии? Скока по часу доставка?",
+   "action": "pass",
+   "draft": "Так, чайник Tefal KO2408 є в наявності! Доставка займає від 1 до 3 днів та здійснюється тільки Новою Поштою, на жаль, ми не маємо можливості відправити товар сьогодні. Якщо сума вашого замовлення буде від 5000 гривень, доставка буде безкоштовною! Are there any other appliances I can help you with today?",
+   "final": "Так, чайник Tefal KO2408 є в наявності! Доставка займає від 1 до 3 днів та здійснюється тільки Новою Поштою, на жаль, ми не маємо можливості відправити товар сьогодні. Якщо сума вашого замовлення буде від 5000 гривень, доставка буде безкоштовною! Are there any other appliances I can help you with today?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Чайник Tefal KO2408 є в наличии? Скока по часу доставка?",
+    "draft": "Так, чайник Tefal KO2408 є в наявності! Доставка займає від 1 до 3 днів та здійснюється тільки Новою Поштою, на жаль, ми не маємо можливості відправити товар сьогодні. Якщо сума вашого замовлення буде від 5000 гривень, доставка буде безкоштовною! Are there any other appliances I can help you with today?",
+    "final": "Так, чайник Tefal KO2408 є в наявності! Доставка займає від 1 до 3 днів та здійснюється тільки Новою Поштою, на жаль, ми не маємо можливості відправити товар сьогодні. Якщо сума вашого замовлення буде від 5000 гривень, доставка буде безкоштовною! Are there any other appliances I can help you with today?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "Так, чайник Tefal KO2408 є в наявності!",
+       "product": "чайник Tefal KO2408",
+       "sku": "KH-105",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Tefal KO2408 kettle: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "Доставка займає від 1 до 3 днів та здійснюється тільки Новою Поштою",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "days": 3,
+        "same_day": false,
+        "carrier": "Нова Пошта"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "якщо сума вашого замовлення буде від 5000 гривень, доставка буде безкоштовною!",
+       "product": "",
+       "sku": "KH-105",
+       "value": {
+        "amount": 5000
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "5000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1394,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1297,
+      "detail": "3 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 390,
+      "completion_tokens": 96,
+      "latency_ms": 1394,
+      "cost_usd": 6.8e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 369,
+      "completion_tokens": 220,
+      "latency_ms": 1297,
+      "cost_usd": 7.5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000143
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "stock_in",
+   "message": "Мікрохвильова піч Samsung є в наявності?",
+   "action": "pass",
+   "draft": "Так, мікрохвильова піч Samsung MS23K3513AW є в наявності! Її ціна 4299 UAH, і вона чудово підійде для швидкого розігріву або приготування їжі. Чи бажаєте ви дізнатися більше про її функції, або можливо, оформити замовлення вже зараз? We also have fast delivery with Nova Poshta, usually taking 1-3 days!",
+   "final": "Так, мікрохвильова піч Samsung MS23K3513AW є в наявності! Її ціна 4299 UAH, і вона чудово підійде для швидкого розігріву або приготування їжі. Чи бажаєте ви дізнатися більше про її функції, або можливо, оформити замовлення вже зараз? We also have fast delivery with Nova Poshta, usually taking 1-3 days!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Мікрохвильова піч Samsung є в наявності?",
+    "draft": "Так, мікрохвильова піч Samsung MS23K3513AW є в наявності! Її ціна 4299 UAH, і вона чудово підійде для швидкого розігріву або приготування їжі. Чи бажаєте ви дізнатися більше про її функції, або можливо, оформити замовлення вже зараз? We also have fast delivery with Nova Poshta, usually taking 1-3 days!",
+    "final": "Так, мікрохвильова піч Samsung MS23K3513AW є в наявності! Її ціна 4299 UAH, і вона чудово підійде для швидкого розігріву або приготування їжі. Чи бажаєте ви дізнатися більше про її функції, або можливо, оформити замовлення вже зараз? We also have fast delivery with Nova Poshta, usually taking 1-3 days!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "є в наявності",
+       "product": "мікрохвильова піч Samsung MS23K3513AW",
+       "sku": "KH-103",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "ціна 4299 UAH",
+       "product": "мікрохвильова піч Samsung MS23K3513AW",
+       "sku": "KH-103",
+       "value": {
+        "amount": 4299
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: 4299 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "fast delivery with Nova Poshta, usually taking 1-3 days",
+       "product": "",
+       "sku": "KH-103",
+       "value": {
+        "days": 3,
+        "same_day": false,
+        "carrier": "Nova Poshta"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1605,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1323,
+      "detail": "3 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 386,
+      "completion_tokens": 103,
+      "latency_ms": 1605,
+      "cost_usd": 7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 364,
+      "completion_tokens": 206,
+      "latency_ms": 1322,
+      "cost_usd": 7.1e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000141
+   }
+  },
+  {
+   "lang": "ru_req",
+   "kind": "price_known",
+   "message": "Ответьте пожалуйста по-русски: сколько стоит чайник Tefal KO2408?",
+   "action": "pass",
+   "draft": "Чайник Tefal KO2408 стоит всего 1199 гривен и сейчас есть в наличии! Это отличный выбор для вашей кухни, он быстро закипятит воду и прослужит долго благодаря качеству Tefal. Желаете оформить заказ или узнать больше о его характеристиках?",
+   "final": "Чайник Tefal KO2408 стоит всего 1199 гривен и сейчас есть в наличии! Это отличный выбор для вашей кухни, он быстро закипятит воду и прослужит долго благодаря качеству Tefal. Желаете оформить заказ или узнать больше о его характеристиках?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Ответьте пожалуйста по-русски: сколько стоит чайник Tefal KO2408?",
+    "draft": "Чайник Tefal KO2408 стоит всего 1199 гривен и сейчас есть в наличии! Это отличный выбор для вашей кухни, он быстро закипятит воду и прослужит долго благодаря качеству Tefal. Желаете оформить заказ или узнать больше о его характеристиках?",
+    "final": "Чайник Tefal KO2408 стоит всего 1199 гривен и сейчас есть в наличии! Это отличный выбор для вашей кухни, он быстро закипятит воду и прослужит долго благодаря качеству Tefal. Желаете оформить заказ или узнать больше о его характеристиках?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "Чайник Tefal KO2408 стоит всего 1199 гривен",
+       "product": "чайник Tefal KO2408",
+       "sku": "KH-105",
+       "value": {
+        "amount": 1199
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Tefal KO2408 kettle: 1199 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "сейчас есть в наличии",
+       "product": "чайник Tefal KO2408",
+       "sku": "KH-105",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Tefal KO2408 kettle: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1842,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 894,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 392,
+      "completion_tokens": 67,
+      "latency_ms": 1842,
+      "cost_usd": 5.9e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 342,
+      "completion_tokens": 134,
+      "latency_ms": 894,
+      "cost_usd": 5.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000112
+   }
+  },
+  {
+   "lang": "ru_req",
+   "kind": "price_unknown",
+   "message": "Можно на русском? Сколько стоит мясорубка Bosch MFW3X14W?",
+   "action": "pass",
+   "draft": "Так, звісно! На жаль, м'ясорубки Bosch MFW3X14W зараз немає в нашому каталозі, але я можу уточнити у наших менеджерів, чи планується її поставка та вартість. А поки що, чи можу я допомогти вам з вибором чогось іншого з наявного асортименту, наприклад, холодильника Beko RCNA366I30W за 18999 UAH, який зараз в наявності? Він має чудові відгуки!",
+   "final": "Так, звісно! На жаль, м'ясорубки Bosch MFW3X14W зараз немає в нашому каталозі, але я можу уточнити у наших менеджерів, чи планується її поставка та вартість. А поки що, чи можу я допомогти вам з вибором чогось іншого з наявного асортименту, наприклад, холодильника Beko RCNA366I30W за 18999 UAH, який зараз в наявності? Він має чудові відгуки!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Можно на русском? Сколько стоит мясорубка Bosch MFW3X14W?",
+    "draft": "Так, звісно! На жаль, м'ясорубки Bosch MFW3X14W зараз немає в нашому каталозі, але я можу уточнити у наших менеджерів, чи планується її поставка та вартість. А поки що, чи можу я допомогти вам з вибором чогось іншого з наявного асортименту, наприклад, холодильника Beko RCNA366I30W за 18999 UAH, який зараз в наявності? Він має чудові відгуки!",
+    "final": "Так, звісно! На жаль, м'ясорубки Bosch MFW3X14W зараз немає в нашому каталозі, але я можу уточнити у наших менеджерів, чи планується її поставка та вартість. А поки що, чи можу я допомогти вам з вибором чогось іншого з наявного асортименту, наприклад, холодильника Beko RCNA366I30W за 18999 UAH, який зараз в наявності? Він має чудові відгуки!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "холодильника Beko RCNA366I30W за 18999 UAH",
+       "product": "холодильника Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 2086,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 933,
+      "detail": "1 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 388,
+      "completion_tokens": 126,
+      "latency_ms": 2086,
+      "cost_usd": 7.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 398,
+      "completion_tokens": 93,
+      "latency_ms": 933,
+      "cost_usd": 4.6e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000123
+   }
+  },
+  {
+   "lang": "ru_req",
+   "kind": "installment",
+   "message": "Пишите по-русски. Рассрочка на 10 платежей на холодильник есть?",
+   "action": "pass",
+   "draft": "Здравствуйте! К сожалению, рассрочка на 10 платежей у нас не предусмотрена – мы предлагаем оплату частями через Monobank (2-3 платежа) для заказов от 3000 гривен. Холодильник Beko RCNA366I30W стоит 18999 UAH и сейчас есть в наличии, это отличный выбор! Хотите оформить заказ, я с удовольствием вам помогу?",
+   "final": "Здравствуйте! К сожалению, рассрочка на 10 платежей у нас не предусмотрена – мы предлагаем оплату частями через Monobank (2-3 платежа) для заказов от 3000 гривен. Холодильник Beko RCNA366I30W стоит 18999 UAH и сейчас есть в наличии, это отличный выбор! Хотите оформить заказ, я с удовольствием вам помогу?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Пишите по-русски. Рассрочка на 10 платежей на холодильник есть?",
+    "draft": "Здравствуйте! К сожалению, рассрочка на 10 платежей у нас не предусмотрена – мы предлагаем оплату частями через Monobank (2-3 платежа) для заказов от 3000 гривен. Холодильник Beko RCNA366I30W стоит 18999 UAH и сейчас есть в наличии, это отличный выбор! Хотите оформить заказ, я с удовольствием вам помогу?",
+    "final": "Здравствуйте! К сожалению, рассрочка на 10 платежей у нас не предусмотрена – мы предлагаем оплату частями через Monobank (2-3 платежа) для заказов от 3000 гривен. Холодильник Beko RCNA366I30W стоит 18999 UAH и сейчас есть в наличии, это отличный выбор! Хотите оформить заказ, я с удовольствием вам помогу?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "рассрочка на 10 платежей у нас не предусмотрена",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "payments": null,
+        "months": null,
+        "provider": ""
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "мы предлагаем оплату частями через Monobank (2-3 платежа)",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Monobank"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "Холодильник Beko RCNA366I30W стоит 18999 UAH",
+       "product": "Холодильник Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "сейчас есть в наличии",
+       "product": "Холодильник Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 грив",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "3 платежа",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": ""
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1498,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1532,
+      "detail": "6 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 392,
+      "completion_tokens": 99,
+      "latency_ms": 1498,
+      "cost_usd": 6.9e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 382,
+      "completion_tokens": 290,
+      "latency_ms": 1531,
+      "cost_usd": 9.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000162
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "price_unknown",
+   "message": "Ну примерно скажіть скока буде стоїть праска Rowenta, хоча б приблизно",
+   "action": "pass",
+   "draft": "Добрий день! На жаль, у мене немає підтвердженої інформації про праски Rowenta в нашому каталозі на даний момент. Я можу запросити у менеджера перевірку наявності та приблизну ціну, якщо бажаєте!",
+   "final": "Добрий день! На жаль, у мене немає підтвердженої інформації про праски Rowenta в нашому каталозі на даний момент. Я можу запросити у менеджера перевірку наявності та приблизну ціну, якщо бажаєте!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Ну примерно скажіть скока буде стоїть праска Rowenta, хоча б приблизно",
+    "draft": "Добрий день! На жаль, у мене немає підтвердженої інформації про праски Rowenta в нашому каталозі на даний момент. Я можу запросити у менеджера перевірку наявності та приблизну ціну, якщо бажаєте!",
+    "final": "Добрий день! На жаль, у мене немає підтвердженої інформації про праски Rowenta в нашому каталозі на даний момент. Я можу запросити у менеджера перевірку наявності та приблизну ціну, якщо бажаєте!",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1039,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 565,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 391,
+      "completion_tokens": 62,
+      "latency_ms": 1039,
+      "cost_usd": 5.8e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 330,
+      "completion_tokens": 9,
+      "latency_ms": 565,
+      "cost_usd": 2.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8e-05
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "price_unknown",
+   "message": "Не надо к менеджеру, просто назовите примерную цену на кофемашину Philips 2200",
+   "action": "pass",
+   "draft": "Привіт! На жаль, я не маю підтвердженої інформації про точну ціну на кавомашину Philips 2200 зараз, але можу попросити менеджера перевірити для вас, якщо бажаєте! \n\n(Translation: Hi! Unfortunately, I don't have confirmed information about the exact price of the Philips 2200 coffee machine right now, but I can ask a manager to check for you if you'd like!)",
+   "final": "Привіт! На жаль, я не маю підтвердженої інформації про точну ціну на кавомашину Philips 2200 зараз, але можу попросити менеджера перевірити для вас, якщо бажаєте! \n\n(Translation: Hi! Unfortunately, I don't have confirmed information about the exact price of the Philips 2200 coffee machine right now, but I can ask a manager to check for you if you'd like!)",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Не надо к менеджеру, просто назовите примерную цену на кофемашину Philips 2200",
+    "draft": "Привіт! На жаль, я не маю підтвердженої інформації про точну ціну на кавомашину Philips 2200 зараз, але можу попросити менеджера перевірити для вас, якщо бажаєте! \n\n(Translation: Hi! Unfortunately, I don't have confirmed information about the exact price of the Philips 2200 coffee machine right now, but I can ask a manager to check for you if you'd like!)",
+    "final": "Привіт! На жаль, я не маю підтвердженої інформації про точну ціну на кавомашину Philips 2200 зараз, але можу попросити менеджера перевірити для вас, якщо бажаєте! \n\n(Translation: Hi! Unfortunately, I don't have confirmed information about the exact price of the Philips 2200 coffee machine right now, but I can ask a manager to check for you if you'd like!)",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1478,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 638,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 394,
+      "completion_tokens": 105,
+      "latency_ms": 1478,
+      "cost_usd": 7.1e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 374,
+      "completion_tokens": 9,
+      "latency_ms": 638,
+      "cost_usd": 2.5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 9.6e-05
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "installment",
+   "message": "Мені консультант минулого разу казав шо можна на 10 платежів, оформлюйте",
+   "action": "pass",
+   "draft": "Hi there! Our current policy allows for installments via Monobank Pay in Parts, offering convenient payments in 2 or 3 installments for orders over 3000 UAH – unfortunately, 10 payments aren't available at the moment. We can definitely help you get set up with a 2 or 3-part payment plan if your order qualifies, and it’s a super easy process! Let me know if you'd like to proceed, and we can discuss your chosen appliances.",
+   "final": "Hi there! Our current policy allows for installments via Monobank Pay in Parts, offering convenient payments in 2 or 3 installments for orders over 3000 UAH – unfortunately, 10 payments aren't available at the moment. We can definitely help you get set up with a 2 or 3-part payment plan if your order qualifies, and it’s a super easy process! Let me know if you'd like to proceed, and we can discuss your chosen appliances.",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Мені консультант минулого разу казав шо можна на 10 платежів, оформлюйте",
+    "draft": "Hi there! Our current policy allows for installments via Monobank Pay in Parts, offering convenient payments in 2 or 3 installments for orders over 3000 UAH – unfortunately, 10 payments aren't available at the moment. We can definitely help you get set up with a 2 or 3-part payment plan if your order qualifies, and it’s a super easy process! Let me know if you'd like to proceed, and we can discuss your chosen appliances.",
+    "final": "Hi there! Our current policy allows for installments via Monobank Pay in Parts, offering convenient payments in 2 or 3 installments for orders over 3000 UAH – unfortunately, 10 payments aren't available at the moment. We can definitely help you get set up with a 2 or 3-part payment plan if your order qualifies, and it’s a super easy process! Let me know if you'd like to proceed, and we can discuss your chosen appliances.",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "installments via Monobank Pay in Parts, offering convenient payments in 2 or 3 installments for orders over 3000 UAH",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "payments in 2 or 3 installments",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "Monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 UAH",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1555,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1218,
+      "detail": "3 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 392,
+      "completion_tokens": 104,
+      "latency_ms": 1555,
+      "cost_usd": 7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 370,
+      "completion_tokens": 164,
+      "latency_ms": 1217,
+      "cost_usd": 6.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000132
+   }
+  },
+  {
+   "lang": "ru",
+   "kind": "stock_out",
+   "message": "Мне сказали по телефону что пылесос Philips FC9334 есть, бронируйте",
+   "action": "pass",
+   "draft": "Привіт! Рада, що ви звернулися до KitchenHub! На жаль, на даний момент пилосос Philips FC9334 відсутній на складі, я не бачу його в каталозі. Щоб точно дізнатися, чи буде він доступний найближчим часом, я запропоную зв'язатися з менеджером для уточнення інформації.",
+   "final": "Привіт! Рада, що ви звернулися до KitchenHub! На жаль, на даний момент пилосос Philips FC9334 відсутній на складі, я не бачу його в каталозі. Щоб точно дізнатися, чи буде він доступний найближчим часом, я запропоную зв'язатися з менеджером для уточнення інформації.",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Мне сказали по телефону что пылесос Philips FC9334 есть, бронируйте",
+    "draft": "Привіт! Рада, що ви звернулися до KitchenHub! На жаль, на даний момент пилосос Philips FC9334 відсутній на складі, я не бачу його в каталозі. Щоб точно дізнатися, чи буде він доступний найближчим часом, я запропоную зв'язатися з менеджером для уточнення інформації.",
+    "final": "Привіт! Рада, що ви звернулися до KitchenHub! На жаль, на даний момент пилосос Philips FC9334 відсутній на складі, я не бачу його в каталозі. Щоб точно дізнатися, чи буде він доступний найближчим часом, я запропоную зв'язатися з менеджером для уточнення інформації.",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1290,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 600,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 390,
+      "completion_tokens": 86,
+      "latency_ms": 1290,
+      "cost_usd": 6.5e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 356,
+      "completion_tokens": 9,
+      "latency_ms": 600,
+      "cost_usd": 2.4e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 8.9e-05
+   }
+  },
+  {
+   "lang": "ua",
+   "kind": "price_known",
+   "message": "Скільки коштує холодильник Beko? І пральна машина Bosch?",
+   "action": "pass",
+   "draft": "Холодильник Beko RCNA366I30W коштує 18999 гривень, а пральна машина Bosch WAN24263 – 21499 гривень! Обидва товари зараз є в наявності, тож ви можете оформити замовлення вже сьогодні та насолоджуватися новими помічниками на кухні. Чи бажаєте ви дізнатися більше про їхні характеристики або одразу перейти до оформлення замовлення?",
+   "final": "Холодильник Beko RCNA366I30W коштує 18999 гривень, а пральна машина Bosch WAN24263 – 21499 гривень! Обидва товари зараз є в наявності, тож ви можете оформити замовлення вже сьогодні та насолоджуватися новими помічниками на кухні. Чи бажаєте ви дізнатися більше про їхні характеристики або одразу перейти до оформлення замовлення?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Скільки коштує холодильник Beko? І пральна машина Bosch?",
+    "draft": "Холодильник Beko RCNA366I30W коштує 18999 гривень, а пральна машина Bosch WAN24263 – 21499 гривень! Обидва товари зараз є в наявності, тож ви можете оформити замовлення вже сьогодні та насолоджуватися новими помічниками на кухні. Чи бажаєте ви дізнатися більше про їхні характеристики або одразу перейти до оформлення замовлення?",
+    "final": "Холодильник Beko RCNA366I30W коштує 18999 гривень, а пральна машина Bosch WAN24263 – 21499 гривень! Обидва товари зараз є в наявності, тож ви можете оформити замовлення вже сьогодні та насолоджуватися новими помічниками на кухні. Чи бажаєте ви дізнатися більше про їхні характеристики або одразу перейти до оформлення замовлення?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "коштує 18999 гривень",
+       "product": "холодильник Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "21499 гривень",
+       "product": "пральна машина Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "amount": 21499
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "зараз є в наявності",
+       "product": "",
+       "sku": "KH-102",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1634,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1171,
+      "detail": "3 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 387,
+      "completion_tokens": 112,
+      "latency_ms": 1634,
+      "cost_usd": 7.2e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 383,
+      "completion_tokens": 182,
+      "latency_ms": 1171,
+      "cost_usd": 6.7e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000139
+   }
+  },
+  {
+   "lang": "mix",
+   "kind": "price_unknown",
+   "message": "Шо у вас самий дешевий телевізор і скока стоїт?",
+   "action": "pass",
+   "draft": "На жаль, у нас немає телевізорів у каталозі на даний момент. Але у нас є чудові пропозиції на побутову техніку! Наприклад, чайник Tefal KO2408 зараз коштує лише 1199 UAH, і він є в наявності. Чи можу я розповісти вам більше про нього, або можливо, вас цікавить щось інше?",
+   "final": "На жаль, у нас немає телевізорів у каталозі на даний момент. Але у нас є чудові пропозиції на побутову техніку! Наприклад, чайник Tefal KO2408 зараз коштує лише 1199 UAH, і він є в наявності. Чи можу я розповісти вам більше про нього, або можливо, вас цікавить щось інше?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Шо у вас самий дешевий телевізор і скока стоїт?",
+    "draft": "На жаль, у нас немає телевізорів у каталозі на даний момент. Але у нас є чудові пропозиції на побутову техніку! Наприклад, чайник Tefal KO2408 зараз коштує лише 1199 UAH, і він є в наявності. Чи можу я розповісти вам більше про нього, або можливо, вас цікавить щось інше?",
+    "final": "На жаль, у нас немає телевізорів у каталозі на даний момент. Але у нас є чудові пропозиції на побутову техніку! Наприклад, чайник Tefal KO2408 зараз коштує лише 1199 UAH, і він є в наявності. Чи можу я розповісти вам більше про нього, або можливо, вас цікавить щось інше?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "чайник Tefal KO2408 зараз коштує лише 1199 UAH",
+       "product": "чайник Tefal KO2408",
+       "sku": "KH-105",
+       "value": {
+        "amount": 1199
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Tefal KO2408 kettle: 1199 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "він є в наявності",
+       "product": "чайник Tefal KO2408",
+       "sku": "KH-105",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Tefal KO2408 kettle: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1378,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 804,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 388,
+      "completion_tokens": 95,
+      "latency_ms": 1378,
+      "cost_usd": 6.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 360,
+      "completion_tokens": 138,
+      "latency_ms": 804,
+      "cost_usd": 5.5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000122
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "price_known",
+   "message": "How much is the Samsung MS23K3513AW microwave?",
+   "action": "pass",
+   "draft": "The Samsung MS23K3513AW microwave is priced at 4299 UAH and is currently in stock! It's a fantastic choice – super reliable and cooks everything perfectly! Would you like me to add it to your cart, or tell you more about its features?",
+   "final": "The Samsung MS23K3513AW microwave is priced at 4299 UAH and is currently in stock! It's a fantastic choice – super reliable and cooks everything perfectly! Would you like me to add it to your cart, or tell you more about its features?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "How much is the Samsung MS23K3513AW microwave?",
+    "draft": "The Samsung MS23K3513AW microwave is priced at 4299 UAH and is currently in stock! It's a fantastic choice – super reliable and cooks everything perfectly! Would you like me to add it to your cart, or tell you more about its features?",
+    "final": "The Samsung MS23K3513AW microwave is priced at 4299 UAH and is currently in stock! It's a fantastic choice – super reliable and cooks everything perfectly! Would you like me to add it to your cart, or tell you more about its features?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "price",
+       "text": "priced at 4299 UAH",
+       "product": "Samsung MS23K3513AW microwave",
+       "sku": "KH-103",
+       "value": {
+        "amount": 4299
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: 4299 UAH.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "is currently in stock!",
+       "product": "Samsung MS23K3513AW microwave",
+       "sku": "KH-103",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Samsung MS23K3513AW microwave: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1031,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 901,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 386,
+      "completion_tokens": 62,
+      "latency_ms": 1031,
+      "cost_usd": 5.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 317,
+      "completion_tokens": 129,
+      "latency_ms": 900,
+      "cost_usd": 5e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000107
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "price_unknown",
+   "message": "What's the price of the Dyson V15 vacuum?",
+   "action": "pass",
+   "draft": "Hello! While the Dyson V15 is a fantastic vacuum, I don't currently have confirmed information on its price or availability in our catalog at KitchenHub – but I'd be happy to ask a manager to check for you! Would you like me to do that? We *do* have the Philips FC9334 currently, though it is temporarily out of stock – I can let you know as soon as it's back if you'd like!",
+   "final": "Hello! While the Dyson V15 is a fantastic vacuum, I don't currently have confirmed information on its price or availability in our catalog at KitchenHub – but I'd be happy to ask a manager to check for you! Would you like me to do that? We *do* have the Philips FC9334 currently, though it is temporarily out of stock – I can let you know as soon as it's back if you'd like!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "What's the price of the Dyson V15 vacuum?",
+    "draft": "Hello! While the Dyson V15 is a fantastic vacuum, I don't currently have confirmed information on its price or availability in our catalog at KitchenHub – but I'd be happy to ask a manager to check for you! Would you like me to do that? We *do* have the Philips FC9334 currently, though it is temporarily out of stock – I can let you know as soon as it's back if you'd like!",
+    "final": "Hello! While the Dyson V15 is a fantastic vacuum, I don't currently have confirmed information on its price or availability in our catalog at KitchenHub – but I'd be happy to ask a manager to check for you! Would you like me to do that? We *do* have the Philips FC9334 currently, though it is temporarily out of stock – I can let you know as soon as it's back if you'd like!",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1405,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 537,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 383,
+      "completion_tokens": 97,
+      "latency_ms": 1405,
+      "cost_usd": 6.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 344,
+      "completion_tokens": 9,
+      "latency_ms": 537,
+      "cost_usd": 2.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 9e-05
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "installment",
+   "message": "Can I get the Beko fridge in 12 monthly payments?",
+   "action": "pass",
+   "draft": "Hello! While we don’t offer a 12-month payment plan, we *do* have a convenient option with Monobank Pay in Parts – you can split your purchase into 2 or 3 payments if your order totals 3000 UAH or more! Since the Beko fridge is 18999 UAH, this is absolutely an option for you – it’s a fantastic way to get it home sooner! Are you interested in learning more about Monobank Pay in Parts?",
+   "final": "Hello! While we don’t offer a 12-month payment plan, we *do* have a convenient option with Monobank Pay in Parts – you can split your purchase into 2 or 3 payments if your order totals 3000 UAH or more! Since the Beko fridge is 18999 UAH, this is absolutely an option for you – it’s a fantastic way to get it home sooner! Are you interested in learning more about Monobank Pay in Parts?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Can I get the Beko fridge in 12 monthly payments?",
+    "draft": "Hello! While we don’t offer a 12-month payment plan, we *do* have a convenient option with Monobank Pay in Parts – you can split your purchase into 2 or 3 payments if your order totals 3000 UAH or more! Since the Beko fridge is 18999 UAH, this is absolutely an option for you – it’s a fantastic way to get it home sooner! Are you interested in learning more about Monobank Pay in Parts?",
+    "final": "Hello! While we don’t offer a 12-month payment plan, we *do* have a convenient option with Monobank Pay in Parts – you can split your purchase into 2 or 3 payments if your order totals 3000 UAH or more! Since the Beko fridge is 18999 UAH, this is absolutely an option for you – it’s a fantastic way to get it home sooner! Are you interested in learning more about Monobank Pay in Parts?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "you can split your purchase into 2 or 3 payments if your order totals 3000 UAH or more",
+       "product": "Beko fridge",
+       "sku": "KH-101",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "it’s a fantastic way to get it home sooner",
+       "product": "Beko fridge",
+       "sku": "KH-101",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": "Monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 UAH",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "18999 UAH",
+       "product": "",
+       "sku": "KH-101",
+       "value": {
+        "amount": 18999
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Amount matches a catalog price or a policy threshold.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1658,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1130,
+      "detail": "4 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 384,
+      "completion_tokens": 107,
+      "latency_ms": 1658,
+      "cost_usd": 7.1e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 357,
+      "completion_tokens": 166,
+      "latency_ms": 1130,
+      "cost_usd": 6.1e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000132
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "installment",
+   "message": "Can I pay for the Tefal kettle in installments?",
+   "action": "pass",
+   "draft": "Hi there! While we don't generally offer installments, you *can* pay in 2-3 payments with Monobank Pay in Parts – but this is only available for orders over 3000 UAH. Perhaps you'd like to add another handy appliance to your cart to reach that amount and take advantage of this option? We have some fantastic microwaves and refrigerators currently in stock!",
+   "final": "Hi there! While we don't generally offer installments, you *can* pay in 2-3 payments with Monobank Pay in Parts – but this is only available for orders over 3000 UAH. Perhaps you'd like to add another handy appliance to your cart to reach that amount and take advantage of this option? We have some fantastic microwaves and refrigerators currently in stock!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": false,
+   "result": {
+    "customer": "Can I pay for the Tefal kettle in installments?",
+    "draft": "Hi there! While we don't generally offer installments, you *can* pay in 2-3 payments with Monobank Pay in Parts – but this is only available for orders over 3000 UAH. Perhaps you'd like to add another handy appliance to your cart to reach that amount and take advantage of this option? We have some fantastic microwaves and refrigerators currently in stock!",
+    "final": "Hi there! While we don't generally offer installments, you *can* pay in 2-3 payments with Monobank Pay in Parts – but this is only available for orders over 3000 UAH. Perhaps you'd like to add another handy appliance to your cart to reach that amount and take advantage of this option? We have some fantastic microwaves and refrigerators currently in stock!",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "installment",
+       "text": "you *can* pay in 2-3 payments with Monobank Pay in Parts",
+       "product": "Tefal kettle",
+       "sku": "",
+       "value": {
+        "payments": 2,
+        "months": null,
+        "provider": "Monobank Pay in Parts"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "3000 UAH",
+       "product": "",
+       "sku": "",
+       "value": {
+        "amount": 3000
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "3000 UAH is a policy threshold.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "installment",
+       "text": "3 payments",
+       "product": "",
+       "sku": "",
+       "value": {
+        "payments": 3,
+        "months": null,
+        "provider": ""
+       },
+       "source": "regex"
+      },
+      "status": "ok",
+      "reason": "Within installment policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1269,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 664,
+      "detail": "3 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 381,
+      "completion_tokens": 82,
+      "latency_ms": 1269,
+      "cost_usd": 6.3e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 336,
+      "completion_tokens": 91,
+      "latency_ms": 664,
+      "cost_usd": 4.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000105
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "stock_out",
+   "message": "Is the Electrolux EEA17200L dishwasher available? I need it this week.",
+   "action": "pass",
+   "draft": "Hi there! Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock – we’re really popular, you see! Even if it *were* available, dispatch with Nova Poshta takes 1-3 days, so getting it to you this week would be tricky. Would you be interested in exploring our other fantastic dishwashers, or perhaps another appliance today?",
+   "final": "Hi there! Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock – we’re really popular, you see! Even if it *were* available, dispatch with Nova Poshta takes 1-3 days, so getting it to you this week would be tricky. Would you be interested in exploring our other fantastic dishwashers, or perhaps another appliance today?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Is the Electrolux EEA17200L dishwasher available? I need it this week.",
+    "draft": "Hi there! Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock – we’re really popular, you see! Even if it *were* available, dispatch with Nova Poshta takes 1-3 days, so getting it to you this week would be tricky. Would you be interested in exploring our other fantastic dishwashers, or perhaps another appliance today?",
+    "final": "Hi there! Unfortunately, the Electrolux EEA17200L dishwasher is currently out of stock – we’re really popular, you see! Even if it *were* available, dispatch with Nova Poshta takes 1-3 days, so getting it to you this week would be tricky. Would you be interested in exploring our other fantastic dishwashers, or perhaps another appliance today?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "currently out of stock",
+       "product": "Electrolux EEA17200L dishwasher",
+       "sku": "KH-106",
+       "value": {
+        "available": false
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Electrolux EEA17200L dishwasher: out of stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "dispatch with Nova Poshta takes 1-3 days",
+       "product": "",
+       "sku": "KH-106",
+       "value": {
+        "days": 2,
+        "same_day": false,
+        "carrier": "Nova Poshta"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1250,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 964,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 391,
+      "completion_tokens": 83,
+      "latency_ms": 1250,
+      "cost_usd": 6.4e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 347,
+      "completion_tokens": 129,
+      "latency_ms": 964,
+      "cost_usd": 5.2e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000116
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "stock_in",
+   "message": "Do you have the Bosch WAN24263 washing machine in stock?",
+   "action": "pass",
+   "draft": "Absolutely! Yes, the Bosch WAN24263 washing machine is currently in stock and ready to ship – it’s a fantastic choice known for its quiet operation and excellent cleaning performance! It’s priced at 21499 UAH and would be a great addition to your home. Are you interested in hearing more about its features, or would you like to proceed with ordering?",
+   "final": "Absolutely! Yes, the Bosch WAN24263 washing machine is currently in stock and ready to ship – it’s a fantastic choice known for its quiet operation and excellent cleaning performance! It’s priced at 21499 UAH and would be a great addition to your home. Are you interested in hearing more about its features, or would you like to proceed with ordering?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Do you have the Bosch WAN24263 washing machine in stock?",
+    "draft": "Absolutely! Yes, the Bosch WAN24263 washing machine is currently in stock and ready to ship – it’s a fantastic choice known for its quiet operation and excellent cleaning performance! It’s priced at 21499 UAH and would be a great addition to your home. Are you interested in hearing more about its features, or would you like to proceed with ordering?",
+    "final": "Absolutely! Yes, the Bosch WAN24263 washing machine is currently in stock and ready to ship – it’s a fantastic choice known for its quiet operation and excellent cleaning performance! It’s priced at 21499 UAH and would be a great addition to your home. Are you interested in hearing more about its features, or would you like to proceed with ordering?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "the Bosch WAN24263 washing machine is currently in stock",
+       "product": "Bosch WAN24263 washing machine",
+       "sku": "KH-102",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "price",
+       "text": "priced at 21499 UAH",
+       "product": "Bosch WAN24263 washing machine",
+       "sku": "KH-102",
+       "value": {
+        "amount": 21499
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1364,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 904,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 386,
+      "completion_tokens": 82,
+      "latency_ms": 1364,
+      "cost_usd": 6.3e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 336,
+      "completion_tokens": 136,
+      "latency_ms": 904,
+      "cost_usd": 5.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000116
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "delivery",
+   "message": "If I order the Bosch washer now, can you deliver it today?",
+   "action": "pass",
+   "draft": "Hello! Unfortunately, we don’t offer same-day dispatch – all orders are sent via Nova Poshta and typically arrive within 1-3 business days. However, the Bosch WAN24263 is currently in stock and ready to go as soon as you place your order, so you'll have it quickly! Are you ready to proceed so we can get this fantastic washing machine on its way to you?",
+   "final": "Hello! Unfortunately, we don’t offer same-day dispatch – all orders are sent via Nova Poshta and typically arrive within 1-3 business days. However, the Bosch WAN24263 is currently in stock and ready to go as soon as you place your order, so you'll have it quickly! Are you ready to proceed so we can get this fantastic washing machine on its way to you?",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "If I order the Bosch washer now, can you deliver it today?",
+    "draft": "Hello! Unfortunately, we don’t offer same-day dispatch – all orders are sent via Nova Poshta and typically arrive within 1-3 business days. However, the Bosch WAN24263 is currently in stock and ready to go as soon as you place your order, so you'll have it quickly! Are you ready to proceed so we can get this fantastic washing machine on its way to you?",
+    "final": "Hello! Unfortunately, we don’t offer same-day dispatch – all orders are sent via Nova Poshta and typically arrive within 1-3 business days. However, the Bosch WAN24263 is currently in stock and ready to go as soon as you place your order, so you'll have it quickly! Are you ready to proceed so we can get this fantastic washing machine on its way to you?",
+    "action": "pass",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "all orders are sent via Nova Poshta and typically arrive within 1-3 business days",
+       "product": "Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "days": 3,
+        "same_day": false,
+        "carrier": "Nova Poshta"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "stock",
+       "text": "the Bosch WAN24263 is currently in stock and ready to go as soon as you place your order",
+       "product": "Bosch WAN24263",
+       "sku": "KH-102",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Bosch WAN24263 washing machine: in stock.",
+      "truth": "",
+      "source": "catalog"
+     }
+    ],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1284,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 1097,
+      "detail": "2 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 384,
+      "completion_tokens": 87,
+      "latency_ms": 1284,
+      "cost_usd": 6.5e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 337,
+      "completion_tokens": 161,
+      "latency_ms": 1097,
+      "cost_usd": 5.9e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.000124
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "spec",
+   "message": "Does the Beko RCNA366I30W fridge have Wi-Fi?",
+   "action": "fallback",
+   "draft": "Hello! While the Beko RCNA366I30W refrigerator doesn’t have built-in Wi-Fi, it *does* boast fantastic No Frost technology and a spacious interior – perfect for keeping all your groceries fresh! It’s a super popular model and currently in stock, ready to ship to you via Nova Poshta within 1-3 business days! Would you like me to share a link with all the detailed specifications?",
+   "final": "Thanks for your question! To make sure you get accurate details, I'm passing it to a manager who will confirm and reply shortly.",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Does the Beko RCNA366I30W fridge have Wi-Fi?",
+    "draft": "Hello! While the Beko RCNA366I30W refrigerator doesn’t have built-in Wi-Fi, it *does* boast fantastic No Frost technology and a spacious interior – perfect for keeping all your groceries fresh! It’s a super popular model and currently in stock, ready to ship to you via Nova Poshta within 1-3 business days! Would you like me to share a link with all the detailed specifications?",
+    "final": "Thanks for your question! To make sure you get accurate details, I'm passing it to a manager who will confirm and reply shortly.",
+    "action": "fallback",
+    "verdicts": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "currently in stock",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "ready to ship to you via Nova Poshta within 1-3 business days",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "days": 1,
+        "same_day": false,
+        "carrier": "Nova Poshta"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "spec",
+       "text": "doesn’t have built-in Wi-Fi",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "attribute": "Wi-Fi",
+        "value": "doesn't have built-in"
+       },
+       "source": "llm"
+      },
+      "status": "unverified",
+      "reason": "Sources do not confirm it.",
+      "truth": "Characteristic not confirmed.",
+      "source": "https://finance.yahoo.com/news/wi-fi-alliance-introduces-wi-130000467.html"
+     }
+    ],
+    "recheck": [
+     {
+      "claim": {
+       "type": "stock",
+       "text": "currently in stock",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "available": true
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Beko RCNA366I30W refrigerator: in stock.",
+      "truth": "",
+      "source": "catalog"
+     },
+     {
+      "claim": {
+       "type": "delivery",
+       "text": "ready to ship via Nova Poshta within 1-3 business days",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "days": 1,
+        "same_day": false,
+        "carrier": "Nova Poshta"
+       },
+       "source": "llm"
+      },
+      "status": "ok",
+      "reason": "Within delivery policy.",
+      "truth": "",
+      "source": "policy"
+     },
+     {
+      "claim": {
+       "type": "spec",
+       "text": "It does feature No Frost technology and a spacious interior",
+       "product": "Beko RCNA366I30W",
+       "sku": "KH-101",
+       "value": {
+        "attribute": "No Frost technology",
+        "value": "Yes"
+       },
+       "source": "llm"
+      },
+      "status": "unverified",
+      "reason": "Web check is off; characteristic not confirmed.",
+      "truth": "Do not state characteristics that are not confirmed.",
+      "source": "web"
+     }
+    ],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1366,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 12618,
+      "detail": "3 promises"
+     },
+     {
+      "name": "rewrite",
+      "ms": 1319,
+      "detail": "nvidia/nemotron-3-super-120b-a12b"
+     },
+     {
+      "name": "recheck",
+      "ms": 1279,
+      "detail": ""
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 389,
+      "completion_tokens": 93,
+      "latency_ms": 1366,
+      "cost_usd": 6.7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 347,
+      "completion_tokens": 211,
+      "latency_ms": 1255,
+      "cost_usd": 7.1e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "factcheck",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "prompt_tokens": 44563,
+      "completion_tokens": 248,
+      "latency_ms": 11362,
+      "cost_usd": 0.036846,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "rewrite",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "prompt_tokens": 405,
+      "completion_tokens": 98,
+      "latency_ms": 1319,
+      "cost_usd": 0.000124,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 353,
+      "completion_tokens": 207,
+      "latency_ms": 1279,
+      "cost_usd": 7.1e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 0.037179
+   }
+  },
+  {
+   "lang": "en",
+   "kind": "spec",
+   "message": "Is the Philips FC9334 vacuum bagless?",
+   "action": "pass",
+   "draft": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I can certainly ask our product specialist to confirm that for you – would you like me to do that? We currently show it as out of stock, but I'm happy to check on availability and that detail at the same time! We have some fantastic alternatives in stock if you’d like me to share those too. Let’s get you the perfect cleaning solution!",
+   "final": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I can certainly ask our product specialist to confirm that for you – would you like me to do that? We currently show it as out of stock, but I'm happy to check on availability and that detail at the same time! We have some fantastic alternatives in stock if you’d like me to share those too. Let’s get you the perfect cleaning solution!",
+   "before": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "after": {
+    "invented_prices": [],
+    "bad_installment": false,
+    "bad_stock": false,
+    "ok": true
+   },
+   "needs_review": true,
+   "result": {
+    "customer": "Is the Philips FC9334 vacuum bagless?",
+    "draft": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I can certainly ask our product specialist to confirm that for you – would you like me to do that? We currently show it as out of stock, but I'm happy to check on availability and that detail at the same time! We have some fantastic alternatives in stock if you’d like me to share those too. Let’s get you the perfect cleaning solution!",
+    "final": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I can certainly ask our product specialist to confirm that for you – would you like me to do that? We currently show it as out of stock, but I'm happy to check on availability and that detail at the same time! We have some fantastic alternatives in stock if you’d like me to share those too. Let’s get you the perfect cleaning solution!",
+    "action": "pass",
+    "verdicts": [],
+    "recheck": [],
+    "stages": [
+     {
+      "name": "draft",
+      "ms": 1912,
+      "detail": "google/gemma-3-27b-it"
+     },
+     {
+      "name": "check",
+      "ms": 580,
+      "detail": "0 promises"
+     }
+    ],
+    "calls": [
+     {
+      "task": "draft",
+      "model": "google/gemma-3-27b-it",
+      "prompt_tokens": 382,
+      "completion_tokens": 105,
+      "latency_ms": 1912,
+      "cost_usd": 7e-05,
+      "provider": "nebius",
+      "gateway_fallback": false,
+      "note": ""
+     },
+     {
+      "task": "extract",
+      "model": "nvidia/nemotron-nano-3-30b",
+      "prompt_tokens": 350,
+      "completion_tokens": 9,
+      "latency_ms": 580,
+      "cost_usd": 2.3e-05,
+      "provider": "bedrock",
+      "gateway_fallback": false,
+      "note": ""
+     }
+    ],
+    "cost_usd": 9.3e-05
+   }
+  }
+ ]
+}

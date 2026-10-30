@@ -7,14 +7,14 @@ ShopGuard checks what a shop chatbot promises (price, stock, installments, deliv
 - Three open models in three roles: Gemma 3 27B as the demo shop bot, Nemotron 3 Nano to pull the promises out of a reply, Nemotron 3 Super to judge web evidence and rewrite.
 - `otari_web_search` as a tool on the Super call, so the judge searches by itself.
 - `usage.cost_usd` from every response, shown under each result in the demo.
-- Provider fallback behind one catalog id: Super has four offerings, and my logs show calls served by both nebius and bedrock.
+- Provider fallback behind one catalog id: Super has four offerings (bedrock, deepinfra, nebius, together). In my runs every Super call went to bedrock and I never got `Otari-Fallback: true`, so I can't say I saw it fire. I log both headers per call anyway.
 - Spend ceilings: $15 for the organization, and two keys with daily ceilings ($0.50 public, $2 for judges). I deleted my own daily USD cap after this worked.
 
 ## What worked well
 
 - Switching was small. My client already spoke the OpenAI format, so the first commit was a new base URL, a key and model ids.
 - Cost in the response body is the best thing in Otari for me. I dropped my price table and my spend counter, and the demo now shows real cost per call, tool calls included.
-- The spend ceiling error is excellent. I set a key to $0.0001 and got a 403 with `code: budget_exceeded`, the scope in a header, and a message that said my 512 `max_tokens` made the estimate too high. I mapped it to "switch the demo to recorded runs" in ten lines.
+- The spend ceiling error is good. I set a key to $0.0001 and got a 403 with `code: budget_exceeded`, the scope in a header, and a message that said my 512 `max_tokens` made the estimate too high. I mapped it to "switch the demo to recorded runs" in ten lines.
 - `GET /api/v1/models` gives prices and `supported_parameters` per model, free. I picked models from it.
 
 ## What did not work, with reproduction steps

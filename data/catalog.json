@@ -1,7 +1,7 @@
 {
  "shop": "KitchenHub",
  "currency": "UAH",
- "note": "Fictional demo shop. Product models are real so that web fact-checks have something to find; prices and stock are invented. Specs are left empty until verified from manufacturer pages (TODO after Tavily key).",
+ "note": "Fictional demo shop. Product models are real so that web fact-checks have something to find; prices and stock are invented. Specs are left empty on purpose so that spec claims go to the web check.",
  "products": [
   {
    "sku": "KH-101",

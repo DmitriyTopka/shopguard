@@ -2,7 +2,7 @@
 
 Money is capped by Otari itself: each pool (public, judges) has its own key with a daily
 spend ceiling, and the organization has a total ceiling; see app.py. Everything here lives
-in one SQLite file so limits survive restarts. Days are UTC.
+in one SQLite file (on a server it survives restarts; on Vercel each instance has its own). Days are UTC.
 """
 from __future__ import annotations
 

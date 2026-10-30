@@ -2,7 +2,7 @@
 
 **Your shop chatbot just promised a discount that does not exist. ShopGuard checks every promise (price, stock, installments, specs) against the shop's data and the web, and fixes the reply before the customer sees it. Open models via Otari.**
 
-Online shops put LLM bots behind the "chat with us" button, and those bots make promises the shop never made: a price that is not in the catalog, 12 interest-free payments when the policy allows 3, "in stock, ships today" for an item that sold out last week. The customer believes the bot, and the shop either honors a promise it can't afford or loses the customer.
+Online shops put LLM bots behind the "chat with us" button, and those bots make promises the shop never made: a price that is not in the catalog, or 12 interest-free payments when the policy allows 3. Sometimes "in stock, ships today" for something that sold out last week. The customer believes the bot, and the shop either honors a promise it can't afford or loses the customer.
 
 ShopGuard sits between any shop bot and the customer. Before a reply is sent, every promise in it is checked against the shop's own data and, for product specs, against the open web. Wrong or unconfirmed promises are fixed. If the fix still fails the check, the customer gets a polite hand-off to a manager instead of a lie.
 
@@ -34,10 +34,10 @@ customer message
 
 Design choices:
 
-- **Code checks what the shop already knows.** Prices, stock, installment rules and delivery terms are facts in the shop's data, so plain code checks them: exact, instant and free. Models do what needs language: finding promises in free text (English, Ukrainian, Russian or a mix) and judging web evidence.
-- **Two extractors, not one.** Nemotron Nano lists the promises; a regex net independently catches every amount of money and every number of payments. If the model misses a price, the regex still sends it to the check. A term the reply itself refuses ("12 payments are not available") is not treated as a promise.
-- **The rewrite is checked again.** A model asked to fix a reply can add a new mistake, so the fixed reply goes through the same checks before it is sent.
-- **Works behind any bot.** The `draft` field of the API accepts a reply from an existing bot, so a shop can keep its bot and put the guard in front of the customer.
+- **Code checks what the shop already knows.** Prices, stock, installment rules and delivery terms are facts in the shop's data, so plain code checks them: exact and free. Models do what needs language: finding promises in free text (English, Ukrainian, Russian or a mix) and judging web evidence.
+- **Two extractors.** Nemotron Nano lists the promises; a regex net independently catches every amount of money and every number of payments. If the model misses a price, the regex still sends it to the check. A term the reply itself refuses ("12 payments are not available") is not treated as a promise.
+- A model asked to fix a reply can add a new mistake, so the rewrite goes through the same checks again before it is sent.
+- The `draft` field of the API accepts a reply from a bot you already run, so the guard can sit in front of an existing bot.
 
 ## Otari: what we use and how
 
@@ -48,11 +48,11 @@ All model calls go through the hosted gateway at `https://api.otari.ai/api/v1` w
 | Open models, several roles | Gemma 3 27B writes the demo seller's reply; Nemotron 3 Nano extracts promises; Nemotron 3 Super judges web evidence and rewrites | `shopguard/llm.py`, `guard.py`, `claims.py`, `facts.py` |
 | Web search | the judge searches by itself through the built-in `otari_web_search` tool, one gateway call per claim, sources come back in `otari_tool_calls`; verdicts are cached per claim | `shopguard/facts.py`, `OtariWebSearch` |
 | Usage and cost | each call's cost is taken from Otari's `usage.cost_usd` (tool charges included) and shown under every result in the demo | `shopguard/llm.py` |
-| Routing and fallbacks | Super is served by four providers behind one catalog id, so Otari moves to the next one when a provider fails (the `Otari-Provider` and `Otari-Fallback` headers are logged per call). On top of that ShopGuard hops from Nano to Super when the small model times out (20 s) or answers with broken JSON, which Otari does not treat as a failure. If both fail, the reply is not sent unchecked: the customer gets the hand-off | `shopguard/claims.py`, `shopguard/llm.py` |
+| Routing and fallbacks | Super has four providers behind one catalog id, so Otari can move to another one when a provider fails. In our runs every Super call went to bedrock and no gateway fallback happened (the `Otari-Provider` and `Otari-Fallback` headers are logged per call, see `eval/results_live_eager_providers.json`). On top of that ShopGuard hops from Nano to Super when the small model times out (20 s) or answers with broken JSON, which Otari does not treat as a failure. If both fail, the reply is not sent unchecked: the customer gets the hand-off | `shopguard/claims.py`, `shopguard/llm.py` |
 | Budgets and limits | an organization ceiling of $15 for the whole hackathon, set on otari.ai; when Otari refuses a call (403 `budget_exceeded`, 402 `insufficient_funds`) the demo switches to recorded runs instead of failing. ShopGuard's own daily USD cap was deleted in favor of these ceilings | `app.py`, `shopguard/llm.py` |
 | Per-user budgets | two keys with their own daily ceilings: the public demo key ($0.50 a day) and the judges' key ($2 a day, reached with `?pass=`). Per-IP rate limits stay in ShopGuard, since Otari only sees one caller | `app.py`, `shopguard/budget.py` |
 
-What did not work as documented is collected for the feedback, not hidden here: see "Notes on Otari" below.
+The things that did not work as documented are listed below in "Notes on Otari", they went into the feedback.
 
 ## Results
 
@@ -103,16 +103,16 @@ Configuration (see `deploy/shopguard.env.example`): the Otari keys (public and j
 
 ## Keeping a public demo alive
 
-The demo stays open until the end of judging. Money is capped by Otari (ceilings above); the rest lives in `shopguard/budget.py` (SQLite):
+The demo stays open until the end of judging. Money is capped by Otari (ceilings above); the rest lives in `shopguard/budget.py` (SQLite, one per instance on Vercel, so these limits are best effort):
 
 - per-IP rate limit (default 20 requests per hour) with HTTP 429;
 - a separate judge pool reached with `?pass=<key>`, on its own Otari key;
-- daily cap on web checks plus a per-claim cache;
+- at most 2 web checks per reply (other specs in that reply count as unconfirmed), a daily cap on web checks and a per-claim cache;
 - recorded runs that replay instantly and cost nothing when the live budget is used up.
 
 ## Prior work
 
-The Ukrainian / Russian / mixed test messages and the failure types come from our own benchmark published on Kaggle in October 2026, which measured how often shop assistants invent prices, installments and stock. ShopGuard is new: the benchmark measured the problem, this project fixes it at runtime.
+The Ukrainian / Russian / mixed test messages and the failure types come from our own benchmark published on Kaggle in October 2026, which measured how often shop assistants invent prices, installments and stock. The benchmark only measured how often bots invent things. ShopGuard tries to stop it at runtime, and the code is new.
 
 ## Data
 
