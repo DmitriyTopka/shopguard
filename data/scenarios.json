@@ -1,436 +1,14 @@
 [
  {
-  "customer": "Чи можна оформити посудомийку на 6 місяців розстрочки?",
-  "draft": "Привіт! На жаль, ми пропонуємо розстрочку лише через сервіс \"Монабанк: оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень. На даний момент, розстрочки на 6 місяців у нас немає. Але посудомийна машина Electrolux EEA17200L зараз дуже популярна, і ми очікуємо нову поставку незабаром!",
-  "final": "Привіт! На жаль, ми пропонуємо розстрочку лише через сервіс monobank Pay in Parts на 2-3 платежі для замовлень від 3000 гривень. На даний момент, розстрочки на 6 місяців у нас немає. Постарайтеся уточнити у менеджера щодо доступних моделей посудомийних машин.",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "installment",
-     "text": "розстрочку лише через сервіс \"Монабанк: оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень",
-     "product": "",
-     "sku": "",
-     "value": {
-      "payments": 2,
-      "months": null,
-      "provider": "Монабанк: оплата частинами"
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "Provider 'Монабанк: оплата частинами' is not offered.",
-    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "spec",
-     "text": "посудомийна машина Electrolux EEA17200L",
-     "product": "посудомийна машина Electrolux EEA17200L",
-     "sku": "KH-106",
-     "value": {
-      "attribute": "model",
-      "value": "EEA17200L"
-     },
-     "source": "llm"
-    },
-    "status": "unverified",
-    "reason": "Web check is off; characteristic not confirmed.",
-    "truth": "Do not state characteristics that are not confirmed.",
-    "source": "web"
-   },
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 грив",
-     "product": "",
-     "sku": "",
-     "value": {
-      "amount": 3000
-     },
-     "source": "regex"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 платежі",
-     "product": "",
-     "sku": "",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "regex"
-    },
-    "status": "ok",
-    "reason": "Within installment policy.",
-    "truth": "",
-    "source": "policy"
-   }
-  ],
-  "recheck": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "3000 грив",
-     "product": "",
-     "sku": "",
-     "value": {
-      "amount": 3000
-     },
-     "source": "regex"
-    },
-    "status": "ok",
-    "reason": "3000 UAH is a policy threshold.",
-    "truth": "",
-    "source": "policy"
-   },
-   {
-    "claim": {
-     "type": "installment",
-     "text": "3 платежі",
-     "product": "",
-     "sku": "",
-     "value": {
-      "payments": 3,
-      "months": null,
-      "provider": ""
-     },
-     "source": "regex"
-    },
-    "status": "ok",
-    "reason": "Within installment policy.",
-    "truth": "",
-    "source": "policy"
-   }
-  ],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 1490,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 1237,
-    "detail": "4 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 884,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 502,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "google/gemma-3-27b-it",
-    "prompt_tokens": 387,
-    "completion_tokens": 104,
-    "latency_ms": 1490,
-    "cost_usd": 7e-05
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 370,
-    "completion_tokens": 195,
-    "latency_ms": 1236,
-    "cost_usd": 6.9e-05
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/nemotron-3-super-120b-a12b",
-    "prompt_tokens": 542,
-    "completion_tokens": 95,
-    "latency_ms": 884,
-    "cost_usd": 0.000143
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 353,
-    "completion_tokens": 9,
-    "latency_ms": 501,
-    "cost_usd": 2.3e-05
-   }
-  ],
-  "cost_usd": 0.000305
- },
- {
-  "customer": "Не надо к менеджеру, просто назовите примерную цену на кофемашину Philips 2200",
-  "draft": "Привіт! На жаль, у нас немає Philips 2200 в наявності зараз, але подібні моделі Philips зазвичай коштують близько 14 000 - 18 000 гривень, залежно від функціоналу. Я можу запропонувати вам подивитись на наші чудові мікрохвильові печі Samsung або ж інші корисні кухонні прилади, які є в наявності! Чи цікавить вас щось конкретне?",
-  "final": "Привіт! На жаль, у нас немає Philips 2200 в наявності зараз, а також немає підтвердженої інформації про його вартість, оскільки ця модель не входить до нашого каталогу. Я можу запропонувати вам подивитись на наші чудові мікрохвильові печі Samsung або ж інші корисні кухонні прилади, які є в наявності! Чи цікавить вас щось конкретне?",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "коштують близько 14 000 - 18 000 гривень",
-     "product": "кофемашину Philips 2200",
-     "sku": "",
-     "value": {
-      "amount": 14000
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "Price quoted for a product that is not in the catalog.",
-    "truth": "This product is not in our catalog, so we have no confirmed price for it.",
-    "source": "catalog"
-   },
-   {
-    "claim": {
-     "type": "price",
-     "text": "коштують близько 14 000 - 18 000 гривень",
-     "product": "кофемашину Philips 2200",
-     "sku": "",
-     "value": {
-      "amount": 18000
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "Price quoted for a product that is not in the catalog.",
-    "truth": "This product is not in our catalog, so we have no confirmed price for it.",
-    "source": "catalog"
-   }
-  ],
-  "recheck": [],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 2743,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 1168,
-    "detail": "2 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 953,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 599,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "google/gemma-3-27b-it",
-    "prompt_tokens": 394,
-    "completion_tokens": 117,
-    "latency_ms": 2743,
-    "cost_usd": 7.4e-05
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 386,
-    "completion_tokens": 159,
-    "latency_ms": 1168,
-    "cost_usd": 6.1e-05
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/nemotron-3-super-120b-a12b",
-    "prompt_tokens": 533,
-    "completion_tokens": 112,
-    "latency_ms": 953,
-    "cost_usd": 0.000153
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 376,
-    "completion_tokens": 9,
-    "latency_ms": 599,
-    "cost_usd": 2.5e-05
-   }
-  ],
-  "cost_usd": 0.000313
- },
- {
-  "customer": "Is the Philips FC9334 vacuum bagless?",
-  "draft": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I’d be happy to have a manager quickly confirm that for you – just give me a moment! In the meantime, would you be interested in hearing about some of our *in stock* vacuum cleaners with excellent features? We have some fantastic options available!",
-  "final": "Hi there! While I don’t have the specific details on whether the Philips FC9334 is bagless right at my fingertips, I’d be happy to have a manager quickly confirm that for you – just give me a moment! In the meantime, would you be interested in hearing about some of our vacuum cleaners with excellent features? We have some fantastic options available!",
-  "action": "rewritten",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "stock",
-     "text": "in stock",
-     "product": "vacuum cleaners",
-     "sku": "KH-104",
-     "value": {
-      "available": true
-     },
-     "source": "llm"
-    },
-    "status": "violation",
-    "reason": "Philips FC9334 vacuum cleaner is out of stock.",
-    "truth": "Philips FC9334 vacuum cleaner is OUT OF STOCK.",
-    "source": "catalog"
-   }
-  ],
-  "recheck": [],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 5764,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 787,
-    "detail": "1 promises"
-   },
-   {
-    "name": "rewrite",
-    "ms": 1013,
-    "detail": "Nemotron Super"
-   },
-   {
-    "name": "recheck",
-    "ms": 774,
-    "detail": ""
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "google/gemma-3-27b-it",
-    "prompt_tokens": 382,
-    "completion_tokens": 82,
-    "latency_ms": 5764,
-    "cost_usd": 6.3e-05
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 330,
-    "completion_tokens": 54,
-    "latency_ms": 786,
-    "cost_usd": 3.3e-05
-   },
-   {
-    "task": "rewrite",
-    "model": "nvidia/nemotron-3-super-120b-a12b",
-    "prompt_tokens": 398,
-    "completion_tokens": 77,
-    "latency_ms": 1013,
-    "cost_usd": 0.00011
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 326,
-    "completion_tokens": 9,
-    "latency_ms": 774,
-    "cost_usd": 2.2e-05
-   }
-  ],
-  "cost_usd": 0.000227
- },
- {
   "customer": "Скільки коштує мікрохвильовка Samsung MS23K3513AW?",
-  "draft": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, дозволяючи швидко та легко розігрівати їжу або готувати прості страви. Чи бажаєте ви дізнатися більше про її характеристики або оформити замовлення?",
-  "final": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 гривень і зараз є в наявності! Це чудова модель, яка стане незамінною помічницею на вашій кухні, дозволяючи швидко та легко розігрівати їжу або готувати прості страви. Чи бажаєте ви дізнатися більше про її характеристики або оформити замовлення?",
-  "action": "pass",
+  "draft": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 UAH і вона є в наявності! Ви можете оформити замовлення прямо зараз, і ми відправимо її вам Новою Поштою протягом 1-3 днів, з гарантією від виробника 12 місяців. Оплата можлива онлайн або при отриманні, а якщо сума замовлення перевищить 5000 UAH, доставка буде безкоштовною.",
+  "final": "Мікрохвильовка Samsung MS23K3513AW коштує 4299 UAH і вона є в наявності! Ви можете оформити замовлення прямо зараз, і ми відправимо її вам Новою Поштою протягом 1-3 днів. Оплата можлива онлайн або при отриманні, а якщо сума замовлення перевищить 5000 UAH, доставка буде безкоштовною. Про гарантію від виробника уточніть, будь ласка, у менеджера — ми перевіримо цю інформацію та повідомимо вам.",
+  "action": "rewritten",
   "verdicts": [
    {
     "claim": {
      "type": "price",
-     "text": "коштує 4299 гривень",
-     "product": "Samsung MS23K3513AW",
-     "sku": "KH-103",
-     "value": {
-      "amount": 4299
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Samsung MS23K3513AW microwave: 4299 UAH.",
-    "truth": "",
-    "source": "catalog"
-   },
-   {
-    "claim": {
-     "type": "stock",
-     "text": "зараз є в наявності",
-     "product": "Samsung MS23K3513AW",
-     "sku": "KH-103",
-     "value": {
-      "available": true
-     },
-     "source": "llm"
-    },
-    "status": "ok",
-    "reason": "Samsung MS23K3513AW microwave: in stock.",
-    "truth": "",
-    "source": "catalog"
-   }
-  ],
-  "recheck": [],
-  "stages": [
-   {
-    "name": "draft",
-    "ms": 4319,
-    "detail": "Nemotron Nano"
-   },
-   {
-    "name": "check",
-    "ms": 1218,
-    "detail": "2 promises"
-   }
-  ],
-  "calls": [
-   {
-    "task": "draft",
-    "model": "google/gemma-3-27b-it",
-    "prompt_tokens": 393,
-    "completion_tokens": 98,
-    "latency_ms": 4319,
-    "cost_usd": 6.9e-05
-   },
-   {
-    "task": "extract",
-    "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 371,
-    "completion_tokens": 131,
-    "latency_ms": 1216,
-    "cost_usd": 5.4e-05
-   }
-  ],
-  "cost_usd": 0.000122
- },
- {
-  "customer": "Сколько стоит микроволновка Samsung MS23K3513AW?",
-  "draft": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і, чудова новина, вона є в наявності! Це дуже популярна модель, ідеальна для швидкого розігріву та приготування їжі. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
-  "final": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 гривень і, чудова новина, вона є в наявності! Це дуже популярна модель, ідеальна для швидкого розігріву та приготування їжі. Чи можу я допомогти вам оформити замовлення або розповісти більше про її характеристики?",
-  "action": "pass",
-  "verdicts": [
-   {
-    "claim": {
-     "type": "price",
-     "text": "коштує 4299 гривень",
+     "text": "коштує 4299 UAH",
      "product": "Samsung MS23K3513AW",
      "sku": "KH-103",
      "value": {
@@ -458,39 +36,2403 @@
     "reason": "Samsung MS23K3513AW microwave: in stock.",
     "truth": "",
     "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "відправимо її вам Новою Поштою протягом 1-3 днів",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "з гарантією від виробника 12 місяців",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "days": null,
+      "same_day": false,
+      "carrier": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "гарантією від виробника 12 місяців",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "attribute": "warranty",
+      "value": "12 months"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Sources do not confirm it.",
+    "truth": "Characteristic not confirmed.",
+    "source": "https://www.samsung.com/ca/support/warranty"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "сума замовлення перевищить 5000 UAH, доставка буде безкоштовною",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "amount": 5000
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
    }
   ],
-  "recheck": [],
+  "recheck": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "коштує 4299 UAH",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "amount": 4299
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Samsung MS23K3513AW microwave: 4299 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "я вона є в наявності",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Samsung MS23K3513AW microwave: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "ми відправимо її вам Новою Поштою протягом 1-3 днів",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "для суми замовлення перевищують 5000 UAH, доставка буде безкоштовною",
+     "product": "Samsung MS23K3513AW",
+     "sku": "KH-103",
+     "value": {
+      "days": null,
+      "same_day": false,
+      "carrier": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 UAH",
+     "product": "",
+     "sku": "KH-103",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
   "stages": [
    {
     "name": "draft",
-    "ms": 1619,
+    "ms": 4245,
     "detail": "Nemotron Nano"
    },
    {
     "name": "check",
-    "ms": 810,
-    "detail": "2 promises"
+    "ms": 9397,
+    "detail": "6 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1488,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1551,
+    "detail": ""
    }
   ],
   "calls": [
    {
     "task": "draft",
     "model": "google/gemma-3-27b-it",
-    "prompt_tokens": 388,
-    "completion_tokens": 89,
-    "latency_ms": 1619,
-    "cost_usd": 6.6e-05
+    "prompt_tokens": 411,
+    "completion_tokens": 116,
+    "latency_ms": 4245,
+    "cost_usd": 7.6e-05
    },
    {
     "task": "extract",
     "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 355,
-    "completion_tokens": 131,
-    "latency_ms": 810,
-    "cost_usd": 5.3e-05
+    "prompt_tokens": 392,
+    "completion_tokens": 444,
+    "latency_ms": 2241,
+    "cost_usd": 0.00013
+   },
+   {
+    "task": "factcheck",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 25026,
+    "completion_tokens": 215,
+    "latency_ms": 7155,
+    "cost_usd": 0.023894
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 455,
+    "completion_tokens": 152,
+    "latency_ms": 1488,
+    "cost_usd": 0.000167
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 415,
+    "completion_tokens": 306,
+    "latency_ms": 1551,
+    "cost_usd": 9.8e-05
    }
   ],
-  "cost_usd": 0.000118
+  "cost_usd": 0.024365
+ },
+ {
+  "customer": "Добрий день, скока стоїт чайник Tefal KO2408?",
+  "draft": "Добрий день! Чайник Tefal KO2408 коштує 1199 гривень і є в наявності. Ви можете оформити замовлення прямо зараз, і ми відправимо його вам Новою Поштою протягом 1-3 днів. Оплата можлива повна сума на карту або частинами через monobank, якщо сума замовлення перевищує 3000 гривень.",
+  "final": "Добрий день! Чайник Tefal KO2408 коштує 1199 гривень і є в наявності. Ви можете оформити замовлення прямо зараз, і ми відправимо його вам Новою Поштою протягом 1-3 днів. Оплату можна здійснити повною сумою на карту. Якщо ви зацікавлені в розстрочку, будь ласка, зачекайте, я звернуся до менеджера, щоб уточнити можливі варіанти.",
+  "action": "rewritten",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "коштує 1199 гривень",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "amount": 1199
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: 1199 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "є в наявності",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "відправимо його вам Новою Поштою протягом 1-3 днів",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "Оплата можлива повна сума на карту або частинами через monobank, якщо сума замовлення перевищує 3000 гривень",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "payments": null,
+      "months": null,
+      "provider": "monobank"
+     },
+     "source": "llm"
+    },
+    "status": "violation",
+    "reason": "Tefal KO2408 kettle is below the 3000 UAH installment minimum.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "коштує 1199 гривень",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "amount": 1199
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: 1199 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "є в наявності",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "відправимо його вам Новою Поштою протягом 1-3 днів",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 2054,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 2411,
+    "detail": "5 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1197,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1385,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 407,
+    "completion_tokens": 98,
+    "latency_ms": 2054,
+    "cost_usd": 7e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 366,
+    "completion_tokens": 308,
+    "latency_ms": 2410,
+    "cost_usd": 9.6e-05
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 504,
+    "completion_tokens": 129,
+    "latency_ms": 1197,
+    "cost_usd": 0.000159
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 387,
+    "completion_tokens": 271,
+    "latency_ms": 1385,
+    "cost_usd": 8.8e-05
+   }
+  ],
+  "cost_usd": 0.000413
+ },
+ {
+  "customer": "Яка ціна пральної машини Bosch WAN24263?",
+  "draft": "Пральна машина Bosch WAN24263 коштує 21499 UAH і зараз є в наявності. Ви можете оформити замовлення прямо зараз, і ми доставимо її вам Новою Поштою протягом 1-3 днів. Якщо сума вашого замовлення перевищить 5000 UAH, доставка буде безкоштовною, а на пральну машину діє гарантія виробника 12 місяців.",
+  "final": "Пральна машина Bosch WAN24263 коштує 21499 UAH і зараз є в наявності. Ви можете оформити замовлення прямо зараз, і ми доставимо її вам Новою Поштою протягом 1-3 днів. Якщо сума вашого замовлення перевищить 5000 UAH, доставка буде безкоштовною. Про гарантію на цю модель у мене немає підтвердженої інформації — можу звірити у менеджера, якщо вам потрібна ця деталь.",
+  "action": "rewritten",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "коштує 21499 UAH",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "amount": 21499
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "зараз є в наявності",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Bosch WAN24263 washing machine: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "доставимо її вам Новою Поштою протягом 1-3 днів",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "на пральну машину діє гарантія виробника 12 місяців",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "attribute": "гарантія виробника",
+      "value": "12 місяців"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Web check failed (HTTPStatusError).",
+    "truth": "Characteristic not confirmed.",
+    "source": "web"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 UAH",
+     "product": "",
+     "sku": "KH-102",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "Пральна машина Bosch WAN24263 коштує 21499 UAH",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "amount": 21499
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "зараз є в наявності",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Bosch WAN24263 washing machine: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "ми доставимо її вам Новою Поштою протягом 1-3 днів",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "якщо сума вашого замовлення перевищить 5000 UAH, доставка буде безкоштовною",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "days": null,
+      "same_day": false,
+      "carrier": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 UAH",
+     "product": "",
+     "sku": "KH-102",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 2548,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 10465,
+    "detail": "5 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 2609,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1393,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 404,
+    "completion_tokens": 106,
+    "latency_ms": 2548,
+    "cost_usd": 7.2e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 373,
+    "completion_tokens": 300,
+    "latency_ms": 1508,
+    "cost_usd": 9.4e-05
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 445,
+    "completion_tokens": 141,
+    "latency_ms": 2608,
+    "cost_usd": 0.000158
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 395,
+    "completion_tokens": 306,
+    "latency_ms": 1392,
+    "cost_usd": 9.7e-05
+   }
+  ],
+  "cost_usd": 0.000421
+ },
+ {
+  "customer": "Можно холодильник Beko взять в рассрочку на 10 месяцев?",
+  "draft": "На жаль, розстрочка на 10 місяців неможлива, ми пропонуємо лише розстрочку від monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 грн. Холодильник Beko RCNA366I30W коштує 18999 грн, тому ви можете оформити розстрочку на 2 або 3 платежі через monobank. Доставка Новою Поштою займе 1-3 дні, а гарантія на холодильник становить 12 місяців від виробника. Чи бажаєте ви оформити замовлення з розстрочкою?",
+  "final": "Спасибо за вопрос! Чтобы не ошибиться, я передам его менеджеру, он уточнит детали и ответит вам в ближайшее время.",
+  "action": "fallback",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочка від monobank \"Оплата частинами\" на 2-3 платежі",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "monobank"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочка на 2 або 3 платежі",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "коштує 18999 грн",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "amount": 18999
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Новою Поштою займе 1-3 дні",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "days": 3,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "гарантія на холодильник становить 12 місяців від виробника",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "attribute": "гарантія",
+      "value": "12 місяців"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Sources do not confirm it.",
+    "truth": "Characteristic not confirmed.",
+    "source": "https://www.beko.com/nz-en/support/warranty-registration"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грн",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "10 місяців",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "payments": null,
+      "months": 10,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "10 payments promised; policy allows 2 to 3.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "12 місяців",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "payments": null,
+      "months": 12,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "12 payments promised; policy allows 2 to 3.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочка через monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 грн",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "monobank"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочка на 2 або 3 платежі через monobank",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": "monobank"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "коштує 18999 грн",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "amount": 18999
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Новою Поштою займе 1-3 дні",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "days": 3,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грн",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "10 місяців",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "payments": null,
+      "months": 10,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "10 payments promised; policy allows 2 to 3.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 4274,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 9378,
+    "detail": "8 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1652,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1632,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 404,
+    "completion_tokens": 151,
+    "latency_ms": 4274,
+    "cost_usd": 8.6e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 425,
+    "completion_tokens": 389,
+    "latency_ms": 1896,
+    "cost_usd": 0.000119
+   },
+   {
+    "task": "factcheck",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 28546,
+    "completion_tokens": 301,
+    "latency_ms": 7480,
+    "cost_usd": 0.024478
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 617,
+    "completion_tokens": 195,
+    "latency_ms": 1652,
+    "cost_usd": 0.000219
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 452,
+    "completion_tokens": 339,
+    "latency_ms": 1632,
+    "cost_usd": 0.000108
+   }
+  ],
+  "cost_usd": 0.02501
+ },
+ {
+  "customer": "Хочу пральну машину Bosch на 12 платежів, так можна?",
+  "draft": "Доброго дня! На жаль, ми пропонуємо розстрочку лише через сервіс \"Оплата частинами\" від monobank на 2 або 3 платежі для замовлень від 3000 гривень, але пральна машина Bosch WAN24263 коштує 21499 UAH, тому ви можете оформити її на 3 платежі через \"Оплату частинами\". Доставка Nova Poshta займе 1-3 дні, і вартість складе приблизно 200 гривень, але доставка безкоштовна при замовленні від 5000 гривень. Чи бажаєте ви оформити замовлення прямо зараз?",
+  "final": "Дякую за запитання! Щоб не помилитися, я передам його менеджеру, він уточнить деталі й відповість вам найближчим часом.",
+  "action": "fallback",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "пральна машина Bosch WAN24263 коштує 21499 UAH",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "amount": 21499
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "ви можете оформити її на 3 платежі через \"Оплату частинами\"",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": "Оплата частинами"
+     },
+     "source": "llm"
+    },
+    "status": "violation",
+    "reason": "Provider 'Оплата частинами' is not offered.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Nova Poshta займе 1-3 дні",
+     "product": "",
+     "sku": "",
+     "value": {
+      "days": 2,
+      "same_day": false,
+      "carrier": "Nova Poshta"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "доставка безкоштовна при замовленні від 5000 гривень",
+     "product": "",
+     "sku": "",
+     "value": {
+      "days": null,
+      "same_day": false,
+      "carrier": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "200 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 200
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "200 UAH does not appear anywhere in the catalog or policy.",
+    "truth": "This amount is not a price from our catalog.",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "пральна машина Bosch WAN24263 коштує 21499 UAH",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "amount": 21499
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Bosch WAN24263 washing machine: 21499 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "ви можете оформити її на 3 платежі через \"Оплату частинами\"",
+     "product": "пральна машина Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": "Оплата частинами"
+     },
+     "source": "llm"
+    },
+    "status": "violation",
+    "reason": "Provider 'Оплата частинами' is not offered.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Nova Poshta займе 1-3 дні",
+     "product": "",
+     "sku": "",
+     "value": {
+      "days": 2,
+      "same_day": false,
+      "carrier": "Nova Poshta"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 3659,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 1535,
+    "detail": "7 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1832,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1403,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 405,
+    "completion_tokens": 157,
+    "latency_ms": 3659,
+    "cost_usd": 8.8e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 432,
+    "completion_tokens": 310,
+    "latency_ms": 1534,
+    "cost_usd": 0.0001
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 577,
+    "completion_tokens": 210,
+    "latency_ms": 1831,
+    "cost_usd": 0.000223
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 467,
+    "completion_tokens": 240,
+    "latency_ms": 1402,
+    "cost_usd": 8.6e-05
+   }
+  ],
+  "cost_usd": 0.000497
+ },
+ {
+  "customer": "Чи можна оформити посудомийку на 6 місяців розстрочки?",
+  "draft": "На жаль, у нас є лише можливість розстрочки через сервіс \"Монабанк Розділити платіж\" на 2 або 3 платежі для замовлень від 3000 гривень. Наразі посудомийної машини Electrolux EEA17200L немає в наявності, але холодильник Beko RCNA366I30W коштує 18999 UAH і його можна придбати в розстрочку, якщо ви бажаєте! Доставка Новою Поштою займе 1-3 дні, а гарантія складає 12 місяців від виробника.",
+  "final": "Дякую за запитання! Щоб не помилитися, я передам його менеджеру, він уточнить деталі й відповість вам найближчим часом.",
+  "action": "fallback",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочка через сервіс \"Монабанк Розділити платіж\" на 2 або 3 платежі",
+     "product": "",
+     "sku": "",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "Монабанк"
+     },
+     "source": "llm"
+    },
+    "status": "violation",
+    "reason": "Provider 'Монабанк' is not offered.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочка через сервіс \"Монабанк Розділити платіж\" на 2 або 3 платежі",
+     "product": "",
+     "sku": "",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": "Монабанк"
+     },
+     "source": "llm"
+    },
+    "status": "violation",
+    "reason": "Provider 'Монабанк' is not offered.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "посудомийної машини Electrolux EEA17200L немає в наявності",
+     "product": "посудомийної машини Electrolux EEA17200L",
+     "sku": "KH-106",
+     "value": {
+      "available": false
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Electrolux EEA17200L dishwasher: out of stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "холодильник Beko RCNA366I30W коштує 18999 UAH",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "amount": 18999
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Новою Поштою займе 1-3 дні",
+     "product": "",
+     "sku": "",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "гарантія складає 12 місяців від виробника",
+     "product": "",
+     "sku": "",
+     "value": {
+      "attribute": "гарантія",
+      "value": "12 місяців"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Sources do not confirm it.",
+    "truth": "Characteristic not confirmed.",
+    "source": "https://vrn.com.ua/harantia"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочка лише через сервіс monobank Pay in Parts на 2 або 3 платежі для замовлень від 3000 гривень",
+     "product": "",
+     "sku": "",
+     "value": {
+      "payments": null,
+      "months": null,
+      "provider": "monobank Pay in Parts"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "посудомийної машини Electrolux EEA17200L",
+     "product": "посудомийної машини Electrolux EEA17200L",
+     "sku": "KH-106",
+     "value": {
+      "attribute": "attribute",
+      "value": "посудомийної машини Electrolux EEA17200L"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Web check is off; characteristic not confirmed.",
+    "truth": "Do not state characteristics that are not confirmed.",
+    "source": "web"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "холодильник Beko RCNA366I30W коштує 18999 UAH",
+     "product": "холодильник Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "attribute": "price",
+      "value": "18999 UAH"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Web check is off; characteristic not confirmed.",
+    "truth": "Do not state characteristics that are not confirmed.",
+    "source": "web"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Новою Поштою займе 1-3 дні",
+     "product": "",
+     "sku": "",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "18999 UAH",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 18999
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Amount matches a catalog price or a policy threshold.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "3 платежі",
+     "product": "",
+     "sku": "",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 3984,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 18048,
+    "detail": "7 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1519,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1688,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 405,
+    "completion_tokens": 150,
+    "latency_ms": 3983,
+    "cost_usd": 8.6e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 422,
+    "completion_tokens": 476,
+    "latency_ms": 2106,
+    "cost_usd": 0.00014
+   },
+   {
+    "task": "factcheck",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 7308,
+    "completion_tokens": 128,
+    "latency_ms": 15941,
+    "cost_usd": 0.021179
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 651,
+    "completion_tokens": 178,
+    "latency_ms": 1519,
+    "cost_usd": 0.000213
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 436,
+    "completion_tokens": 365,
+    "latency_ms": 1686,
+    "cost_usd": 0.000114
+   }
+  ],
+  "cost_usd": 0.021732
+ },
+ {
+  "customer": "Какая максимальная рассрочка на стиральную машину Bosch?",
+  "draft": "Вітаю! Для пральної машини Bosch WAN24263 (21499 UAH) ми пропонуємо розстрочку від monobank \"Оплати частинами\" на 2 або 3 платежі, оскільки сума замовлення перевищує 3000 UAH. Доставка Новою Поштою займе від 1 до 3 днів, а гарантія на пральну машину – 12 місяців від виробника. Чи бажаєте ви оформити замовлення прямо зараз?",
+  "final": "Спасибо за вопрос! Чтобы не ошибиться, я передам его менеджеру, он уточнит детали и ответит вам в ближайшее время.",
+  "action": "fallback",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочку від monobank \"Оплати частинами\" на 2 або 3 платежі",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "monobank \"Оплати частинами\""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочку від monobank \"Оплати частинами\" на 2 або 3 платежі",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": "monobank \"Оплати частинами\""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Новою Поштою займе від 1 до 3 днів",
+     "product": "",
+     "sku": "",
+     "value": {
+      "days": 3,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "гарантія на пральну машину – 12 місяців від виробника",
+     "product": "",
+     "sku": "",
+     "value": {
+      "attribute": "warranty",
+      "value": "12 months"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Sources do not confirm it.",
+    "truth": "Characteristic not confirmed.",
+    "source": "https://www.consumeraffairs.com/homeowners/bosch-appliance-warranty.html"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "21499 UAH",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 21499
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Amount matches a catalog price or a policy threshold.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 UAH",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочку від monobank \"Оплати частинами\" на 2 або 3 платежі",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "monobank \"Оплати частинами\""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "розстрочку від monobank \"Оплати частинами\" на 2 або 3 платежі",
+     "product": "Bosch WAN24263",
+     "sku": "KH-102",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": "monobank \"Оплати частинами\""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка Новою Поштою займе від 1 до 3 днів",
+     "product": "",
+     "sku": "",
+     "value": {
+      "days": 3,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "Гарантія на пральну машину – 12 місяців від виробника",
+     "product": "",
+     "sku": "",
+     "value": {
+      "attribute": "гарантія",
+      "value": "12 місяців"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Web check is off; characteristic not confirmed.",
+    "truth": "Do not state characteristics that are not confirmed.",
+    "source": "web"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "21499 UAH",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 21499
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Amount matches a catalog price or a policy threshold.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 UAH",
+     "product": "",
+     "sku": "",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 3080,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 5624,
+    "detail": "6 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1275,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1616,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 402,
+    "completion_tokens": 117,
+    "latency_ms": 3080,
+    "cost_usd": 7.5e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 385,
+    "completion_tokens": 336,
+    "latency_ms": 1417,
+    "cost_usd": 0.000104
+   },
+   {
+    "task": "factcheck",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 13703,
+    "completion_tokens": 130,
+    "latency_ms": 4205,
+    "cost_usd": 0.02214
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 455,
+    "completion_tokens": 132,
+    "latency_ms": 1275,
+    "cost_usd": 0.000154
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 384,
+    "completion_tokens": 340,
+    "latency_ms": 1616,
+    "cost_usd": 0.000105
+   }
+  ],
+  "cost_usd": 0.022578
+ },
+ {
+  "customer": "Можно чайник Tefal в рассрочку на 4 платежа?",
+  "draft": "На жаль, розстрочка доступна лише через Monobank \"Оплата частинами\" на 2-3 платежі для замовлень від 3000 гривень, тому для чайника Tefal KO2408 за 1199 грн це неможливо.  Чайник Tefal KO2408 коштує 1199 грн і є в наявності, доставка Новою Поштою займе 1-3 дні, і буде коштувати приблизно 70 грн, якщо сума замовлення менша за 5000 грн. Ви можете оплатити повну суму карткою або при отриманні у відділенні Нової Пошти, і на чайник надається гарантія від виробника терміном 12 місяців.  Чи оформлюємо замовлення?",
+  "final": "Спасибо за вопрос! Чтобы не ошибиться, я передам его менеджеру, он уточнит детали и ответит вам в ближайшее время.",
+  "action": "fallback",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "чайник Tefal KO2408 коштує 1199 грн",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "amount": 1199
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: 1199 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "є в наявності",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "доставка Новою Поштою займе 1-3 дні",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "коштувати приблизно 70 грн, якщо сума замовлення менша за 5000 грн",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "days": null,
+      "same_day": false,
+      "carrier": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "надається гарантія від виробника терміном 12 місяців",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "attribute": "warranty period",
+      "value": "12 months"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Sources do not confirm it.",
+    "truth": "Characteristic not confirmed.",
+    "source": "https://www.tefal.com/consumer-services/warranty-and-repairs/warranty"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "70 грн",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "amount": 70
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "70 UAH does not appear anywhere in the catalog or policy.",
+    "truth": "This amount is not a price from our catalog.",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 грн",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "3 платежі",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "Tefal KO2408 kettle is below the 3000 UAH installment minimum.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "12 місяців",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "payments": null,
+      "months": 12,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "12 payments promised; policy allows 2 to 3.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "чайник Tefal KO2408 коштує 1199 грн",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "amount": 1199
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: 1199 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "є в наявності",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Tefal KO2408 kettle: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "доставка Новою Поштою займе 1-3 дні",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "days": 1,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "Доставка безкоштовна при замовленні від 5000 грн, інакше вартість доставки потрібно уточнити у менеджера",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "days": null,
+      "same_day": false,
+      "carrier": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "spec",
+     "text": "Про гарантію на чайник також потрібно уточнити у менеджера",
+     "product": "чайник Tefal KO2408",
+     "sku": "KH-105",
+     "value": {
+      "attribute": "warranty",
+      "value": "не підтверджена"
+     },
+     "source": "llm"
+    },
+    "status": "unverified",
+    "reason": "Web check is off; characteristic not confirmed.",
+    "truth": "Do not state characteristics that are not confirmed.",
+    "source": "web"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 грив",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 грн",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "3 платежі",
+     "product": "",
+     "sku": "KH-105",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "Tefal KO2408 kettle is below the 3000 UAH installment minimum.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 5754,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 8433,
+    "detail": "10 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1603,
+    "detail": "Nemotron Super"
+   },
+   {
+    "name": "recheck",
+    "ms": 1782,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 403,
+    "completion_tokens": 188,
+    "latency_ms": 5754,
+    "cost_usd": 9.7e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 468,
+    "completion_tokens": 347,
+    "latency_ms": 1653,
+    "cost_usd": 0.000111
+   },
+   {
+    "task": "factcheck",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 37770,
+    "completion_tokens": 227,
+    "latency_ms": 6779,
+    "cost_usd": 0.025813
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 703,
+    "completion_tokens": 201,
+    "latency_ms": 1603,
+    "cost_usd": 0.000236
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 457,
+    "completion_tokens": 374,
+    "latency_ms": 1782,
+    "cost_usd": 0.000117
+   }
+  ],
+  "cost_usd": 0.026374
+ },
+ {
+  "customer": "Сколько стоит микроволновка Samsung MS23K3513AW?",
+  "draft": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 грн і є в наявності! Її потужність 800 Вт, об'єм 23 літри, і вона має 6 режимів приготування - ідеальний вибір для вашої кухні! Доставка Новою Поштою займе 1-3 дні, а гарантія від виробника – 12 місяців.",
+  "final": "Мікрохвильова піч Samsung MS23K3513AW коштує 4299 грн і є в наявності! Її потужність 800 Вт, об'єм 23 літри, і вона має 6 режимів приготування - ідеальний вибір для вашої кухні! Доставка Новою Поштою займе 1-3 дні, а гарантія від виробника – 12 місяців.",
+  "action": "pass",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "4299 грн",
+     "product": "",
+     "sku": "KH-103",
+     "value": {
+      "amount": 4299
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Amount matches a catalog price or a policy threshold.",
+    "truth": "",
+    "source": "catalog"
+   }
+  ],
+  "recheck": [],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 2502,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 2406,
+    "detail": "1 promises"
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 406,
+    "completion_tokens": 109,
+    "latency_ms": 2502,
+    "cost_usd": 7.3e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 378,
+    "completion_tokens": 600,
+    "latency_ms": 2405,
+    "cost_usd": 0.000167
+   }
+  ],
+  "cost_usd": 0.00024
+ },
+ {
+  "customer": "Подскажите цену на холодильник Beko RCNA366I30W",
+  "draft": "Звичайно! Холодильник Beko RCNA366I30W зараз коштує 18999 грн і є в наявності. Ви можете оформити замовлення прямо зараз, і ми відправимо його вам Новою Поштою протягом 1-3 днів, звичайною доставкою. Оскільки сума замовлення перевищує 5000 грн, доставка буде безкоштовною!",
+  "final": "Звичайно! Холодильник Beko RCNA366I30W зараз коштує 18999 грн і є в наявності. Ви можете оформити замовлення прямо зараз, і ми відправимо його вам Новою Поштою протягом 1-3 днів, звичайною доставкою. Оскільки сума замовлення перевищує 5000 грн, доставка буде безкоштовною!",
+  "action": "pass",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "Холодильник Beko RCNA366I30W зараз коштує 18999 грн",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "amount": 18999
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "stock",
+     "text": "і є в наявності",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "available": true
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: in stock.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "ми відправимо його вам Новою Поштою протягом 1-3 днів, звичайною доставкою",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "days": 3,
+      "same_day": false,
+      "carrier": "Нова Пошта"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "delivery",
+     "text": "дostavka буде безкоштовною",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "days": null,
+      "same_day": false,
+      "carrier": ""
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within delivery policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "5000 грн",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "amount": 5000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "5000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "recheck": [],
+  "stages": [
+   {
+    "name": "draft",
+    "ms": 2430,
+    "detail": "Nemotron Nano"
+   },
+   {
+    "name": "check",
+    "ms": 1530,
+    "detail": "5 promises"
+   }
+  ],
+  "calls": [
+   {
+    "task": "draft",
+    "model": "google/gemma-3-27b-it",
+    "prompt_tokens": 406,
+    "completion_tokens": 99,
+    "latency_ms": 2430,
+    "cost_usd": 7e-05
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 369,
+    "completion_tokens": 306,
+    "latency_ms": 1529,
+    "cost_usd": 9.6e-05
+   }
+  ],
+  "cost_usd": 0.000166
  }
 ]
