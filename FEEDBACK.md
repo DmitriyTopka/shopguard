@@ -1,6 +1,6 @@
 # Otari feedback from building ShopGuard
 
-ShopGuard checks what a shop chatbot promises (price, stock, installments, delivery, specs) before the customer reads it. Until this hackathon it had never run on a live model. I moved it to hosted Otari on 30 October 2026 and ran 49 test messages several times. Total spend so far: about $0.70 of the $22 balance.
+ShopGuard checks what a shop chatbot promises (price, stock, installments, delivery, specs) before the customer reads it. Until this hackathon it had never run on a live model. I moved it to hosted Otari on 30 October 2026 and ran 49 test messages several times. Otari tracked $1.55 so far out of the $22 balance, that includes all my experiments; the two 49-message runs in the README cost $0.47 of it.
 
 ## What I used
 

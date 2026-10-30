@@ -6,7 +6,7 @@ Online shops put LLM bots behind the "chat with us" button, and those bots make 
 
 ShopGuard sits between any shop bot and the customer. Before a reply is sent, every promise in it is checked against the shop's own data and, for product specs, against the open web. Wrong or unconfirmed promises are fixed. If the fix still fails the check, the customer gets a polite hand-off to a manager instead of a lie.
 
-> Built for Mozilla's Developers Wilding: Online hackathon, on the hosted [Otari](https://github.com/mozilla-ai/otari) gateway. Live demo: [shopguard-otari.vercel.app](https://shopguard-otari.vercel.app) · Video (3 min): [shopguard-otari.vercel.app/demo.mp4](https://shopguard-otari.vercel.app/demo.mp4) · Issue opened on Otari: [mozilla-ai/otari#2717](https://github.com/mozilla-ai/otari/issues/2717)
+> Built for Mozilla's Developers Wilding: Online hackathon, on the hosted [Otari](https://github.com/mozilla-ai/otari) gateway. Live demo: [shopguard-otari.vercel.app](https://shopguard-otari.vercel.app) · Video (3 min 20 s): [shopguard-otari.vercel.app/demo.mp4](https://shopguard-otari.vercel.app/demo.mp4) · Issue opened on Otari: [mozilla-ai/otari#2717](https://github.com/mozilla-ai/otari/issues/2717)
 
 ## How it works
 
