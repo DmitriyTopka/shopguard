@@ -3,3 +3,4 @@ __pycache__/
 .env
 eval/results.json
 .pytest_cache/
+.vercel
