@@ -78,6 +78,8 @@ Full rows: `eval/results_live_eager.json`, `eval/results_live_pushy.json`. Most 
 - `otari_web_search` searches by model code returned company profiles and finance news instead of product pages; in the pushy run it confirmed none of the spec claims, so unconfirmed specs are removed from the reply.
 - Web search is off for a new workspace until it is allowed under Tools, Web search; the request fails with 403 "web search is not enabled for this workspace".
 - Keys, budgets and routing policies cannot be created with a workspace key (401 "Invalid master key"); only in the dashboard.
+- Guardrails are not used: every guardrail on the hosted gateway (Lakera, Azure, Alinia, Patronus, watsonx, OpenAI moderation, Bedrock) needs an account and a key with that vendor. ShopGuard is itself an output guardrail for shop facts; we would like to plug it into Otari as one.
+- A routing policy on hosted Otari only routes across your own provider keys, so the small-to-big model fallback had to be written in ShopGuard.
 
 ## Running it
 
