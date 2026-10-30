@@ -61,6 +61,13 @@ def test_delivery():
     assert same_day.status == VIOLATION and ok.status == OK
 
 
+def test_delivery_carrier_in_cyrillic_is_ok():
+    # live Nemotron run 30.10: the extractor returned "Нова Пошта" and the guard blocked an honest reply
+    for name in ("Нова Пошта", "Новую Почту"):
+        assert check_claim(Claim("delivery", name, value={"carrier": name}), shop).status == OK
+    assert check_claim(Claim("delivery", "Meest", value={"carrier": "Meest"}), shop).status == VIOLATION
+
+
 def test_spec_without_web_is_unverified():
     v = check_claim(Claim("spec", "Wi-Fi", sku="KH-101", value={"attribute": "wifi", "value": "yes"}), shop)
     assert v.status == UNVERIFIED

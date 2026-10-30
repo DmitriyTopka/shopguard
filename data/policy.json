@@ -9,6 +9,7 @@
   },
   "delivery": {
     "carriers": ["Nova Poshta"],
+    "carrier_aliases": ["Нова Пошта", "Нову Пошту", "Нової Пошти", "Новая Почта", "Новую Почту", "Новой Почты", "Nova Post"],
     "min_days": 1,
     "max_days": 3,
     "same_day": false,

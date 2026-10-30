@@ -106,7 +106,7 @@ def _delivery(c: Claim, shop: Shop) -> Verdict:
         return Verdict(c, VIOLATION, f"{days}-day delivery promised; policy minimum is {pol.get('min_days')}.",
                        truth=truth, source="policy")
     carrier = (c.value.get("carrier") or "").lower()
-    carriers = [x.lower() for x in pol.get("carriers", [])]
+    carriers = [x.lower() for x in pol.get("carriers", []) + pol.get("carrier_aliases", [])]
     if carrier and carriers and not any(carrier in x or x in carrier for x in carriers):
         return Verdict(c, VIOLATION, f"Carrier '{c.value.get('carrier')}' is not used.", truth=truth, source="policy")
     return Verdict(c, OK, "Within delivery policy.", source="policy")
