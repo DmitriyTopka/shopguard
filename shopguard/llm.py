@@ -1,4 +1,4 @@
-"""LLM access: Nebius Token Factory (OpenAI-compatible) and an offline stub.
+"""LLM access: Otari gateway, Nebius Token Factory (both OpenAI-compatible) and an offline stub.
 
 Every call carries a `task` tag ("draft", "extract", "judge", "rewrite") so that
 cost can be attributed per stage and the stub can answer deterministically.
@@ -54,10 +54,13 @@ class LLM:
 
 
 class TokenFactoryLLM(LLM):
-    def __init__(self, api_key: str | None = None, base_url: str | None = None, timeout: float = 60.0):
-        self.api_key = api_key or os.environ["NEBIUS_API_KEY"]
-        self.base_url = (base_url or os.getenv("NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1")).rstrip("/")
-        self.http = httpx.Client(timeout=timeout)
+    KEY_ENV, BASE_ENV, BASE_DEFAULT = "NEBIUS_API_KEY", "NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1"
+
+    def __init__(self, api_key: str | None = None, base_url: str | None = None, timeout: float = 60.0,
+                 http: httpx.Client | None = None):
+        self.api_key = api_key or os.environ[self.KEY_ENV]
+        self.base_url = (base_url or os.getenv(self.BASE_ENV, self.BASE_DEFAULT)).rstrip("/")
+        self.http = http or httpx.Client(timeout=timeout)
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False):
         body = {"model": model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
@@ -81,6 +84,16 @@ class TokenFactoryLLM(LLM):
         )
 
 
+class OtariLLM(TokenFactoryLLM):
+    """Mozilla.ai Otari hosted gateway: same OpenAI-compatible wire format, workspace token `otk_...`.
+
+    Model ids are `provider/model` as listed in the workspace Models tab; set them in
+    SHOPGUARD_MODEL_FAST / SHOPGUARD_MODEL_SMART.
+    """
+
+    KEY_ENV, BASE_ENV, BASE_DEFAULT = "OTARI_API_KEY", "OTARI_BASE_URL", "https://api.otari.ai/v1"
+
+
 def strip_reasoning(text: str) -> str:
     """Drop a <think>...</think> block if the model returns its reasoning inline."""
     if "</think>" in text:
@@ -102,8 +115,18 @@ class StubLLM(LLM):
         return LLMResult(text=text, model=model, task=task)
 
 
-def default_llm() -> LLM:
+def live_llm() -> TokenFactoryLLM | None:
+    """The live gateway configured in env: Otari first, Nebius as the legacy path."""
+    if os.getenv("OTARI_API_KEY"):
+        return OtariLLM()
     if os.getenv("NEBIUS_API_KEY"):
         return TokenFactoryLLM()
+    return None
+
+
+def default_llm() -> LLM:
+    live = live_llm()
+    if live:
+        return live
     from .stub import demo_stub
     return demo_stub()

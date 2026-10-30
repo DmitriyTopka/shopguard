@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 
 
 def make_client(tmp_path, monkeypatch, **env):
+    monkeypatch.delenv("OTARI_API_KEY", raising=False)
     monkeypatch.delenv("NEBIUS_API_KEY", raising=False)
     monkeypatch.delenv("TAVILY_API_KEY", raising=False)
     monkeypatch.setenv("SHOPGUARD_DB", str(tmp_path / "app.db"))

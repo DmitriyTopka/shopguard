@@ -5,13 +5,16 @@ patterns from our benchmark, not the guard's own extractor, so the guard is not
 grading itself. Stock and spec cases also get a human-review flag in the output.
 
     python eval/run_eval.py                 # offline stub
+    python eval/run_eval.py --live --limit 5   # Otari: OTARI_API_KEY or the macOS keychain item otari-api/shopguard
     NEBIUS_API_KEY=... python eval/run_eval.py --live --record data/scenarios.json
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -21,7 +24,7 @@ sys.path.insert(0, str(ROOT / "eval"))
 
 from cases import CASES  # noqa: E402
 from shopguard.guard import Guard  # noqa: E402
-from shopguard.llm import TokenFactoryLLM  # noqa: E402
+from shopguard.llm import live_llm  # noqa: E402
 from shopguard.shop import Shop  # noqa: E402
 from shopguard.stub import demo_stub  # noqa: E402
 
@@ -41,9 +44,19 @@ def score(text: str, kind: str, shop: Shop) -> dict:
             "ok": not invented and not bad_install and not bad_stock}
 
 
+def keychain_otari_key() -> str:
+    """Read the Otari token from the macOS keychain without echoing it; '' if absent."""
+    try:
+        out = subprocess.run(["security", "find-generic-password", "-s", "otari-api", "-a", "shopguard", "-w"],
+                             capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    return out.stdout.strip() if out.returncode == 0 else ""
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--live", action="store_true", help="use Nebius Token Factory (needs NEBIUS_API_KEY)")
+    ap.add_argument("--live", action="store_true", help="use the live gateway: Otari (OTARI_API_KEY) or Nebius (NEBIUS_API_KEY)")
     ap.add_argument("--persona", default="eager")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--out", default=str(ROOT / "eval" / "results.json"))
@@ -51,10 +64,13 @@ def main() -> None:
     args = ap.parse_args()
 
     shop = Shop.load()
-    llm = TokenFactoryLLM() if args.live else demo_stub()
+    if args.live and not os.getenv("OTARI_API_KEY") and not os.getenv("NEBIUS_API_KEY"):
+        os.environ["OTARI_API_KEY"] = keychain_otari_key()
+    llm = (live_llm() or sys.exit("no live key: set OTARI_API_KEY or add keychain item otari-api/shopguard")) \
+        if args.live else demo_stub()
+    print(f"mode: {type(llm).__name__}", file=sys.stderr)
     searcher = None
     if args.live:
-        import os
         if os.getenv("TAVILY_API_KEY"):
             from shopguard.facts import TavilySearcher
             searcher = TavilySearcher()
