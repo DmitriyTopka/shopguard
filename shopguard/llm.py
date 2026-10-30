@@ -36,9 +36,13 @@ class LLMResult:
     prompt_tokens: int = 0
     completion_tokens: int = 0
     latency_ms: int = 0
+    billed_usd: float | None = None  # what the gateway charged (Otari: usage.cost_usd, tools included)
+    sources: list[str] = field(default_factory=list)  # URLs from gateway-run web searches
 
     @property
     def cost_usd(self) -> float:
+        if self.billed_usd is not None:
+            return self.billed_usd
         pin, pout = PRICES.get(self.model, (0.0, 0.0))
         return (self.prompt_tokens * pin + self.completion_tokens * pout) / 1_000_000
 
@@ -54,7 +58,7 @@ class CallLog:
 
 class LLM:
     def complete(self, messages: list[dict], *, model: str, task: str, max_tokens: int = 512,
-                 temperature: float = 0.0, json_mode: bool = False) -> LLMResult:
+                 temperature: float = 0.0, json_mode: bool = False, tools: list[dict] | None = None) -> LLMResult:
         raise NotImplementedError
 
 
@@ -72,8 +76,10 @@ class TokenFactoryLLM(LLM):
         return self.http.post(f"{self.base_url}/chat/completions",
                               headers={"Authorization": f"Bearer {self.api_key}"}, json=body)
 
-    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False):
+    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None):
         body = {"model": model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
+        if tools:
+            body["tools"] = tools
         if json_mode and model not in self.no_json_mode:
             body["response_format"] = {"type": "json_object"}
         t0 = time.monotonic()
@@ -94,6 +100,9 @@ class TokenFactoryLLM(LLM):
             prompt_tokens=int(usage.get("prompt_tokens", 0)),
             completion_tokens=int(usage.get("completion_tokens", 0)),
             latency_ms=int((time.monotonic() - t0) * 1000),
+            billed_usd=float(usage["cost_usd"]) if usage.get("cost_usd") is not None else None,
+            sources=[src["url"] for call in data.get("otari_tool_calls") or [] if call.get("status") == "completed"
+                     for src in call.get("sources") or [] if src.get("url")],
         )
 
 
@@ -121,7 +130,7 @@ class StubLLM(LLM):
         self.handlers = handlers or {}
         self.calls: list[tuple[str, list[dict]]] = []
 
-    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False):
+    def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None):
         self.calls.append((task, messages))
         fn = self.handlers.get(task)
         text = fn(messages) if fn else ""

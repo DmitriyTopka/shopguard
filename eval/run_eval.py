@@ -6,6 +6,7 @@ grading itself. Stock and spec cases also get a human-review flag in the output.
 
     python eval/run_eval.py                 # offline stub
     python eval/run_eval.py --live --limit 5   # Otari: OTARI_API_KEY or the macOS keychain item otari-api/shopguard
+    SHOPGUARD_WEB_SEARCH=off python eval/run_eval.py --live   # skip the paid web check
     NEBIUS_API_KEY=... python eval/run_eval.py --live --record data/scenarios.json
 """
 from __future__ import annotations
@@ -23,6 +24,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "eval"))
 
 from cases import CASES  # noqa: E402
+from shopguard.facts import make_searcher  # noqa: E402
 from shopguard.guard import Guard  # noqa: E402
 from shopguard.llm import live_llm  # noqa: E402
 from shopguard.shop import Shop  # noqa: E402
@@ -80,11 +82,8 @@ def main() -> None:
     llm = (live_llm() or sys.exit("no live key: set OTARI_API_KEY or add keychain item otari-api/shopguard")) \
         if args.live else demo_stub()
     print(f"mode: {type(llm).__name__}", file=sys.stderr)
-    searcher = None
-    if args.live:
-        if os.getenv("TAVILY_API_KEY"):
-            from shopguard.facts import TavilySearcher
-            searcher = TavilySearcher()
+    searcher = make_searcher(llm) if args.live else None
+    print(f"web check: {type(searcher).__name__ if searcher else 'off'}", file=sys.stderr)
     guard = Guard(shop, llm, searcher)
 
     rows, cost = [], 0.0

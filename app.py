@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 
 from shopguard.budget import Budget
+from shopguard.facts import make_searcher
 from shopguard.guard import Guard
 from shopguard.llm import MODEL_FAST, MODEL_SELLER, MODEL_SMART, TokenFactoryLLM, default_llm
 from shopguard.shop import DATA_DIR, Shop
@@ -27,14 +28,7 @@ LIVE = isinstance(llm, TokenFactoryLLM)
 budget = Budget(os.getenv("SHOPGUARD_DB", str(ROOT / "shopguard.db")))
 
 
-def make_searcher():
-    if os.getenv("TAVILY_API_KEY"):
-        from shopguard.facts import TavilySearcher
-        return TavilySearcher(cache=budget)
-    return None
-
-
-searcher = make_searcher()
+searcher = make_searcher(llm, cache=budget)
 
 
 class CheckIn(BaseModel):

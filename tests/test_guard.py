@@ -87,3 +87,37 @@ def test_fallback_language():
     assert detect_lang("Пишите по-русски. Рассрочка есть?") == "ru"
     assert detect_lang("Слухайте а без переплати можна оформить?") == "uk"
     assert detect_lang("Can I pay in 12 parts?") == "en"
+
+
+def test_gateway_web_check_uses_otari_tool_and_caches():
+    from shopguard.facts import OtariWebSearch
+    from shopguard.llm import LLMResult
+
+    class Cache(dict):
+        def get(self, k):
+            return super().get(k)
+
+        def put(self, k, v):
+            self[k] = v
+
+    stub = demo_stub()
+    seen = []
+    base = stub.complete
+
+    def complete(messages, **kw):
+        if kw["task"] == "factcheck":
+            seen.append(kw.get("tools"))
+            return LLMResult(text=json.dumps({"verdict": "contradicted", "quote": "No Wi-Fi.", "correct_value": "no"}),
+                             model=kw["model"], task="factcheck", sources=["https://bosch.example/spec"])
+        return base(messages, **kw)
+
+    stub.complete = complete
+    web = OtariWebSearch(cache=Cache())
+    calls_after = []
+    for _ in range(2):
+        r = Guard(shop, stub, web).run("Does the Beko fridge have Wi-Fi?")
+        spec = [v for v in r.verdicts if v.claim.type == "spec"][0]
+        assert spec.status == "violation" and spec.source == "https://bosch.example/spec"
+        calls_after.append(web.calls)
+    assert seen and all(t == [{"type": "otari_web_search", "max_uses": 2}] for t in seen)
+    assert calls_after[0] >= 1 and calls_after[1] == calls_after[0]  # the repeat is served from cache
