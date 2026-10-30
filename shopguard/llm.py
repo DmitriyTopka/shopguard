@@ -62,17 +62,25 @@ class TokenFactoryLLM(LLM):
         self.api_key = api_key or os.environ[self.KEY_ENV]
         self.base_url = (base_url or os.getenv(self.BASE_ENV, self.BASE_DEFAULT)).rstrip("/")
         self.http = http or httpx.Client(timeout=timeout)
+        self.no_json_mode: set[str] = set()  # models whose provider rejected response_format
+
+    def _post(self, body: dict) -> httpx.Response:
+        return self.http.post(f"{self.base_url}/chat/completions",
+                              headers={"Authorization": f"Bearer {self.api_key}"}, json=body)
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False):
         body = {"model": model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
-        if json_mode:
+        if json_mode and model not in self.no_json_mode:
             body["response_format"] = {"type": "json_object"}
         t0 = time.monotonic()
-        r = self.http.post(
-            f"{self.base_url}/chat/completions",
-            headers={"Authorization": f"Bearer {self.api_key}"},
-            json=body,
-        )
+        r = self._post(body)
+        if r.status_code == 400 and "response_format" in body and "response_format" in r.text:
+            # Otari lists Nemotron Nano with structured_output, but its Bedrock offering returns
+            # 400 "'response_format' is not supported for bedrock". The prompt already asks for
+            # JSON and parse_llm_json tolerates prose, so retry once without it (400s are not billed).
+            self.no_json_mode.add(model)
+            del body["response_format"]
+            r = self._post(body)
         r.raise_for_status()
         data = r.json()
         usage = data.get("usage") or {}

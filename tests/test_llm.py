@@ -32,3 +32,19 @@ def test_otari_request_shape(monkeypatch):
     assert seen["auth"] == "Bearer otk_test"
     assert b'"response_format":{"type":"json_object"}' in seen["body"].replace(b" ", b"")
     assert res.text == "[]" and res.prompt_tokens == 100 and res.completion_tokens == 10
+
+
+def test_json_mode_rejected_by_provider_is_retried_without_it():
+    bodies = []
+
+    def handler(req: httpx.Request) -> httpx.Response:
+        body = req.read()
+        bodies.append(body)
+        if b"response_format" in body:
+            return httpx.Response(400, json={"detail": "'response_format' is not supported for bedrock."})
+        return httpx.Response(200, json={"choices": [{"message": {"content": "[]"}}], "usage": {}})
+
+    client = L.OtariLLM(api_key="otk_test", http=httpx.Client(transport=httpx.MockTransport(handler)))
+    for _ in range(2):
+        assert client.complete([{"role": "user", "content": "x"}], model="m", task="extract", json_mode=True).text == "[]"
+    assert len(bodies) == 3  # one rejected call, then the model is remembered
