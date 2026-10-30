@@ -4,3 +4,4 @@ __pycache__/
 eval/results.json
 .pytest_cache/
 .vercel
+public/*.mp4
