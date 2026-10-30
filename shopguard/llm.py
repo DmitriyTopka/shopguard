@@ -12,14 +12,15 @@ from typing import Callable
 
 import httpx
 
-# Model ids and prices are configurable: verify both in the Token Factory console.
-MODEL_FAST = os.getenv("SHOPGUARD_MODEL_FAST", "nvidia/Nemotron-3-Nano-30B-A3B")
-MODEL_SMART = os.getenv("SHOPGUARD_MODEL_SMART", "nvidia/Nemotron-3-Super-120B-A12B")
+# Model ids and prices are configurable. Defaults are the Otari catalog (GET /api/v1/models, 30.10.2026);
+# the Nano id with response_format support is `nemotron-nano-3-30b`, not `nemotron-3-nano-30b-a3b`.
+MODEL_FAST = os.getenv("SHOPGUARD_MODEL_FAST", "nvidia/nemotron-nano-3-30b")
+MODEL_SMART = os.getenv("SHOPGUARD_MODEL_SMART", "nvidia/nemotron-3-super-120b-a12b")
 
-# USD per 1M tokens (input, output). Defaults are aggregator figures, override from the console.
+# USD per 1M tokens (input, output), from the same catalog.
 PRICES = {
     MODEL_FAST: (float(os.getenv("SHOPGUARD_PRICE_FAST_IN", "0.06")), float(os.getenv("SHOPGUARD_PRICE_FAST_OUT", "0.24"))),
-    MODEL_SMART: (float(os.getenv("SHOPGUARD_PRICE_SMART_IN", "0.30")), float(os.getenv("SHOPGUARD_PRICE_SMART_OUT", "0.90"))),
+    MODEL_SMART: (float(os.getenv("SHOPGUARD_PRICE_SMART_IN", "0.15")), float(os.getenv("SHOPGUARD_PRICE_SMART_OUT", "0.65"))),
 }
 
 
@@ -91,7 +92,7 @@ class OtariLLM(TokenFactoryLLM):
     SHOPGUARD_MODEL_FAST / SHOPGUARD_MODEL_SMART.
     """
 
-    KEY_ENV, BASE_ENV, BASE_DEFAULT = "OTARI_API_KEY", "OTARI_BASE_URL", "https://api.otari.ai/v1"
+    KEY_ENV, BASE_ENV, BASE_DEFAULT = "OTARI_API_KEY", "OTARI_BASE_URL", "https://api.otari.ai/api/v1"
 
 
 def strip_reasoning(text: str) -> str:

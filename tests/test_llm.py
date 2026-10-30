@@ -28,7 +28,7 @@ def test_otari_request_shape(monkeypatch):
 
     client = L.OtariLLM(api_key="otk_test", http=httpx.Client(transport=httpx.MockTransport(handler)))
     res = client.complete([{"role": "user", "content": "hi"}], model=L.MODEL_FAST, task="extract", json_mode=True)
-    assert seen["url"] == "https://api.otari.ai/v1/chat/completions"
+    assert seen["url"] == "https://api.otari.ai/api/v1/chat/completions"
     assert seen["auth"] == "Bearer otk_test"
     assert b'"response_format":{"type":"json_object"}' in seen["body"].replace(b" ", b"")
     assert res.text == "[]" and res.prompt_tokens == 100 and res.completion_tokens == 10
