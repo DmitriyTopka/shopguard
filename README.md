@@ -6,7 +6,7 @@ Online shops put LLM bots behind the "chat with us" button, and those bots make 
 
 ShopGuard sits between any shop bot and the customer. Before a reply is sent, every promise in it is checked against the shop's own data and, for product specs, against the open web. Wrong or unconfirmed promises are fixed. If the fix still fails the check, the customer gets a polite hand-off to a manager instead of a lie.
 
-> Built for Mozilla's Developers Wilding: Online hackathon, on the hosted [Otari](https://github.com/mozilla-ai/otari) gateway. Live demo: [shopguard-otari.vercel.app](https://shopguard-otari.vercel.app) · Video (3 min 20 s): [shopguard-otari.vercel.app/demo.mp4](https://shopguard-otari.vercel.app/demo.mp4) · Issue opened on Otari: [mozilla-ai/otari#2717](https://github.com/mozilla-ai/otari/issues/2717)
+> Built for Mozilla's Developers Wilding: Online hackathon, on the hosted [Otari](https://github.com/mozilla-ai/otari) gateway. Live demo: [shopguard-otari.vercel.app](https://shopguard-otari.vercel.app) · Video (3 min 20 s): [shopguard-otari.vercel.app/demo.mp4](https://shopguard-otari.vercel.app/demo.mp4) · Issue opened on Otari: [mozilla-ai/otari#2717](https://github.com/mozilla-ai/otari/issues/2717), fixed by the team on 31 October
 
 ## How it works
 
@@ -76,6 +76,7 @@ Full rows: `eval/results_live_eager.json`, `eval/results_live_pushy.json`. Most 
 - The hosted quickstart shows `https://api.otari.ai/v1`; the server answers 404 there ("Otari serves its API under /api/v1").
 - The catalog lists `nvidia/nemotron-nano-3-30b` with `response_format`, but its only offering (Bedrock) answers 400 "'response_format' is not supported for bedrock". ShopGuard retries once without it.
 - `otari_web_search` searches by model code returned company profiles and finance news instead of product pages; in the pushy run it confirmed none of the spec claims, so unconfirmed specs are removed from the reply.
+- `otari_web_search` with a small `max_uses` often failed on Bedrock with 400 "toolConfig field must be defined". I reported it as [#2717](https://github.com/mozilla-ai/otari/issues/2717), and the team fixed it on 31 October ([#2731](https://github.com/mozilla-ai/otari/pull/2731)). ShopGuard still uses `max_uses: 3` and retries once with a higher limit.
 - Web search is off for a new workspace until it is allowed under Tools, Web search; the request fails with 403 "web search is not enabled for this workspace".
 - Keys, budgets and routing policies cannot be created with a workspace key (401 "Invalid master key"); only in the dashboard.
 - Guardrails are not used: every guardrail on the hosted gateway (Lakera, Azure, Alinia, Patronus, watsonx, OpenAI moderation, Bedrock) needs an account and a key with that vendor. ShopGuard is itself an output guardrail for shop facts; we would like to plug it into Otari as one.
