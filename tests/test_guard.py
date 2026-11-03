@@ -208,7 +208,11 @@ def test_formula_is_evaluated_locally_from_shop_facts_only():
     assert evaluate("18999 / 12", shop) is None          # 12 payments are not allowed
     assert evaluate("1583 * 12", shop) is None           # 1583 is not a shop fact
     assert evaluate("__import__('os')", shop) is None
-    assert evaluate("18999 / 3 - 1", shop) is None       # 1 is an allowed count? no: counts are 2..3
+    assert evaluate("18999 / 3 - 1", shop) is None       # chains outside the allowed shapes
+    assert evaluate("18999 * 3 / 2", shop) is None       # payment counts only as the single divisor
+    assert evaluate("18999 / 2 / 3", shop) is None
+    assert evaluate("18999 + 5000", shop) == 23999.0
+    assert evaluate("(18999 + 5000) / 2", shop) == 11999.5
 
 
 def test_model_claiming_derived_is_not_enough():
