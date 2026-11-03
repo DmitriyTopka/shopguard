@@ -211,8 +211,8 @@ def test_formula_is_evaluated_locally_from_shop_facts_only():
     assert evaluate("18999 / 3 - 1", shop) is None       # chains outside the allowed shapes
     assert evaluate("18999 * 3 / 2", shop) is None       # payment counts only as the single divisor
     assert evaluate("18999 / 2 / 3", shop) is None
-    assert evaluate("18999 + 5000", shop) == 23999.0
-    assert evaluate("(18999 + 5000) / 2", shop) == 11999.5
+    assert evaluate("18999 + 5000", shop) is None        # thresholds never enter a formula
+    assert evaluate("18999 + 18999", shop) is None       # each product price once
 
 
 def test_model_claiming_derived_is_not_enough():
