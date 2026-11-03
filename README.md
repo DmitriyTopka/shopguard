@@ -20,6 +20,7 @@ customer message
  extract promises ── Nemotron Nano  +  regex net for money and payment counts
       │
       ├── price / stock / installments / delivery ──► plain code vs catalog.json + policy.json
+      │      └─ an amount that is no catalog price ──► Nemotron Super runs Python via otari_code_execution
       └── product specs ──► Nemotron Super with Otari's otari_web_search tool: supported / contradicted / not found
       │
       ▼
@@ -43,14 +44,21 @@ Design choices:
 
 All model calls go through the hosted gateway at `https://api.otari.ai/api/v1` with one workspace key (`shopguard/llm.py`, class `OtariLLM`). The first commit where Otari came in: [`d0920d9`](https://github.com/DmitriyTopka/shopguard/commit/d0920d9221602e1482c65f4962d40e9424a37123) on branch `otari-hackathon`.
 
-| Otari feature | How ShopGuard uses it | Where |
-|---|---|---|
-| Open models, several roles | Gemma 3 27B writes the demo seller's reply; Nemotron 3 Nano extracts promises; Nemotron 3 Super judges web evidence and rewrites | `shopguard/llm.py`, `guard.py`, `claims.py`, `facts.py` |
-| Web search | the judge searches by itself through the built-in `otari_web_search` tool, one gateway call per claim, sources come back in `otari_tool_calls`; verdicts are cached per claim | `shopguard/facts.py`, `OtariWebSearch` |
-| Usage and cost | each call's cost is taken from Otari's `usage.cost_usd` (tool charges included) and shown under every result in the demo | `shopguard/llm.py` |
-| Routing and fallbacks | Super has four providers behind one catalog id, so Otari can move to another one when a provider fails. In our runs every Super call went to bedrock and no gateway fallback happened (the `Otari-Provider` and `Otari-Fallback` headers are logged per call, see `eval/results_live_eager_providers.json`). On top of that ShopGuard hops from Nano to Super when the small model times out (20 s) or answers with broken JSON, which Otari does not treat as a failure. If both fail, the reply is not sent unchecked: the customer gets the hand-off | `shopguard/claims.py`, `shopguard/llm.py` |
-| Budgets and limits | an organization ceiling of $15 for the whole hackathon, set on otari.ai; when Otari refuses a call (403 `budget_exceeded`, 402 `insufficient_funds`) the demo switches to recorded runs instead of failing. ShopGuard's own daily USD cap was deleted in favor of these ceilings | `app.py`, `shopguard/llm.py` |
-| Per-user budgets | two keys with their own daily ceilings: the public demo key ($0.50 a day) and the judges' key ($2 a day, reached with `?pass=`). Per-IP rate limits stay in ShopGuard, since Otari only sees one caller | `app.py`, `shopguard/budget.py` |
+Rubric features in the rubric's own words, with what is really in the app:
+
+| Rubric feature | Status | How ShopGuard uses it | Where |
+|---|---|---|---|
+| Open-weight models, two or more | used | Gemma 3 27B, Nemotron 3 Nano, Nemotron 3 Super | `shopguard/llm.py` |
+| Multiple models serving distinct roles | used | Gemma writes the demo seller's reply; Nano extracts promises; Super judges web evidence, checks arithmetic and rewrites | `guard.py`, `claims.py`, `facts.py`, `mathcheck.py` |
+| Web search or web fetch | used | the judge searches by itself through the built-in `otari_web_search` tool, one gateway call per claim, sources come back in `otari_tool_calls`; verdicts are cached per claim | `shopguard/facts.py`, `OtariWebSearch` |
+| Code execution | used | an amount that is not a catalog price ("2 payments of 9 499.50 UAH") goes to Super with the built-in `otari_code_execution` tool; Super writes and runs Python on the shop's facts, and the amount is accepted only if the gateway really ran the code, the value matches and the split uses a payment count the policy allows. Before this, honest replies with monthly amounts were rewritten (`eval/results_live_code_check.json`) | `shopguard/mathcheck.py` |
+| Budgets and spending limits | used | an organization ceiling of $15, set on otari.ai; when Otari refuses a call (403 `budget_exceeded`, 402 `insufficient_funds`) the demo switches to recorded runs instead of failing. ShopGuard's own daily USD cap was deleted in favor of these ceilings | `app.py`, `shopguard/llm.py` |
+| Per-user budgets | partial | two keys with their own daily ceilings: the public demo ($0.50 a day) and the judges ($2 a day, reached with `?pass=`), plus a per-IP rate limit in ShopGuard. Real end-user budgets need a service key that a workspace cannot create | `app.py`, `shopguard/budget.py` |
+| Model routing and fallbacks | partial | Super has four providers behind one catalog id, but in our runs every Super call went to bedrock and `Otari-Fallback: true` never appeared (headers are logged per call, `eval/results_live_eager_providers.json`). The fallback from Nano to Super on a timeout (20 s) or broken JSON is ShopGuard code, because a hosted routing policy only routes across your own provider keys | `shopguard/claims.py`, `shopguard/llm.py` |
+| MCP integrations | not used | | |
+| Guardrails | not used | every hosted guardrail needs an account and key with a vendor | |
+
+Every call's cost comes from Otari's `usage.cost_usd` (tool charges included) and is shown under each result in the demo.
 
 The things that did not work as documented are listed below in "Notes on Otari", they went into the feedback.
 
@@ -77,6 +85,7 @@ Full rows: `eval/results_live_eager.json`, `eval/results_live_pushy.json`. Most 
 - The catalog lists `nvidia/nemotron-nano-3-30b` with `response_format`, but its only offering (Bedrock) answers 400 "'response_format' is not supported for bedrock". ShopGuard retries once without it.
 - `otari_web_search` searches by model code returned company profiles and finance news instead of product pages; in the pushy run it confirmed none of the spec claims, so unconfirmed specs are removed from the reply.
 - `otari_web_search` with a small `max_uses` often failed on Bedrock with 400 "toolConfig field must be defined". I reported it as [#2717](https://github.com/mozilla-ai/otari/issues/2717), and the team fixed it on 31 October ([#2731](https://github.com/mozilla-ai/otari/pull/2731)). ShopGuard still uses `max_uses: 3` and retries once with a higher limit.
+- `otari_web_fetch` works on hosted Otari, but beko.com and e-catalog answered it with 403, so ShopGuard keeps `otari_web_search` for specs. `otari_web_fetch` also rejects `max_uses` (400 "declarations may contain only the type field"), while `otari_web_search` accepts it.
 - Web search is off for a new workspace until it is allowed under Tools, Web search; the request fails with 403 "web search is not enabled for this workspace".
 - Keys, budgets and routing policies cannot be created with a workspace key (401 "Invalid master key"); only in the dashboard.
 - Guardrails are not used: every guardrail on the hosted gateway (Lakera, Azure, Alinia, Patronus, watsonx, OpenAI moderation, Bedrock) needs an account and a key with that vendor. ShopGuard is itself an output guardrail for shop facts; we would like to plug it into Otari as one.

@@ -11,6 +11,7 @@ import time
 from dataclasses import dataclass, field
 
 from .checks import OK, UNVERIFIED, VIOLATION, Verdict, check_claim
+from . import mathcheck
 from .claims import Claim, extract_claims
 from .facts import Searcher, fact_check
 from .claims import ExtractionFailed
@@ -82,7 +83,8 @@ class GuardResult:
             "calls": [
                 {"task": c.task, "model": c.model, "prompt_tokens": c.prompt_tokens,
                  "completion_tokens": c.completion_tokens, "latency_ms": c.latency_ms, "cost_usd": round(c.cost_usd, 6),
-                 "provider": c.provider, "gateway_fallback": c.gateway_fallback, "note": c.note}
+                 "provider": c.provider, "gateway_fallback": c.gateway_fallback, "note": c.note,
+                 "code_runs": c.code_runs}
                 for c in self.log.calls
             ],
             "cost_usd": round(self.log.cost_usd, 6),
@@ -119,7 +121,7 @@ class Guard:
 
     def check(self, reply: str, customer: str, log: CallLog, web: bool = True) -> list[Verdict]:
         claims = extract_claims(reply, customer, self.shop, self.llm, log)
-        verdicts, web_used = [], 0
+        verdicts, web_used, math_used = [], 0, 0
         for c in claims:
             if c.type == "spec":
                 if web and web_used < MAX_WEB_CHECKS:
@@ -128,7 +130,11 @@ class Guard:
                 else:
                     verdicts.append(fact_check(c, self.shop, None, self.llm, log))
             else:
-                verdicts.append(check_claim(c, self.shop))
+                v = check_claim(c, self.shop)
+                if mathcheck.needs_math(v) and mathcheck.enabled() and math_used < mathcheck.MAX_MATH_CHECKS:
+                    math_used += 1
+                    v = mathcheck.math_check(v, reply, self.shop, self.llm, log)
+                verdicts.append(v)
         return verdicts
 
     def rewrite(self, customer: str, draft: str, problems: list[Verdict], log: CallLog) -> str:

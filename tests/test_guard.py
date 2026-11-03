@@ -149,3 +149,54 @@ def test_extract_falls_back_to_big_model_on_broken_json_and_timeout():
         assert models[:2] == [MODEL_FAST, MODEL_SMART]
         assert any(c["note"].startswith("fallback to") for c in r.to_dict()["calls"])
         assert any(v.claim.source == "llm" for v in r.verdicts)  # the big model's claims reach the checks
+
+
+class _MathLLM(StubLLM):
+    """Stub whose math_check call reports a code run, like Otari's otari_code_execution."""
+
+    def __init__(self, answer: str, ran: bool = True):
+        super().__init__()
+        self.answer, self.ran = answer, ran
+
+    def complete(self, messages, *, model, task, tools=None, **kw):
+        from shopguard.llm import LLMResult
+        self.calls.append((task, messages, tools))
+        if task != "math_check":
+            return LLMResult(text="", model=model, task=task)
+        runs = [{"code": "print(18999/2)", "stdout": "9499.5\n"}] if self.ran else []
+        return LLMResult(text=self.answer, model=model, task=task, code_runs=runs)
+
+
+def _regex_price(amount):
+    from shopguard.checks import check_claim
+    from shopguard.claims import Claim
+    return check_claim(Claim(type="price", text=f"{amount} UAH", value={"amount": amount}, source="regex"), shop)
+
+
+def test_derived_monthly_amount_is_accepted_after_a_code_run():
+    from shopguard import mathcheck
+    from shopguard.llm import CallLog
+    v = _regex_price(9499.5)
+    assert mathcheck.needs_math(v)
+    llm = _MathLLM('{"derived": true, "formula": "18999 / 2", "value": 9499.5}')
+    out = mathcheck.math_check(v, "18 999 UAH, that is 9499.5 UAH a month in 2 payments", shop, llm, CallLog())
+    assert out.status == "ok" and out.source == "code"
+    assert llm.calls[0][2] == [{"type": "otari_code_execution"}]
+
+
+def test_derived_claim_without_a_code_run_stays_a_violation():
+    from shopguard import mathcheck
+    from shopguard.llm import CallLog
+    v = _regex_price(9499.5)
+    llm = _MathLLM('{"derived": true, "formula": "18999 / 2", "value": 9499.5}', ran=False)
+    assert mathcheck.math_check(v, "9499.5 UAH a month", shop, llm, CallLog()).status == "violation"
+
+
+def test_wrong_value_or_disallowed_split_stays_a_violation():
+    from shopguard import mathcheck
+    from shopguard.llm import CallLog
+    v = _regex_price(1333)
+    split12 = _MathLLM('{"derived": true, "formula": "15999 / 12", "value": 1333.25}')
+    assert mathcheck.math_check(v, "1333 UAH a month for 12 months", shop, split12, CallLog()).status == "violation"
+    wrong = _MathLLM('{"derived": true, "formula": "x", "value": 5000}')
+    assert mathcheck.math_check(v, "1333 UAH", shop, wrong, CallLog()).status == "violation"

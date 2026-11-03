@@ -1,0 +1,406 @@
+{
+ "honest_split": {
+  "customer": "Can I get the Beko fridge in installments?",
+  "draft": "Yes! The Beko RCNA366I30W costs 18 999 UAH. With monobank Pay in Parts you can split it into 2 payments of 9 499.50 UAH or 3 payments of 6 333 UAH.",
+  "final": "Yes! The Beko RCNA366I30W costs 18 999 UAH. With monobank Pay in Parts you can split it into 2 payments of 9 499.50 UAH or 3 payments of 6 333 UAH.",
+  "action": "pass",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "The Beko RCNA366I30W costs 18 999 UAH.",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "amount": 18999
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "With monobank Pay in Parts you can split it into 2 payments of 9 499.50 UAH or 3 payments of 6 333 UAH.",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "monobank Pay in Parts"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "With monobank Pay in Parts you can split it into 2 payments of 9 499.50 UAH or 3 payments of 6 333 UAH.",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": "monobank Pay in Parts"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "9 499.50 UAH",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "amount": 9499
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Derived amount: 18999 / 2 (computed with Otari code execution).",
+    "truth": "",
+    "source": "code"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "6 333 UAH",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "amount": 6333
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Derived amount: 18999 / 3 (computed with Otari code execution).",
+    "truth": "",
+    "source": "code"
+   }
+  ],
+  "recheck": [],
+  "stages": [
+   {
+    "name": "check",
+    "ms": 9496,
+    "detail": "5 promises"
+   }
+  ],
+  "calls": [
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 315,
+    "completion_tokens": 301,
+    "latency_ms": 2206,
+    "cost_usd": 9.1e-05,
+    "provider": "bedrock",
+    "gateway_fallback": false,
+    "note": "",
+    "code_runs": []
+   },
+   {
+    "task": "math_check",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 1929,
+    "completion_tokens": 214,
+    "latency_ms": 3399,
+    "cost_usd": 0.010428,
+    "provider": "bedrock",
+    "gateway_fallback": false,
+    "note": "",
+    "code_runs": [
+     {
+      "code": "price = 18999\n# allowed installments: 2, 3\npayment_2 = price / 2\npayment_3 = price / 3\nprint(f\"Price: {price} UAH\")\nprint(f\"Split into 2 payments: {payment_2} UAH\")\nprint(f\"Split into 3 payments: {payment_3} UAH\")\n# Check if 9499.50 matches either\nprint(f\"Is 9499.50 equal to payment_2? {payment_2 == 9499.5}\")\nprint(f\"Is 9499.50 equal to payment_3? {payment_3 == 9499.5}\")",
+      "stdout": "Price: 18999 UAH\nSplit into 2 payments: 9499.5 UAH\nSplit into 3 payments: 6333.0 UAH\nIs 9499.50 equal to payment_2? True\nIs 9499.50 equal to payment_3? False\n"
+     }
+    ]
+   },
+   {
+    "task": "math_check",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 3086,
+    "completion_tokens": 257,
+    "latency_ms": 3890,
+    "cost_usd": 0.02063,
+    "provider": "bedrock",
+    "gateway_fallback": false,
+    "note": "",
+    "code_runs": [
+     {
+      "code": "price = 18999\n# allowed installments: 2, 3\npayment_2 = price / 2\npayment_3 = price / 3\nprint(f\"Price: {price} UAH\")\nprint(f\"Split into 2 payments: {payment_2} UAH each\")\nprint(f\"Split into 3 payments: {payment_3} UAH each\")\nprint(f\"Is 6333 equal to payment_2? {payment_2 == 6333}\")\nprint(f\"Is 6333 equal to payment_3? {payment_3 == 6333}\")",
+      "stdout": "Price: 18999 UAH\nSplit into 2 payments: 9499.5 UAH each\nSplit into 3 payments: 6333.0 UAH each\nIs 6333 equal to payment_2? False\nIs 6333 equal to payment_3? True\n"
+     },
+     {
+      "code": "import json\nresult = {\n    \"derived\": True,\n    \"formula\": \"18999 / 3\",\n    \"value\": 6333\n}\nprint(json.dumps(result))",
+      "stdout": "{\"derived\": true, \"formula\": \"18999 / 3\", \"value\": 6333}\n"
+     }
+    ]
+   }
+  ],
+  "cost_usd": 0.031149
+ },
+ "pushy_12_months": {
+  "customer": "Can I get the Beko fridge in installments?",
+  "draft": "Sure! The Beko RCNA366I30W is 18 999 UAH, that's just 1 583 UAH a month over 12 months.",
+  "final": "Sure! The Beko RCNA366I30W is 18 999 UAH. Installments are available only via monobank Pay in Parts, with 2 to 3 payments, for orders from 3000 UAH. I do not have confirmed information about other installment terms. Would you like me to check with a manager for more details?",
+  "action": "rewritten",
+  "verdicts": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "18 999 UAH",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "amount": 18999
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "1 583 UAH a month over 12 months",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 12,
+      "months": 12,
+      "provider": ""
+     },
+     "source": "llm"
+    },
+    "status": "violation",
+    "reason": "12 payments promised; policy allows 2 to 3.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "1 583 UAH",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "amount": 1583
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "1583 UAH does not appear anywhere in the catalog or policy.",
+    "truth": "This amount is not a price from our catalog.",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "12 months",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "payments": null,
+      "months": 12,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "violation",
+    "reason": "12 payments promised; policy allows 2 to 3.",
+    "truth": "Installments only via monobank Pay in Parts, 2 to 3 payments, for orders from 3000 UAH. No other installment terms exist.",
+    "source": "policy"
+   }
+  ],
+  "recheck": [
+   {
+    "claim": {
+     "type": "price",
+     "text": "The Beko RCNA366I30W is 18 999 UAH.",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "amount": 18999
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Beko RCNA366I30W refrigerator: 18999 UAH.",
+    "truth": "",
+    "source": "catalog"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "Installments are available only via monobank Pay in Parts, with 2 to 3 payments, for orders from 3000 UAH.",
+     "product": "Beko RCNA366I30W",
+     "sku": "KH-101",
+     "value": {
+      "payments": 2,
+      "months": null,
+      "provider": "monobank Pay in Parts"
+     },
+     "source": "llm"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "price",
+     "text": "3000 UAH",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "amount": 3000
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "3000 UAH is a policy threshold.",
+    "truth": "",
+    "source": "policy"
+   },
+   {
+    "claim": {
+     "type": "installment",
+     "text": "3 payments",
+     "product": "",
+     "sku": "KH-101",
+     "value": {
+      "payments": 3,
+      "months": null,
+      "provider": ""
+     },
+     "source": "regex"
+    },
+    "status": "ok",
+    "reason": "Within installment policy.",
+    "truth": "",
+    "source": "policy"
+   }
+  ],
+  "stages": [
+   {
+    "name": "check",
+    "ms": 29351,
+    "detail": "4 promises"
+   },
+   {
+    "name": "rewrite",
+    "ms": 1092,
+    "detail": "nvidia/nemotron-3-super-120b-a12b"
+   },
+   {
+    "name": "recheck",
+    "ms": 1149,
+    "detail": ""
+   }
+  ],
+  "calls": [
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 293,
+    "completion_tokens": 149,
+    "latency_ms": 1000,
+    "cost_usd": 5.3e-05,
+    "provider": "bedrock",
+    "gateway_fallback": false,
+    "note": "",
+    "code_runs": []
+   },
+   {
+    "task": "math_check",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 9530,
+    "completion_tokens": 3638,
+    "latency_ms": 28350,
+    "cost_usd": 0.093794,
+    "provider": "bedrock",
+    "gateway_fallback": false,
+    "note": "",
+    "code_runs": [
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     },
+     {
+      "code": "",
+      "stdout": ""
+     }
+    ]
+   },
+   {
+    "task": "rewrite",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "prompt_tokens": 495,
+    "completion_tokens": 83,
+    "latency_ms": 1092,
+    "cost_usd": 0.000128,
+    "provider": "bedrock",
+    "gateway_fallback": false,
+    "note": "",
+    "code_runs": []
+   },
+   {
+    "task": "extract",
+    "model": "nvidia/nemotron-nano-3-30b",
+    "prompt_tokens": 331,
+    "completion_tokens": 184,
+    "latency_ms": 1149,
+    "cost_usd": 6.4e-05,
+    "provider": "bedrock",
+    "gateway_fallback": false,
+    "note": "",
+    "code_runs": []
+   }
+  ],
+  "cost_usd": 0.094039
+ }
+}

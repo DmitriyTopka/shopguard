@@ -6,6 +6,7 @@ ShopGuard checks what a shop chatbot promises (price, stock, installments, deliv
 
 - Three open models in three roles: Gemma 3 27B as the demo shop bot, Nemotron 3 Nano to pull the promises out of a reply, Nemotron 3 Super to judge web evidence and rewrite.
 - `otari_web_search` as a tool on the Super call, so the judge searches by itself.
+- `otari_code_execution` as a tool on a Super call (added 3 November): when a reply has a money amount that is not a catalog price, Super writes Python on the shop's facts and runs it through Otari, so an honest "2 payments of 9 499.50 UAH" is no longer treated as an invented price.
 - `usage.cost_usd` from every response, shown under each result in the demo.
 - Provider fallback behind one catalog id: Super has four offerings (bedrock, deepinfra, nebius, together). In my runs every Super call went to bedrock and I never got `Otari-Fallback: true`, so I can't say I saw it fire. I log both headers per call anyway.
 - Spend ceilings: $15 for the organization, and two keys with daily ceilings ($0.50 public, $2 for judges). I deleted my own daily USD cap after this worked.
@@ -15,6 +16,7 @@ ShopGuard checks what a shop chatbot promises (price, stock, installments, deliv
 - Switching was small. My client already spoke the OpenAI format, so the first commit was a new base URL, a key and model ids.
 - Cost in the response body is the best thing in Otari for me. I dropped my price table and my spend counter, and the demo now shows real cost per call, tool calls included.
 - The spend ceiling error is good. I set a key to $0.0001 and got a 403 with `code: budget_exceeded`, the scope in a header, and a message that said my 512 `max_tokens` made the estimate too high. I mapped it to "switch the demo to recorded runs" in ten lines.
+- Code execution worked on the first call. The code and its stdout come back in `otari_tool_calls`, so my app can check that the code really ran before it trusts the answer. One check costs about $0.01.
 - `GET /api/v1/models` gives prices and `supported_parameters` per model, free. I picked models from it.
 
 ## What did not work, with reproduction steps
@@ -26,6 +28,9 @@ ShopGuard checks what a shop chatbot promises (price, stock, installments, deliv
 5. **Search API needs its own search tool.** `POST /api/v1/search` returns 400 "No search tools are configured" even after web search is allowed, so I could not run a plain search and control the query myself.
 6. **Tool limit breaks the request.** With `otari_web_search` and `"max_uses": 1` or `2`, Super on Bedrock often fails with 400 "The toolConfig field must be defined when using toolUse and toolResult content blocks": 3 of 4 identical calls in a row. With `max_uses: 3` it works. Full repro and request ids: [mozilla-ai/otari#2717](https://github.com/mozilla-ai/otari/issues/2717). The team confirmed it the same day: past the limit the model keeps searching until the last tool round, and that round goes to Bedrock with no tools declared. They fixed it in any-llm and closed the issue on 31 October ([otari#2731](https://github.com/mozilla-ai/otari/pull/2731)). I keep `max_uses: 3` and the retry in ShopGuard until I see the fix on otari.ai.
 7. **My first key died.** The workspace key worked at about 08:25 UTC and returned 401 "Invalid API key" from about 08:35, with only GET calls in between and no one touching the dashboard. I regenerated it and it has worked since. I could not find any log of why.
+
+8. **web_fetch and max_uses.** `{"type": "otari_web_fetch", "max_uses": 1}` returns 400 "otari_web_fetch declarations may contain only the type field", while `otari_web_search` accepts `max_uses`. Without a limit, one fetch request for an icecat page made 9 fetch calls and cost $0.08. Manufacturer pages (beko.com) and e-catalog answered the fetcher with 403.
+9. **Code execution loops sometimes.** For one amount check the model called the code tool 9 times in a row before answering (`eval/results_live_code_check.json`, pushy case). A `max_uses` on `otari_code_execution` would help here too.
 
 ## When I was most tempted to skip Otari and call the provider directly
 

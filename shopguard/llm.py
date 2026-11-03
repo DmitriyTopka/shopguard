@@ -41,6 +41,7 @@ class LLMResult:
     provider: str = ""  # Otari-Provider: which provider actually served the call
     gateway_fallback: bool = False  # Otari-Fallback: the gateway moved to another offering of the model
     note: str = ""  # e.g. why ShopGuard moved this task to the bigger model
+    code_runs: list[dict] = field(default_factory=list)  # gateway-run otari_code_execution calls: code, stdout
 
     @property
     def cost_usd(self) -> float:
@@ -137,6 +138,9 @@ class OtariLLM(LLM):
             gateway_fallback=r.headers.get("otari-fallback", "").lower() == "true",
             sources=[src["url"] for call in data.get("otari_tool_calls") or [] if call.get("status") == "completed"
                      for src in call.get("sources") or [] if src.get("url")],
+            code_runs=[{"code": call.get("code", ""), "stdout": call.get("stdout", "")}
+                       for call in data.get("otari_tool_calls") or []
+                       if call.get("type") == "code_execution" and call.get("status") == "completed"],
         )
 
 
