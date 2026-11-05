@@ -23,7 +23,11 @@ from shopguard.shop import DATA_DIR, Shop
 ROOT = Path(__file__).resolve().parent
 SCENARIOS_PATH = DATA_DIR / "scenarios.json"
 JUDGE_KEY = os.getenv("SHOPGUARD_JUDGE_KEY", "")
-TRUST_PROXY = os.getenv("SHOPGUARD_TRUST_PROXY", "1") == "1"
+# Where the client address comes from. On Vercel (VERCEL is set by the platform) only the edge's own
+# x-vercel-forwarded-for counts. Elsewhere X-Forwarded-For is read only when SHOPGUARD_TRUST_PROXY=1 says a
+# proxy in front replaces it; by default the connection's address is used, so no header can forge it.
+ON_VERCEL = bool(os.getenv("VERCEL"))
+TRUST_PROXY = os.getenv("SHOPGUARD_TRUST_PROXY", "0") == "1"
 
 app = FastAPI(title="ShopGuard", docs_url=None, redoc_url=None)
 shop = Shop.load()
@@ -129,13 +133,12 @@ class CheckIn(BaseModel):
 
 
 def client_ip(req: Request) -> str:
-    # Vercel's edge sets x-vercel-forwarded-for and overwrites x-forwarded-for with the real client address
-    # (05.11: two requests with forged X-Forwarded-For got the same end-user id). Behind another proxy, set
-    # SHOPGUARD_TRUST_PROXY=0 unless that proxy also replaces the header, or the address can be forged.
-    if TRUST_PROXY:
+    # 05.11: on Vercel two requests with forged X-Forwarded-For got the same end-user id as a plain one
+    if ON_VERCEL:
         vercel = req.headers.get("x-vercel-forwarded-for", "")
         if vercel:
             return vercel.split(",")[0].strip()
+    elif TRUST_PROXY:
         fwd = req.headers.get("x-forwarded-for", "")
         if fwd:
             return fwd.split(",")[0].strip()

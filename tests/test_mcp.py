@@ -56,6 +56,8 @@ def test_endpoint_needs_the_token(monkeypatch):
 
 def test_visitor_id_is_a_salted_hash_not_the_address(monkeypatch):
     import importlib
+    monkeypatch.setenv("SHOPGUARD_TRUST_PROXY", "1")
+    monkeypatch.delenv("VERCEL", raising=False)
     import app as A
     importlib.reload(A)
 
@@ -66,3 +68,22 @@ def test_visitor_id_is_a_salted_hash_not_the_address(monkeypatch):
     assert label == "visitor" and "203.0.113.7" not in uid and uid.startswith("visitor-")
     assert A.end_user(R(), judge=False, tiny=True)[0] != uid
     assert A.end_user(R(), judge=True, tiny=False)[0] == "judges"
+
+
+def test_forwarded_headers_are_ignored_unless_trusted(monkeypatch):
+    import importlib
+    monkeypatch.delenv("SHOPGUARD_TRUST_PROXY", raising=False)
+    monkeypatch.delenv("VERCEL", raising=False)
+    import app as A
+    importlib.reload(A)
+
+    class C:
+        host = "10.0.0.5"
+
+    class R:
+        headers = {"x-forwarded-for": "198.51.100.1", "x-vercel-forwarded-for": "198.51.100.2"}
+        client = C()
+    assert A.client_ip(R()) == "10.0.0.5"
+    monkeypatch.setenv("VERCEL", "1")
+    importlib.reload(A)
+    assert A.client_ip(R()) == "198.51.100.2"
