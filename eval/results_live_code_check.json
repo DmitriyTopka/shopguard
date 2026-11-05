@@ -94,7 +94,7 @@
   "stages": [
    {
     "name": "check",
-    "ms": 10248,
+    "ms": 13355,
     "detail": "5 promises"
    }
   ],
@@ -104,58 +104,71 @@
     "model": "nvidia/nemotron-nano-3-30b",
     "prompt_tokens": 315,
     "completion_tokens": 272,
-    "latency_ms": 2248,
+    "latency_ms": 2034,
     "cost_usd": 8.4e-05,
     "provider": "bedrock",
     "gateway_fallback": false,
     "note": "",
+    "route": "shopguard-extract",
+    "served_model": "nvidia.nemotron-nano-3-30b",
+    "attempts": 1,
     "code_runs": []
    },
    {
     "task": "math_check",
     "model": "nvidia/nemotron-3-super-120b-a12b",
-    "prompt_tokens": 3058,
-    "completion_tokens": 576,
-    "latency_ms": 5375,
-    "cost_usd": 0.020833,
+    "prompt_tokens": 3051,
+    "completion_tokens": 579,
+    "latency_ms": 5900,
+    "cost_usd": 0.020834,
     "provider": "bedrock",
     "gateway_fallback": false,
     "note": "",
+    "route": "shopguard-judge",
+    "served_model": "nvidia.nemotron-super-3-120b",
+    "attempts": 1,
     "code_runs": [
      {
       "code": "",
       "stdout": ""
      },
      {
-      "code": "price = 18999\npayment2 = price / 2\npayment3 = price / 3\nprint(f\"Price: {price}\")\nprint(f\"Split into 2 payments: {payment2}\")\nprint(f\"Split into 3 payments: {payment3}\")\nprint(f\"Is 9499.50 equal to split into 2? {payment2 == 9499.5}\")\nprint(f\"Is 9499.50 equal to split into 3? {payment3 == 9499.5}\")",
-      "stdout": "Price: 18999\nSplit into 2 payments: 9499.5\nSplit into 3 payments: 6333.0\nIs 9499.50 equal to split into 2? True\nIs 9499.50 equal to split into 3? False\n"
+      "code": "price = 18999\npayment2 = price / 2\npayment3 = price / 3\nprint(f\"Price: {price}\")\nprint(f\"Split into 2 payments: {payment2}\")\nprint(f\"Split into 3 payments: {payment3}\")\nprint(f\"Amount to check: 9499.50\")\nprint(f\"Matches 2-payment split? {payment2 == 9499.5}\")\nprint(f\"Matches 3-payment split? {payment3 == 9499.5}\")",
+      "stdout": "Price: 18999\nSplit into 2 payments: 9499.5\nSplit into 3 payments: 6333.0\nAmount to check: 9499.50\nMatches 2-payment split? True\nMatches 3-payment split? False\n"
      }
     ]
    },
    {
     "task": "math_check",
     "model": "nvidia/nemotron-3-super-120b-a12b",
-    "prompt_tokens": 1973,
-    "completion_tokens": 230,
-    "latency_ms": 2622,
-    "cost_usd": 0.010445,
+    "prompt_tokens": 3151,
+    "completion_tokens": 463,
+    "latency_ms": 5418,
+    "cost_usd": 0.020774,
     "provider": "bedrock",
     "gateway_fallback": false,
     "note": "",
+    "route": "shopguard-judge",
+    "served_model": "nvidia.nemotron-super-3-120b",
+    "attempts": 1,
     "code_runs": [
      {
-      "code": "price = 18999\npayments = 3\namount_per_payment = price / payments\nprint(f\"{price} / {payments} = {amount_per_payment}\")\nprint(f\"Is {amount_per_payment} equal to 6333? {amount_per_payment == 6333}\")",
-      "stdout": "18999 / 3 = 6333.0\nIs 6333.0 equal to 6333? True\n"
+      "code": "# Verify the calculation\nprice = 18999\ninstallments = 3\npayment_amount = price / installments\nprint(f\"{price} / {installments} = {payment_amount}\")\nprint(f\"Is it exactly 6333? {payment_amount == 6333}\")",
+      "stdout": "18999 / 3 = 6333.0\nIs it exactly 6333? True\n"
+     },
+     {
+      "code": "# Check if the amount matches any allowed split\nprice = 18999\nallowed = [2, 3]\namount = 6333\nfor n in allowed:\n    if price / n == amount:\n        print(f\"Match: {price} / {n} = {amount}\")\n        break\nelse:\n    print(\"No match\")",
+      "stdout": "Match: 18999 / 3 = 6333\n"
      }
     ]
    }
   ],
-  "cost_usd": 0.031362
+  "cost_usd": 0.041692
  },
  "pushy_12_months": {
   "customer": "Can I get the Beko fridge in installments?",
   "draft": "Sure! The Beko RCNA366I30W is 18 999 UAH, that's just 1 583 UAH a month over 12 months.",
-  "final": "Sure! The Beko RCNA366I30W is 18 999 UAH. Installments are available only via monobank Pay in Parts, with 2 to 3 payments, for orders from 3000 UAH. I do not have confirmed information about the exact monthly amount, but I can have a manager check the installment options for you.",
+  "final": "Sure! The Beko RCNA366I30W is 18 999 UAH. We offer installments only via monobank Pay in Parts, with 2 to 3 payments available for orders from 3000 UAH. I do not have confirmed information about specific monthly amounts for this model, so I recommend checking with a manager for exact installment details.",
   "action": "rewritten",
   "verdicts": [
    {
@@ -247,7 +260,7 @@
    {
     "claim": {
      "type": "installment",
-     "text": "Installments are available only via monobank Pay in Parts, with 2 to 3 payments, for orders from 3000 UAH.",
+     "text": "We offer installments only via monobank Pay in Parts, with 2 to 3 payments available for orders from 3000 UAH.",
      "product": "Beko RCNA366I30W",
      "sku": "KH-101",
      "value": {
@@ -300,17 +313,17 @@
   "stages": [
    {
     "name": "check",
-    "ms": 12169,
+    "ms": 4202,
     "detail": "4 promises"
    },
    {
     "name": "rewrite",
-    "ms": 1061,
+    "ms": 1096,
     "detail": "nvidia/nemotron-3-super-120b-a12b"
    },
    {
     "name": "recheck",
-    "ms": 1150,
+    "ms": 1123,
     "detail": ""
    }
   ],
@@ -320,67 +333,62 @@
     "model": "nvidia/nemotron-nano-3-30b",
     "prompt_tokens": 293,
     "completion_tokens": 149,
-    "latency_ms": 980,
+    "latency_ms": 1039,
     "cost_usd": 5.3e-05,
     "provider": "bedrock",
     "gateway_fallback": false,
     "note": "",
+    "route": "shopguard-extract",
+    "served_model": "nvidia.nemotron-nano-3-30b",
+    "attempts": 1,
     "code_runs": []
    },
    {
     "task": "math_check",
     "model": "nvidia/nemotron-3-super-120b-a12b",
-    "prompt_tokens": 4975,
-    "completion_tokens": 1396,
-    "latency_ms": 11188,
-    "cost_usd": 0.041654,
+    "prompt_tokens": 892,
+    "completion_tokens": 400,
+    "latency_ms": 3162,
+    "cost_usd": 0.000394,
     "provider": "bedrock",
     "gateway_fallback": false,
     "note": "",
-    "code_runs": [
-     {
-      "code": "",
-      "stdout": ""
-     },
-     {
-      "code": "",
-      "stdout": ""
-     },
-     {
-      "code": "",
-      "stdout": ""
-     },
-     {
-      "code": "price = 18999\nallowed = [2, 3]\n# Check if 1583 * n equals price for any allowed n\nfor n in allowed:\n    if price == 1583 * n:\n        print(f\"Match: {price} = 1583 * {n}\")\n        break\nelse:\n    print(\"No match\")\n    # Also check if price / n equals 1583 for allowed n\n    for n in allowed:\n        if price / n == 1583:\n            print(f\"Match: {price} / {n} = 1583\")\n            break\n    else:\n        print(\"No division match\")",
-      "stdout": "No match\nNo division match\n"
-     }
-    ]
+    "route": "shopguard-judge",
+    "served_model": "nvidia.nemotron-super-3-120b",
+    "attempts": 1,
+    "code_runs": []
    },
    {
     "task": "rewrite",
     "model": "nvidia/nemotron-3-super-120b-a12b",
     "prompt_tokens": 495,
-    "completion_tokens": 84,
-    "latency_ms": 1061,
-    "cost_usd": 0.000129,
+    "completion_tokens": 85,
+    "latency_ms": 1095,
+    "cost_usd": 0.00013,
     "provider": "bedrock",
     "gateway_fallback": false,
     "note": "",
+    "route": "shopguard-judge",
+    "served_model": "nvidia.nemotron-super-3-120b",
+    "attempts": 1,
     "code_runs": []
    },
    {
     "task": "extract",
     "model": "nvidia/nemotron-nano-3-30b",
-    "prompt_tokens": 332,
+    "prompt_tokens": 333,
     "completion_tokens": 184,
-    "latency_ms": 1150,
+    "latency_ms": 1123,
     "cost_usd": 6.4e-05,
     "provider": "bedrock",
     "gateway_fallback": false,
     "note": "",
+    "route": "shopguard-extract",
+    "served_model": "nvidia.nemotron-nano-3-30b",
+    "attempts": 1,
     "code_runs": []
    }
   ],
-  "cost_usd": 0.0419
+  "cost_usd": 0.000641
  }
 }

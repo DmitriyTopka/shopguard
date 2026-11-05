@@ -15,7 +15,7 @@ from . import mathcheck
 from .claims import Claim, extract_claims
 from .facts import Searcher, fact_check
 from .claims import ExtractionFailed
-from .llm import LLM, MODEL_FAST, MODEL_SELLER, MODEL_SMART, CallLog
+from .llm import LLM, MODEL_FAST, MODEL_SELLER, MODEL_SMART, ROUTE_DRILL, CallLog
 from .shop import Shop
 
 MAX_WEB_CHECKS = 2
@@ -84,6 +84,7 @@ class GuardResult:
                 {"task": c.task, "model": c.model, "prompt_tokens": c.prompt_tokens,
                  "completion_tokens": c.completion_tokens, "latency_ms": c.latency_ms, "cost_usd": round(c.cost_usd, 6),
                  "provider": c.provider, "gateway_fallback": c.gateway_fallback, "note": c.note,
+                 "route": c.route, "served_model": c.served_model, "attempts": c.attempts,
                  "code_runs": c.code_runs}
                 for c in self.log.calls
             ],
@@ -113,9 +114,10 @@ class Guard:
         system += f"\n\nPolicy:\n{self.shop.policy_text()}\n\nCatalog (price, stock):\n{self.shop.catalog_text()}"
         return [{"role": "system", "content": system}, {"role": "user", "content": customer}]
 
-    def draft(self, customer: str, persona: str, log: CallLog) -> str:
+    def draft(self, customer: str, persona: str, log: CallLog, drill: bool = False) -> str:
+        # drill: the seller call names shopguard-drill, whose first model is not deployed, so Otari falls back
         res = self.llm.complete(self.seller_messages(customer, persona), model=MODEL_SELLER, task="draft",
-                                max_tokens=300, temperature=0.7)
+                                max_tokens=300, temperature=0.7, route=ROUTE_DRILL if drill else None)
         log.calls.append(res)
         return res.text
 
@@ -150,12 +152,13 @@ class Guard:
         log.calls.append(res)
         return res.text
 
-    def run(self, customer: str, draft: str | None = None, persona: str = "standard", web: bool = True) -> GuardResult:
+    def run(self, customer: str, draft: str | None = None, persona: str = "standard", web: bool = True,
+            drill: bool = False) -> GuardResult:
         log = CallLog()
         stages: list[Stage] = []
         t = time.monotonic()
         if draft is None:
-            draft = self.draft(customer, persona, log)
+            draft = self.draft(customer, persona, log, drill=drill)
             stages.append(Stage("draft", _ms(t), MODEL_SELLER))
         t = time.monotonic()
         handoff = FALLBACK[detect_lang(customer)]

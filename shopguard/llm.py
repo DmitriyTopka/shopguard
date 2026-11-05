@@ -20,6 +20,22 @@ MODEL_SMART = os.getenv("SHOPGUARD_MODEL_SMART", "nvidia/nemotron-3-super-120b-a
 # ("частkami", "замовžiти") in the first live run, Gemma 3 27B writes it cleanly.
 MODEL_SELLER = os.getenv("SHOPGUARD_MODEL_SELLER", "google/gemma-3-27b-it")
 
+# Otari routing policies (Routing > Policies on otari.ai). Each role calls a policy, not a model, so a
+# provider outage is absorbed by Otari: shopguard-seller (Gemma 3 27B on Nebius, then Llama 3.3 70B),
+# shopguard-extract (Nano, then Super), shopguard-judge (Super on Bedrock, then gpt-oss-120b).
+# shopguard-drill starts on a model that is listed but not deployed, for the demo's outage drill.
+ROUTES = {
+    MODEL_SELLER: os.getenv("SHOPGUARD_ROUTE_SELLER", "shopguard-seller"),
+    MODEL_FAST: os.getenv("SHOPGUARD_ROUTE_FAST", "shopguard-extract"),
+    MODEL_SMART: os.getenv("SHOPGUARD_ROUTE_SMART", "shopguard-judge"),
+}
+ROUTE_DRILL = os.getenv("SHOPGUARD_ROUTE_DRILL", "shopguard-drill")
+
+
+def routing_enabled() -> bool:
+    return os.getenv("SHOPGUARD_ROUTING", "on").lower() not in ("off", "0", "false")
+
+
 # USD per 1M tokens (input, output), from the same catalog.
 PRICES = {
     MODEL_FAST: (float(os.getenv("SHOPGUARD_PRICE_FAST_IN", "0.06")), float(os.getenv("SHOPGUARD_PRICE_FAST_OUT", "0.24"))),
@@ -42,6 +58,9 @@ class LLMResult:
     gateway_fallback: bool = False  # Otari-Fallback: the gateway moved to another offering of the model
     note: str = ""  # e.g. why ShopGuard moved this task to the bigger model
     code_runs: list[dict] = field(default_factory=list)  # gateway-run otari_code_execution calls: code, stdout
+    route: str = ""  # the Otari routing policy the call named, if any
+    served_model: str = ""  # Otari-Model: the model that answered
+    attempts: int = 1  # Otari-Attempt-Count: candidates tried, the one that served included
 
     @property
     def cost_usd(self) -> float:
@@ -74,7 +93,8 @@ SPEND_CODES = {"budget_exceeded", "insufficient_funds"}
 class LLM:
     def complete(self, messages: list[dict], *, model: str, task: str, max_tokens: int = 512,
                  temperature: float = 0.0, json_mode: bool = False, tools: list[dict] | None = None,
-                 timeout: float | None = None) -> LLMResult:
+                 timeout: float | None = None, route: str | None = None) -> LLMResult:
+        """`model` is the catalog id of the role; `route` names an Otari policy to send instead."""
         raise NotImplementedError
 
 
@@ -100,11 +120,15 @@ class OtariLLM(LLM):
                               timeout=timeout if timeout is not None else self.http.timeout)
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
-                 timeout=None):
-        body = {"model": model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
+                 timeout=None, route=None):
+        if route is None and routing_enabled():
+            route = ROUTES.get(model)
+        body = {"model": route or model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
         if tools:
             body["tools"] = tools
-        if json_mode and model not in self.no_json_mode:
+        # A policy may put both candidates on Bedrock, which rejects response_format, and Otari then answers
+        # 400 all_candidates_rejected. The prompts ask for JSON anyway, so a routed call goes without it.
+        if json_mode and not route and model not in self.no_json_mode:
             body["response_format"] = {"type": "json_object"}
         t0 = time.monotonic()
         r = self._post(body, timeout)
@@ -136,6 +160,9 @@ class OtariLLM(LLM):
             billed_usd=float(usage["cost_usd"]) if usage.get("cost_usd") is not None else None,
             provider=r.headers.get("otari-provider", ""),
             gateway_fallback=r.headers.get("otari-fallback", "").lower() == "true",
+            route=route or "",
+            served_model=r.headers.get("otari-model", ""),
+            attempts=int(r.headers.get("otari-attempt-count", "1") or 1),
             sources=[src["url"] for call in data.get("otari_tool_calls") or [] if call.get("status") == "completed"
                      for src in call.get("sources") or [] if src.get("url")],
             code_runs=[{"code": call.get("code", ""), "stdout": call.get("stdout", "")}
@@ -159,7 +186,7 @@ class StubLLM(LLM):
         self.calls: list[tuple[str, list[dict]]] = []
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
-                 timeout=None):
+                 timeout=None, route=None):
         self.calls.append((task, messages))
         fn = self.handlers.get(task)
         text = fn(messages) if fn else ""

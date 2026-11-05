@@ -57,6 +57,9 @@ label.opt{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:cen
 h2{font-size:16px;margin:28px 0 8px}
 .how{color:var(--muted);font-size:14px}
 .how ol{padding-left:18px}
+.hood{margin-top:8px}.hood summary{cursor:pointer}.hood table{border-collapse:collapse;width:100%;margin-top:6px;font-size:13px}
+.hood td{border-top:1px solid #ddd;padding:4px 6px;vertical-align:top}.hood code{font-size:12px}
+.fb{background:#fff1c2;color:#7a5200;border-radius:4px;padding:0 5px;font-weight:600}
 </style>
 </head>
 <body>
@@ -77,6 +80,7 @@ h2{font-size:16px;margin:28px 0 8px}
       <label class="opt">bot style
         <select id="persona"><option value="eager">eager seller</option><option value="standard">standard</option><option value="pushy">pushy (stress test)</option></select>
       </label>
+      <label class="opt" title="The seller call goes to the Otari routing policy shopguard-drill, whose first model is not deployed. Otari falls back to Gemma and reports it."><input type="checkbox" id="drill"> simulate a provider outage</label>
       <span style="flex:1"></span>
       <button class="go" id="go">Ask the shop</button>
     </div>
@@ -156,7 +160,16 @@ function render(r){
       </div>
     </div>`).join("") : `<div class="claim ok"><div class="t">no promises</div><div>The reply makes no checkable promises.</div></div>`;
   const ms = (r.stages || []).map(s => `<div>${esc(s.name)} ${s.ms} ms${s.detail ? " · " + esc(s.detail) : ""}</div>`).join("");
-  $("pipe").innerHTML = ms + `<div>${r.calls.length} model calls · $${r.cost_usd.toFixed(4)}</div>`;
+  const TASK = {draft:"seller bot", extract:"extract promises", factcheck:"web check", math_check:"amount check", rewrite:"rewrite"};
+  const rows = (r.calls || []).map(c => {
+    const route = c.route ? `policy <code>${esc(c.route)}</code> → ` : "";
+    const served = esc(c.served_model || c.model) + (c.provider ? " on " + esc(c.provider) : "");
+    const fb = c.gateway_fallback ? ` <span class="fb">Otari fallback, ${c.attempts} attempts</span>` : "";
+    const tools = (c.code_runs || []).length ? ` · ${c.code_runs.length} code run(s)` : "";
+    return `<tr><td>${esc(TASK[c.task] || c.task)}</td><td>${route}${served}${fb}${tools}${c.note ? " · " + esc(c.note) : ""}</td><td>$${(c.cost_usd || 0).toFixed(4)}</td></tr>`;
+  }).join("");
+  $("pipe").innerHTML = ms + `<div>${(r.calls || []).length} model calls · $${r.cost_usd.toFixed(4)}</div>`
+    + (rows ? `<details class="hood" open><summary>Under the hood: every Otari call</summary><table>${rows}</table></details>` : "");
 }
 
 $("go").onclick = async () => {
@@ -164,7 +177,7 @@ $("go").onclick = async () => {
   if(!message) return;
   $("go").disabled = true; $("err").textContent = "";
   try{
-    const body = {message, persona: $("persona").value};
+    const body = {message, persona: $("persona").value, drill: $("drill").checked};
     if($("byo").checked && $("draftIn").value.trim()) body.draft = $("draftIn").value.trim();
     const res = await fetch("/api/check", {method:"POST", headers, body: JSON.stringify(body)});
     const data = await res.json();

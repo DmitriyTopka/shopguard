@@ -13,7 +13,8 @@ from pydantic import BaseModel, Field
 from shopguard.budget import Budget
 from shopguard.facts import make_searcher
 from shopguard.guard import Guard
-from shopguard.llm import MODEL_FAST, MODEL_SELLER, MODEL_SMART, OtariLLM, SpendLimitReached, default_llm
+from shopguard.llm import (MODEL_FAST, MODEL_SELLER, MODEL_SMART, ROUTES, OtariLLM, SpendLimitReached, default_llm,
+                           routing_enabled)
 from shopguard.shop import DATA_DIR, Shop
 
 ROOT = Path(__file__).resolve().parent
@@ -38,6 +39,7 @@ class CheckIn(BaseModel):
     message: str = Field(min_length=1, max_length=500)
     draft: str | None = Field(default=None, max_length=1500)
     persona: str = Field(default="eager", pattern="^(standard|eager|pushy)$")
+    drill: bool = False  # outage drill: the seller call goes to a policy whose first model is down
 
 
 def client_ip(req: Request) -> str:
@@ -69,6 +71,7 @@ def status(req: Request):
     return {
         "live": LIVE,
         "models": {"fast": MODEL_FAST, "smart": MODEL_SMART, "seller": MODEL_SELLER},
+        "routes": ROUTES if LIVE and routing_enabled() else {},
         "web_check": searcher is not None,
         "judge": is_judge(req),
         "budget": budget.status(),
@@ -89,7 +92,7 @@ def check(body: CheckIn, req: Request):
     guard = Guard(shop, judge_llm if judge else llm, searcher if budget.can_search() else None)
     searches_before = getattr(searcher, "calls", 0)
     try:
-        result = guard.run(body.message, draft=body.draft or None, persona=body.persona)
+        result = guard.run(body.message, draft=body.draft or None, persona=body.persona, drill=body.drill)
     except SpendLimitReached as e:
         return JSONResponse(status_code=503, content={
             "detail": "Today's live budget for this demo is used up (Otari spend ceiling). Recorded scenarios still work.",
