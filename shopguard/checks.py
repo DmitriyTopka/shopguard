@@ -29,15 +29,19 @@ class Verdict:
         return d
 
 
-# the noun only: "guaranteed Wi-Fi" or "гарантовано доставимо" is not a warranty claim
-WARRANTY_RX = re.compile(r"\bwarrant(y|ies)\b|гаранті(я|ю|ї|єю)|гаранти(я|ю|и|ей|ию)\b", re.IGNORECASE)
-# a claim that joins the warranty to something else ("Wi-Fi and a 12-month warranty") is not a policy fact alone
-JOINED_RX = re.compile(r",|;|\+|&|\b(and|plus|also)\b|(?<!\w)(і|й|та|и|также|також)(?!\w)", re.IGNORECASE)
+# broad on purpose: every form of warranty / guarantee / гарантія / гарантия counts, minus the adverbs and verbs
+# that promise something else ("guaranteed Wi-Fi", "гарантовано доставимо", "гарантируем")
+WARRANTY_RX = re.compile(r"warrant\w*|guarant\w*|гаранті\w*|гаранти\w*|гарантій\w*|гарантий\w*", re.IGNORECASE)
+NOT_WARRANTY = re.compile(r"guaranteed|guarantees?\s+(that|to|you)|гарантован\w*|гарантирован\w*|гаранту\w*|гарантиру\w*",
+                          re.IGNORECASE)
+# a claim that joins the warranty to something else ("Wi-Fi and a 12-month warranty"): the term is still
+# checked here, the rest goes to the usual spec check
 TERM_RX = re.compile(r"(\d+)\s*-?\s*(months?|місяц\w*|міс\.?|месяц\w*|мес\.?|years?|рок\w*|рік|год\w*|лет)", re.IGNORECASE)
 YEAR_UNITS = ("year", "рок", "рік", "год", "лет")
 EXTRA_WARRANTY_RX = re.compile(
     r"lifetime|extended|forever|free repair|replacement|довічн|пожизн|розширен|расширен|безкоштовн\w* ремонт|"
     r"бесплатн\w* ремонт|заміна|замена|продовжен|продлен", re.IGNORECASE)
+JOINED_RX = re.compile(r",|;|\+|&|\b(and|plus|also)\b|(?<!\w)(і|й|та|и|также|також)(?!\w)", re.IGNORECASE)
 
 
 def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
@@ -47,8 +51,11 @@ def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
     as a spec it went unconfirmed in the re-check (no web there) and honest replies were handed off.
     """
     pol = shop.policy.get("warranty")
-    if c.type != "spec" or not pol or not WARRANTY_RX.search(c.text) or JOINED_RX.search(c.text):
-        return None  # not a plain warranty claim: it goes to the usual spec check
+    if c.type != "spec" or not pol:
+        return None
+    mentions = [m.group(0) for m in WARRANTY_RX.finditer(c.text)]
+    if not mentions or all(NOT_WARRANTY.fullmatch(m) for m in mentions):
+        return None
     months = pol.get("months")
     bad = Verdict(c, VIOLATION, f"Warranty term not in the shop policy ({months} months).", truth=pol["summary"],
                   source="policy")
@@ -59,6 +66,8 @@ def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
     said = {n * 12 if u.startswith(YEAR_UNITS) else n for n, u in terms}
     if said and said != {months}:
         return bad
+    if JOINED_RX.search(c.text):
+        return None  # the warranty part is fine; the rest of the claim still needs the spec check
     return Verdict(c, OK, f"Warranty matches the shop policy: {pol['summary']}", source="policy")
 
 
