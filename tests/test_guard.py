@@ -270,3 +270,15 @@ def test_product_claim_needs_its_own_price_in_the_formula():
     own = _MathLLM('{"derived": true, "formula": "18999 + 4299", "value": 23298}')
     assert mathcheck.math_check(check_claim(c2, shop), "fridge and microwave together 23 298 UAH", shop, own,
                                 CallLog()).status == "ok"
+
+
+def test_formula_tricks_with_comments_or_names_are_refused():
+    from shopguard import mathcheck
+    from shopguard.claims import Claim
+    assert mathcheck.evaluate("21499-4299#18999", shop) is None
+    assert mathcheck.evaluate("x+18999", shop) is None
+    c = Claim(type="price", text="together 17 200 UAH", value={"amount": 17200}, source="llm", sku="KH-101")
+    assert not mathcheck._involves("21499 - 4299 #18999", c, shop)
+    assert not mathcheck._involves("21499 + 4299", c, shop)
+    c2 = Claim(type="price", text="together 23 298 UAH", value={"amount": 23298}, source="llm", sku="KH-101")
+    assert mathcheck._involves("18999 + 4299", c2, shop)

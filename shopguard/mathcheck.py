@@ -96,6 +96,8 @@ def evaluate(formula: str, shop: Shop) -> float | None:
     """
     counts = _allowed_counts(shop)
     prices = {p.price for p in shop.products}
+    if not SAFE_FORMULA.fullmatch(formula):
+        return None
     try:
         tree = ast.parse(formula.replace(" ", ""), mode="eval").body
     except (SyntaxError, ValueError):
@@ -129,14 +131,25 @@ def evaluate(formula: str, shop: Shop) -> float | None:
     return None
 
 
+SAFE_FORMULA = re.compile(r"[0-9+\-/(). ]{1,120}")  # digits and these operators only: no comments, names or calls
+
+
 def _involves(formula: str, c: Claim, shop: Shop) -> bool:
     """A claim tied to one product may only be explained by a sum (or its split) that contains that
     product's own price: no difference, and no formula built from other products alone."""
     if c.source == "regex" or not c.sku:
         return True
     p = shop.by_sku(c.sku)
-    ints = {int(x) for x in re.findall(r"\d+", formula)}
-    return bool(p) and p.price in ints and "-" not in formula
+    if not p or not SAFE_FORMULA.fullmatch(formula):
+        return False
+    try:
+        tree = ast.parse(formula.replace(" ", ""), mode="eval")
+    except (SyntaxError, ValueError):
+        return False
+    nodes = list(ast.walk(tree))
+    if any(isinstance(n, ast.BinOp) and isinstance(n.op, ast.Sub) for n in nodes):
+        return False
+    return any(isinstance(n, ast.Constant) and type(n.value) is int and n.value == p.price for n in nodes)
 
 
 def _printed(runs: list[dict], amount: float) -> bool:
