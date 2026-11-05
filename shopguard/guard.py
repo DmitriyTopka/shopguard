@@ -192,6 +192,10 @@ class Guard:
                 stages.append(Stage("guardrail", _ms(t), f"blocked by Otari guardrail: {e}"[:300]))
                 return GuardResult(customer, "", [], FALLBACK[detect_lang(customer)], "blocked",
                                    stages=stages, log=log, guardrails=e.verdicts)
+            except httpx.HTTPError as e:
+                # the seller call (guardrail check included) did not answer: hand off, never an unchecked reply
+                stages.append(Stage("draft", _ms(t), f"seller call failed: {type(e).__name__}"))
+                return GuardResult(customer, "", [], FALLBACK[detect_lang(customer)], "fallback", stages=stages, log=log)
             stages.append(Stage("draft", _ms(t), MODEL_SELLER))
         t = time.monotonic()
         handoff = FALLBACK[detect_lang(customer)]

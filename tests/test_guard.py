@@ -232,7 +232,7 @@ def test_math_check_retries_only_an_unconfirmed_derivation():
     assert sum(1 for c in no.calls if c[0] == "math_check") == 1
     unconfirmed = _MathLLM('{"derived": true, "formula": "18999 + 4299", "value": 23298}', ran=False)
     v = mathcheck.math_check(_regex_price(23298), "both for 23 298 UAH", shop, unconfirmed, CallLog())
-    assert v.status != "ok" and sum(1 for c in unconfirmed.calls if c[0] == "math_check") == 2
+    assert v.status != "ok" and sum(1 for c in unconfirmed.calls if c[0] == "math_check") == 3  # empty runs: 2 retries
 
 
 def test_installment_split_is_checked_by_plain_code():

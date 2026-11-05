@@ -51,3 +51,16 @@ def test_last_verdict_wins_and_fields_are_allowlisted():
     from shopguard.llm import clean_guardrails
     out = clean_guardrails([{"profile": "p", "valid": False, "url": "https://x/guard/SECRET", "raw": "y"}])
     assert out == [{"profile": "p", "valid": False}]
+
+
+class _Hanging(StubLLM):
+    def complete(self, messages, **kw):
+        import httpx
+        if kw.get("task") == "draft":
+            raise httpx.ReadTimeout("slow")
+        return super().complete(messages, **kw)
+
+
+def test_a_seller_call_that_times_out_is_handed_off():
+    r = Guard(Shop.load(), _Hanging()).run("Is the kettle in stock?", persona="eager")
+    assert r.action == "fallback" and r.draft == "" and r.final
