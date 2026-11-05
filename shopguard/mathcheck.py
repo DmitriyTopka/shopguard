@@ -49,8 +49,8 @@ def enabled() -> bool:
 # A total or a payment, said in so many words. Without them an extracted price that differs from the
 # catalog stays a wrong price: "the fridge costs 23 298" must not be "derived" as fridge + microwave.
 TOTAL_WORDS = re.compile(
-    r"\b(together|in total|total|both|combined|plus|each payment|payments?|a month|per month)\b"
-    r"|вместе|всего|в сумме|итого|разом|усього|загалом|платеж|платіж|в месяц|на місяць|щомісяч",
+    r"\b(together|in total|combined|payments? of|a month|per month)\b"
+    r"|вместе|в сумме|итого|разом|загалом|платеж|платіж|в месяц|на місяць|щомісяч",
     re.IGNORECASE)
 
 
@@ -129,6 +129,16 @@ def evaluate(formula: str, shop: Shop) -> float | None:
     return None
 
 
+def _involves(formula: str, c: Claim, shop: Shop) -> bool:
+    """A claim tied to one product may only be explained by a sum (or its split) that contains that
+    product's own price: no difference, and no formula built from other products alone."""
+    if c.source == "regex" or not c.sku:
+        return True
+    p = shop.by_sku(c.sku)
+    ints = {int(x) for x in re.findall(r"\d+", formula)}
+    return bool(p) and p.price in ints and "-" not in formula
+
+
 def _printed(runs: list[dict], amount: float) -> bool:
     """The gateway really ran code, and its output contains the amount."""
     nums = re.findall(r"-?\d+(?:\.\d+)?", " ".join(r.get("stdout", "") for r in runs))
@@ -169,7 +179,7 @@ def math_check(v: Verdict, reply: str, shop: Shop, llm: LLM, log: CallLog) -> Ve
         if ans.get("derived") is not True:
             return v
         formula = str(ans.get("formula", "")).strip()[:120]
-        result = evaluate(formula, shop)
+        result = evaluate(formula, shop) if _involves(formula, c, shop) else None
         if result is not None and abs(result - amount) <= 1 and _printed(res.code_runs, amount):
             return Verdict(c, OK, f"Derived amount: {formula} (computed with Otari code execution).",
                            source="code")

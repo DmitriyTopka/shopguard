@@ -253,3 +253,20 @@ def test_only_totals_and_payments_go_to_the_code_check():
     assert mathcheck.needs_math(extracted("both together come to 23 298 UAH", 23298))
     assert mathcheck.needs_math(extracted("разом 23 298 грн", 23298))
     assert not mathcheck.needs_math(extracted("the Beko fridge costs 23 298 UAH", 23298))
+
+
+def test_product_claim_needs_its_own_price_in_the_formula():
+    from shopguard import mathcheck
+    from shopguard.checks import check_claim
+    from shopguard.claims import Claim
+    from shopguard.llm import CallLog
+    c = Claim(type="price", text="together 17 200 UAH", value={"amount": 17200}, source="llm", sku="KH-101")
+    v = check_claim(c, shop)
+    assert mathcheck.needs_math(v)
+    # 21499 - 4299 = 17200, but the claim is about the fridge (18999): not accepted
+    other = _MathLLM('{"derived": true, "formula": "21499 - 4299", "value": 17200}', stdout="17200\n")
+    assert mathcheck.math_check(v, "the fridge, together 17 200 UAH", shop, other, CallLog()).status != "ok"
+    c2 = Claim(type="price", text="together 23 298 UAH", value={"amount": 23298}, source="llm", sku="KH-101")
+    own = _MathLLM('{"derived": true, "formula": "18999 + 4299", "value": 23298}')
+    assert mathcheck.math_check(check_claim(c2, shop), "fridge and microwave together 23 298 UAH", shop, own,
+                                CallLog()).status == "ok"
