@@ -54,12 +54,36 @@ def _price(c: Claim, product, shop: Shop) -> Verdict:
                            truth="This product is not in our catalog, so we have no confirmed price for it.")
         if amount in shop.allowed_prices():
             return Verdict(c, OK, "Amount matches a catalog price or a policy threshold.")
+        split = _installment_split(float(c.value["amount"]), product, shop)
+        if split:
+            p, n = split
+            return Verdict(c, OK, f"One of {n} installment payments: {p.price} / {n} for {p.name} "
+                                  f"(the policy allows this split).", source="policy")
         return Verdict(c, VIOLATION, f"{amount} {shop.currency} does not appear anywhere in the catalog or policy.",
                        truth="This amount is not a price from our catalog.")
     if amount == product.price:
         return Verdict(c, OK, f"{product.name}: {product.price} {shop.currency}.")
     return Verdict(c, VIOLATION, f"Quoted {amount}, catalog says {product.price} {shop.currency}.",
                    truth=f"{product.name} costs {product.price} {shop.currency}.")
+
+
+def _installment_split(raw: float, product, shop: Shop):
+    """(product, n) when the amount is a catalog price split into a number of payments the policy allows.
+
+    Plain arithmetic over the shop's data, the same rule as the shop-data MCP tool installment_plan.
+    A product the reply names is tried first; other derived amounts (sums, differences) go to the
+    code-execution check in mathcheck.py.
+    """
+    inst = shop.policy.get("installment", {})
+    counts = range(inst.get("min_payments", 1), inst.get("max_payments", 1) + 1)
+    floor = inst.get("min_order_uah", 0)
+    candidates = [product] if product else []
+    candidates += [p for p in shop.products if p is not product]
+    for p in candidates:
+        for n in counts:
+            if n > 1 and p.price >= floor and abs(raw - p.price / n) <= 1:
+                return p, n
+    return None
 
 
 def _stock(c: Claim, product) -> Verdict:

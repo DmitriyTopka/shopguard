@@ -10,6 +10,8 @@ import re
 import time
 from dataclasses import dataclass, field
 
+import httpx
+
 from .checks import OK, UNVERIFIED, VIOLATION, Verdict, check_claim
 from . import mathcheck
 from .claims import Claim, extract_claims
@@ -87,7 +89,7 @@ class GuardResult:
                  "completion_tokens": c.completion_tokens, "latency_ms": c.latency_ms, "cost_usd": round(c.cost_usd, 6),
                  "provider": c.provider, "gateway_fallback": c.gateway_fallback, "note": c.note,
                  "route": c.route, "served_model": c.served_model, "attempts": c.attempts,
-                 "guardrails": c.guardrails,
+                 "guardrails": c.guardrails, "mcp_calls": c.mcp_calls,
                  "code_runs": c.code_runs}
                 for c in self.log.calls
             ],
@@ -110,9 +112,12 @@ def detect_lang(text: str) -> str:
 
 
 class Guard:
-    def __init__(self, shop: Shop, llm: LLM, searcher: Searcher | None = None, guardrails: list[dict] | None = None):
+    def __init__(self, shop: Shop, llm: LLM, searcher: Searcher | None = None, guardrails: list[dict] | None = None,
+                 mcp_servers: list[dict] | None = None):
         # guardrails: Otari request-level checks for the seller call, e.g. our own /validate service
+        # mcp_servers: our shop-data MCP server, which the rewrite uses instead of a pasted policy
         self.shop, self.llm, self.searcher, self.guardrails = shop, llm, searcher, guardrails
+        self.mcp_servers = mcp_servers
 
     def seller_messages(self, customer: str, persona: str) -> list[dict]:
         system = SELLER_PERSONAS.get(persona, SELLER_PERSONAS["standard"]).format(shop=self.shop.name)
@@ -147,14 +152,30 @@ class Guard:
 
     def rewrite(self, customer: str, draft: str, problems: list[Verdict], log: CallLog) -> str:
         lines = [f"- \"{v.claim.text}\": {v.reason} Correct fact: {v.truth or 'not confirmed'}" for v in problems]
-        res = self.llm.complete(
-            [
-                {"role": "system", "content": REWRITE_SYSTEM},
-                {"role": "user", "content": f"Customer: {customer}\n\nDraft reply:\n{draft}\n\nProblems:\n" + "\n".join(lines)
-                 + f"\n\nShop policy for reference:\n{self.shop.policy_text()}"},
-            ],
-            model=MODEL_SMART, task="rewrite", max_tokens=400,
-        )
+        if self.mcp_servers:
+            # Otari runs the shop-data tools for Super: it looks up what it writes instead of reading a pasted policy
+            facts = ("\n\nLook up every price, stock status, installment term and delivery term you write with the "
+                     "shop-data tools (find_product, list_in_stock, get_policy, installment_plan). If the product is "
+                     "out of stock, you may offer an in-stock alternative from list_in_stock.")
+        else:
+            facts = f"\n\nShop policy for reference:\n{self.shop.policy_text()}"
+        def ask(facts_text: str, servers: list[dict] | None):
+            return self.llm.complete(
+                [
+                    {"role": "system", "content": REWRITE_SYSTEM},
+                    {"role": "user", "content": f"Customer: {customer}\n\nDraft reply:\n{draft}\n\nProblems:\n"
+                     + "\n".join(lines) + facts_text},
+                ],
+                model=MODEL_SMART, task="rewrite", max_tokens=700, mcp_servers=servers,
+            )
+        try:
+            res = ask(facts, self.mcp_servers)
+        except httpx.HTTPError as e:
+            if not self.mcp_servers:
+                raise
+            # the MCP loop failed (server down, loop past its cap): rewrite from the pasted policy instead
+            res = ask(f"\n\nShop policy for reference:\n{self.shop.policy_text()}", None)
+            res.note = f"MCP rewrite failed ({type(e).__name__}), used the pasted policy"
         log.calls.append(res)
         return res.text
 

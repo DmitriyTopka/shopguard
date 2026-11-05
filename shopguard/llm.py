@@ -29,6 +29,8 @@ ROUTES = {
     MODEL_FAST: os.getenv("SHOPGUARD_ROUTE_FAST", "shopguard-extract"),
     MODEL_SMART: os.getenv("SHOPGUARD_ROUTE_SMART", "shopguard-judge"),
 }
+TOOL_ROUNDS = int(os.getenv("SHOPGUARD_TOOL_ROUNDS", "3"))
+MCP_ROUNDS = int(os.getenv("SHOPGUARD_MCP_ROUNDS", "6"))
 ROUTE_DRILL = os.getenv("SHOPGUARD_ROUTE_DRILL", "shopguard-drill")
 
 
@@ -62,6 +64,7 @@ class LLMResult:
     served_model: str = ""  # Otari-Model: the model that answered
     attempts: int = 1  # Otari-Attempt-Count: candidates tried, the one that served included
     guardrails: list[dict] = field(default_factory=list)  # Otari-Guardrails: verdicts of request-level checks
+    mcp_calls: list[dict] = field(default_factory=list)  # gateway-run MCP tool calls: server, tool, result
 
     @property
     def cost_usd(self) -> float:
@@ -102,7 +105,8 @@ SPEND_CODES = {"budget_exceeded", "insufficient_funds"}
 class LLM:
     def complete(self, messages: list[dict], *, model: str, task: str, max_tokens: int = 512,
                  temperature: float = 0.0, json_mode: bool = False, tools: list[dict] | None = None,
-                 timeout: float | None = None, route: str | None = None, guardrails: list[dict] | None = None) -> LLMResult:
+                 timeout: float | None = None, route: str | None = None, guardrails: list[dict] | None = None,
+                 mcp_servers: list[dict] | None = None) -> LLMResult:
         """`model` is the catalog id of the role; `route` names an Otari policy to send instead."""
         raise NotImplementedError
 
@@ -129,7 +133,7 @@ class OtariLLM(LLM):
                               timeout=timeout if timeout is not None else self.http.timeout)
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
-                 timeout=None, route=None, guardrails=None):
+                 timeout=None, route=None, guardrails=None, mcp_servers=None):
         if route is None and routing_enabled():
             route = ROUTES.get(model)
         body = {"model": route or model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
@@ -137,6 +141,13 @@ class OtariLLM(LLM):
             body["tools"] = tools
         if guardrails:
             body["guardrails"] = guardrails
+        if mcp_servers:
+            body["mcp_servers"] = mcp_servers
+        if tools or mcp_servers:
+            # caps Otari's tool loop: without it one amount check ran code 8 times for $0.08. A rewrite with
+            # MCP needs more rounds (product, installment rules, delivery rules, then the answer); past the
+            # cap Otari answers 422 "Exceeded max_tool_iterations".
+            body["max_tool_iterations"] = MCP_ROUNDS if mcp_servers else TOOL_ROUNDS
         # A policy may put both candidates on Bedrock, which rejects response_format, and Otari then answers
         # 400 all_candidates_rejected. The prompts ask for JSON anyway, so a routed call goes without it.
         if json_mode and not route and model not in self.no_json_mode:
@@ -180,6 +191,7 @@ class OtariLLM(LLM):
             served_model=r.headers.get("otari-model", ""),
             attempts=int(r.headers.get("otari-attempt-count", "1") or 1),
             guardrails=_guardrail_header(r.headers.get("otari-guardrails", "")),
+            mcp_calls=_mcp_calls(data.get("otari_tool_calls") or []),
             sources=[src["url"] for call in data.get("otari_tool_calls") or [] if call.get("status") == "completed"
                      for src in call.get("sources") or [] if src.get("url")],
             code_runs=[{"code": call.get("code", ""), "stdout": call.get("stdout", "")}
@@ -197,6 +209,17 @@ def clean_guardrails(items) -> list[dict]:
     for g in items if isinstance(items, list) else [items]:
         if isinstance(g, dict):
             out.append({k: (str(g[k])[:300] if k == "explanation" else g[k]) for k in GUARDRAIL_FIELDS if k in g})
+    return out
+
+
+def _mcp_calls(calls: list) -> list[dict]:
+    out = []
+    for c in calls:
+        if isinstance(c, dict) and "mcp" in str(c.get("type", "")):
+            result = c.get("output") or c.get("result") or c.get("text") or ""
+            # Otari returns server, tool name, status and the tool's text output (no arguments), checked 05.11
+            out.append({"server": c.get("server", ""), "tool": c.get("name", ""), "status": c.get("status", ""),
+                        "result": str(result)[:400]})
     return out
 
 
@@ -225,7 +248,7 @@ class StubLLM(LLM):
         self.calls: list[tuple[str, list[dict]]] = []
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
-                 timeout=None, route=None, guardrails=None):
+                 timeout=None, route=None, guardrails=None, mcp_servers=None):
         self.calls.append((task, messages))
         fn = self.handlers.get(task)
         text = fn(messages) if fn else ""

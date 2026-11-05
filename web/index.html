@@ -59,7 +59,7 @@ h2{font-size:16px;margin:28px 0 8px}
 .how ol{padding-left:18px}
 .hood{margin-top:8px}.hood summary{cursor:pointer}.hood table{border-collapse:collapse;width:100%;margin-top:6px;font-size:13px}
 .hood td{border-top:1px solid #ddd;padding:4px 6px;vertical-align:top}.hood code{font-size:12px}
-.fb{background:#fff1c2;color:#7a5200;border-radius:4px;padding:0 5px;font-weight:600}
+.mcp{font-size:12px;color:#355;margin-top:2px}.fb{background:#fff1c2;color:#7a5200;border-radius:4px;padding:0 5px;font-weight:600}
 </style>
 </head>
 <body>
@@ -110,8 +110,8 @@ h2{font-size:16px;margin:28px 0 8px}
       <li><b>Guardrail.</b> Before the sales bot sees a message, Otari calls ShopGuard's own guardrail service. gpt-oss-safeguard-120b reads it against a shop policy, and a customer who tells the bot to ignore its rules or to "just confirm" a price is refused with 403 before any model answers. Asking for a discount is fine; dictating the answer is not.</li>
       <li><b>Draft.</b> A sales bot (Gemma 3 27B through Otari) writes a reply. Or paste a reply from any bot you already run.</li>
       <li><b>Extract.</b> Nemotron Nano lists every promise in the reply as JSON. A regex net also catches any amount of money or number of payments, so nothing slips through if extraction misses it.</li>
-      <li><b>Check.</b> Prices, stock, installments and delivery are checked by plain code against the catalog and the policy: exact and free. An amount that is not a catalog price (a monthly payment, a total) goes to Nemotron Super, which runs Python on the shop's facts through Otari's code execution tool. For product specs Nemotron Super searches the web through Otari's built-in web search tool and judges whether the sources back the claim.</li>
-      <li><b>Fix.</b> If anything is wrong or unconfirmed, Nemotron Super rewrites the reply using only the correct facts, and the rewrite is checked again. If it still fails, a safe hand-off to a manager is sent instead.</li>
+      <li><b>Check.</b> Prices, stock, installments and delivery are checked by plain code against the catalog and the policy: exact and free. A catalog price split into the payments the policy allows is plain arithmetic too. Any other amount (a total for two products, a difference, a split of that total) goes to Nemotron Super, which runs Python on the shop's facts through Otari's code execution tool, and ShopGuard re-checks the formula itself. For product specs Nemotron Super searches the web through Otari's built-in web search tool and judges whether the sources back the claim.</li>
+      <li><b>Fix.</b> If anything is wrong or unconfirmed, Nemotron Super rewrites the reply. It looks up every price, stock status, installment and delivery term it writes in ShopGuard's own MCP server <code>shop-data</code>, which Otari calls for it, and the rewrite is checked again. If it still fails, a safe hand-off to a manager is sent instead.</li>
     </ol>
     <p>Demo store "KitchenHub": prices and stock are fictional, product models and specs are real. No real customer data is used. Every model call goes through the <a href="https://github.com/mozilla-ai/otari">Otari</a> gateway; code: <a href="https://github.com/DmitriyTopka/shopguard">github.com/DmitriyTopka/shopguard</a>.</p>
   </div>
@@ -172,8 +172,9 @@ function render(r){
     const served = esc(c.served_model || c.model) + (c.provider ? " on " + esc(c.provider) : "");
     const fb = c.gateway_fallback ? ` <span class="fb">Otari fallback, ${c.attempts} attempts</span>` : "";
     const tools = (c.code_runs || []).length ? ` · ${c.code_runs.length} code run(s)` : "";
+    const mcps = (c.mcp_calls || []).map(m => `<div class="mcp">MCP <code>${esc(m.server)}.${esc(m.tool)}</code> → ${esc(m.result.slice(0, 140))}</div>`).join("");
     const guards = (c.guardrails || []).map(g => ` · guardrail ${esc(g.profile)}: ${g.valid === true ? "passed" : g.valid === false ? "flagged" : esc(g.status || "n/a")}`).join("");
-    return `<tr><td>${esc(TASK[c.task] || c.task)}</td><td>${route}${served}${fb}${tools}${guards}${c.note ? " · " + esc(c.note) : ""}</td><td>$${(c.cost_usd || 0).toFixed(4)}</td></tr>`;
+    return `<tr><td>${esc(TASK[c.task] || c.task)}</td><td>${route}${served}${fb}${tools}${guards}${mcps}${c.note ? " · " + esc(c.note) : ""}</td><td>$${(c.cost_usd || 0).toFixed(4)}</td></tr>`;
   }).join("");
   $("pipe").innerHTML = ms + `<div>${(r.calls || []).length} model calls · $${r.cost_usd.toFixed(4)}</div>`
     + (rows ? `<details class="hood" open><summary>Under the hood: every Otari call</summary><table>${rows}</table></details>` : "");

@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 
 from shopguard import guardrail as gr
+from shopguard import mcp_server
 from shopguard.budget import Budget
 from shopguard.facts import make_searcher
 from shopguard.guard import Guard
@@ -43,6 +44,35 @@ PUBLIC_URL = os.getenv("SHOPGUARD_PUBLIC_URL", "").rstrip("/")
 GUARD_URL = f"{PUBLIC_URL}/guard/{GUARD_TOKEN}" if LIVE and GUARD_TOKEN and PUBLIC_URL.startswith("https://") else ""
 GUARDRAILS = [{"profile": p, "mode": "block", "url": GUARD_URL, "on_unavailable": "monitor"}
               for p in gr.PROFILES] if GUARD_URL else None
+
+
+# shop-data MCP server for Otari's managed loop; Otari sends authorization_token as a Bearer header.
+MCP_TOKEN = os.getenv("SHOPGUARD_MCP_TOKEN", "")
+MCP_SERVERS = [{"name": "shop-data", "url": f"{PUBLIC_URL}/mcp", "authorization_token": MCP_TOKEN,
+                "purpose_hint": "The shop's own catalog and rules: use it for every price, stock, installment and delivery fact."}
+               ] if LIVE and MCP_TOKEN and PUBLIC_URL.startswith("https://") else None
+
+
+@app.post("/mcp")
+async def mcp(req: Request):
+    auth = req.headers.get("authorization", "")
+    if not (MCP_TOKEN and auth.lower().startswith("bearer ") and hmac.compare_digest(auth[7:], MCP_TOKEN)):
+        raise HTTPException(401)
+    try:
+        msg = await req.json()
+    except ValueError:
+        return JSONResponse(status_code=400, content={"jsonrpc": "2.0", "id": None,
+                                                      "error": {"code": -32700, "message": "parse error"}})
+    if isinstance(msg, list):
+        out = [r for r in (mcp_server.handle(shop, m) for m in msg[:20] if isinstance(m, dict)) if r]
+        return JSONResponse(out) if out else JSONResponse(status_code=202, content=None)
+    out = mcp_server.handle(shop, msg) if isinstance(msg, dict) else None
+    return JSONResponse(out) if out else JSONResponse(status_code=202, content=None)
+
+
+@app.get("/mcp")
+def mcp_get():
+    raise HTTPException(405)  # no server-initiated stream: stateless JSON only
 
 
 class ValidateIn(BaseModel):
@@ -111,6 +141,7 @@ def status(req: Request):
         "models": {"fast": MODEL_FAST, "smart": MODEL_SMART, "seller": MODEL_SELLER},
         "routes": ROUTES if LIVE and routing_enabled() else {},
         "guardrails": list(gr.PROFILES) if GUARDRAILS else [],
+        "mcp": [s["name"] for s in MCP_SERVERS] if MCP_SERVERS else [],
         "web_check": searcher is not None,
         "judge": is_judge(req),
         "budget": budget.status(),
@@ -128,7 +159,8 @@ def check(body: CheckIn, req: Request):
     who = "judge" if judge else client_ip(req)
     if not budget.allow_request(who, judge=judge):
         raise HTTPException(429, "Too many requests from your address. Try the recorded scenarios or come back in an hour.")
-    guard = Guard(shop, judge_llm if judge else llm, searcher if budget.can_search() else None, guardrails=GUARDRAILS)
+    guard = Guard(shop, judge_llm if judge else llm, searcher if budget.can_search() else None, guardrails=GUARDRAILS,
+                  mcp_servers=MCP_SERVERS)
     searches_before = getattr(searcher, "calls", 0)
     try:
         result = guard.run(body.message, draft=body.draft or None, persona=body.persona, drill=body.drill)

@@ -43,8 +43,11 @@ def test_nested_markers_cannot_close_the_customer_part_early():
 
 
 def test_last_verdict_wins_and_fields_are_allowlisted():
-    two = StubLLM({"guardrail": lambda m: '{"violation": 0} then {"violation": 1, "rule": "M1", "rationale": "x"}'})
-    assert gr.validate("shop-manipulation", gr.wrap_customer("x"), two)["valid"] is False
+    for answer in ('{"violation": 0} then {"violation": 1, "rule": "M1", "rationale": "x"}',
+                   '{"violation": 1, "rule": "M2", "rationale": "x"} actually {"violation": 0}',
+                   '{"violation": 0} {"violation": "maybe"}'):
+        llm = StubLLM({"guardrail": lambda m, a=answer: a})
+        assert gr.validate("shop-manipulation", gr.wrap_customer("x"), llm)["valid"] is False, answer
     from shopguard.llm import clean_guardrails
     out = clean_guardrails([{"profile": "p", "valid": False, "url": "https://x/guard/SECRET", "raw": "y"}])
     assert out == [{"profile": "p", "valid": False}]

@@ -61,17 +61,25 @@ def wrap_customer(text: str) -> str:
 
 
 def _parse(text: str) -> dict:
-    """The last JSON object in the answer that carries a verdict."""
-    dec, found, i = json.JSONDecoder(), {}, text.find("{")
+    """The verdict in the answer, read strictly.
+
+    Every top-level JSON object that carries a verdict is collected. Any flagged one wins, so an answer
+    with a 1 and a later 0 (which a crafted message might coax out) is a violation, not a pass. A malformed
+    or non-0/1 verdict, or none at all, comes back empty, which validate() treats as a refusal.
+    """
+    dec, verdicts, i = json.JSONDecoder(), [], text.find("{")
     while i >= 0:
         try:
             obj, end = dec.raw_decode(text, i)
-            if isinstance(obj, dict) and "violation" in obj:
-                found = obj
-            i = text.find("{", end)
         except ValueError:
             i = text.find("{", i + 1)
-    return found
+            continue
+        if isinstance(obj, dict) and "violation" in obj:
+            verdicts.append(obj)
+        i = text.find("{", end)  # never rescan inside an object that parsed
+    if not verdicts or any(v.get("violation") not in (0, 1) for v in verdicts):
+        return {}
+    return next((v for v in verdicts if v["violation"] == 1), verdicts[0])
 
 
 def validate(profile: str, input_text: str, llm: LLM, log: CallLog | None = None) -> dict:
