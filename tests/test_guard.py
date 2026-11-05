@@ -294,7 +294,7 @@ def test_warranty_is_a_shop_rule_not_a_web_spec():
     assert policy_spec(Claim(type="spec", text="2 роки гарантії"), shop).status == "violation"
     assert policy_spec(Claim(type="spec", text="lifetime warranty"), shop).status == "violation"
     assert policy_spec(Claim(type="spec", text="безкоштовний ремонт за гарантією"), shop).status == "violation"
-    assert policy_spec(Claim(type="spec", text="гарантія від виробника"), shop).status == "ok"
+    assert policy_spec(Claim(type="spec", text="гарантія від виробника"), shop) is None  # no term: spec check
     assert policy_spec(Claim(type="spec", text="гарантия 12 месяцев и бесплатный ремонт"), shop).status == "violation"
     assert policy_spec(Claim(type="spec", text="warranty 36"), shop).status == "violation"
     assert policy_spec(Claim(type="spec", text="guaranteed to have Wi-Fi"), shop) is None
@@ -305,3 +305,13 @@ def test_warranty_is_a_shop_rule_not_a_web_spec():
     assert policy_spec(Claim(type="spec", text="Wi-Fi and a 12-month warranty"), shop) is None
     assert policy_spec(Claim(type="spec", text="Wi-Fi та гарантія 12 місяців"), shop) is None
     assert policy_spec(Claim(type="spec", text="has Wi-Fi"), shop) is None
+
+
+def test_warranty_ok_only_with_an_explicit_policy_term():
+    from shopguard.checks import policy_spec
+    from shopguard.claims import Claim
+    for t in ("money-back guarantee", "price guarantee for 12 months", "unconditional 12-month guarantee",
+              "гарантія повернення грошей"):
+        assert policy_spec(Claim(type="spec", text=t), shop).status == "violation", t
+    for t in ("twelve-month warranty", "гарантія дванадцять місяців", "manufacturer's warranty"):
+        assert policy_spec(Claim(type="spec", text=t), shop) is None, t
