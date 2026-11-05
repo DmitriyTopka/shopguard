@@ -40,11 +40,17 @@ NEGATED_RX = re.compile(r"(немає|нет в наличии|not in stock|out 
 REFUSAL_RX = re.compile(r"(?<!\w)(не|немає|нет|not|no|never|unavailable|(?:can|don|doesn|isn|aren|won)['’]t)(?!\w)", re.I)
 
 
+# "гарантія 12 місяців" is a warranty term, not 12 payments: the warranty phrase is cut out before reading terms
+WARRANTY_PHRASE_RX = re.compile(r"(warrant|guarant|гаранті|гаранти)\w*[^.!?\n]{0,40}", re.I)
+IMPOSSIBLE_RX = re.compile(r"неможлив|невозможн|impossible|not possible|not available|недоступн", re.I)
+
+
 def promised_payments(text: str) -> list[int]:
     out = []
     for sentence in re.split(r"[.!?\n]+", text):
-        if not REFUSAL_RX.search(sentence):
-            out += [int(n) for n in PAYMENTS_RX.findall(sentence)]
+        if REFUSAL_RX.search(sentence) or IMPOSSIBLE_RX.search(sentence):
+            continue
+        out += [int(n) for n in PAYMENTS_RX.findall(WARRANTY_PHRASE_RX.sub(" ", sentence))]
     return out
 
 
@@ -89,6 +95,7 @@ def main() -> None:
     ap.add_argument("--record", default="", help="also write replayable scenarios for the demo")
     ap.add_argument("--full", action="store_true", help="also use the live demo's guardrail and shop-data MCP server")
     ap.add_argument("--demo-url", default="https://shopguard-otari.vercel.app")
+    ap.add_argument("--rescore", default="", help="re-score the rows of a saved results file, no model calls")
     args = ap.parse_args()
 
     shop = Shop.load()

@@ -1,6 +1,6 @@
 # Otari feedback from building ShopGuard
 
-ShopGuard checks what a shop chatbot promises (price, stock, installments, delivery, specs) before the customer reads it. Until this hackathon it had never run on a live model. I moved it to hosted Otari on 30 October 2026 and ran 49 test messages several times. Otari tracked $1.55 so far out of the $22 balance, that includes all my experiments; the two 49-message runs in the README cost $0.47 of it.
+ShopGuard checks what a shop chatbot promises (price, stock, installments, delivery, specs) before the customer reads it. Until this hackathon it had never run on a live model. I moved it to hosted Otari on 30 October 2026 and ran 49 test messages several times. By 5 November the organization had spent $4.14 against its $15 ceiling, all experiments included; the two 49-message runs with every feature on cost $0.31 of it.
 
 ## What I used
 
@@ -39,7 +39,8 @@ ShopGuard checks what a shop chatbot promises (price, stock, installments, deliv
 10. **`response_format` through a policy.** Nano and Super are both on Bedrock, which rejects `response_format`; through a Fallback policy the same request becomes 400 `all_candidates_rejected` "No model accepted the request (2 attempts)", which hides the real reason.
 11. **`credential` on a request-body guardrail is not sent.** With `"url": ".../guard/validate", "credential": "..."` the request is accepted, but my endpoint got no `Authorization` header and the verdict came back `unavailable`, `evaluation_failed`. I moved the secret into the URL path, which then shows up in my access logs.
 12. **MCP calls come back without arguments.** `otari_tool_calls` entries for MCP have `server`, `name`, `status` and `output`, so the demo can show what `find_product` returned but not what the model asked for.
-13. **The service key is hard to find.** It is a checkbox at the bottom of Create key, Advanced. Its list of end-user budgets is a short box that scrolls inside the dialog, so I first thought my three new budgets were missing and reloaded the page.
+13. **An empty code run counts as completed.** About one call in three, Nemotron Super called `otari_code_execution` with an empty program, and `otari_tool_calls` reported it as `completed` with empty stdout and exit code 0. A `failed` status, or a hint back to the model, would save a retry.
+14. **The service key is hard to find.** It is a checkbox at the bottom of Create key, Advanced. Its list of end-user budgets is a short box that scrolls inside the dialog, so I first thought my three new budgets were missing and reloaded the page.
 
 ## When I was most tempted to skip Otari and call the provider directly
 

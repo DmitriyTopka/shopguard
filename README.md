@@ -70,20 +70,22 @@ The things that did not work as documented are listed below in "Notes on Otari";
 
 ## Results
 
-`eval/run_eval.py` runs 49 customer messages (40 Ukrainian / Russian / mixed from our public benchmark *shop_assistant_honesty_ua_ru*, plus 9 new English ones) through the guard on Otari and scores the bot draft and the sent reply with an independent pattern scorer, not the guard's own extractor. The scorer only knows prices, payment counts and stock, so it under-counts wrong specs.
+`eval/run_eval.py` runs 49 customer messages (40 Ukrainian / Russian / mixed from our public benchmark *shop_assistant_honesty_ua_ru*, plus 9 new English ones) through the guard on Otari and scores the bot draft and the sent reply with an independent pattern scorer, not the guard's own extractor. The scorer only knows prices, payment counts and stock, so it under-counts wrong specs and delivery promises.
 
-Two seller personas: **eager** (a friendly bot told to close the sale) and **pushy** (a stress test: the bot's prompt only rewards closing the sale right now).
+Two seller personas: **eager** (a friendly bot told to close the sale) and **pushy** (a stress test: the bot's prompt only rewards closing the sale right now). The run below is on 5 November with every feature on (`--live --full`): routing policies, the guardrail and the MCP rewrite of the live demo.
 
-| live run on Otari, 30.10.2026 | eager seller | pushy seller |
+| live run on Otari, 05.11.2026, all features | eager seller | pushy seller |
 |---|---|---|
-| replies with an invented price, installment or stock promise, before the guard | 3/49 | 8/49 |
-| same, in the reply the customer gets | **0/49** | **0/49** |
-| honest price and stock answers replaced by the hand-off | 0/13 | 0/13 |
-| clean drafts replaced by the hand-off (any kind) | 0 | 3 |
-| guard actions: pass / rewritten / hand-off | 43 / 4 / 2 | 27 / 13 / 9 |
-| cost of the whole run | $0.03 | $0.44 |
+| drafts where ShopGuard found a wrong price, payment plan, stock or delivery promise | 3/49 | 6/49 |
+| drafts it rewrote or handed to a manager (wrong or unconfirmed promises of any kind, specs included) | 8/49 | 10/49 |
+| replies sent with an invented price, installment or stock promise, by the independent scorer | **0/49** | **0/49** |
+| honest price and stock answers replaced by the hand-off | 0/13 | 1/13 |
+| guard actions: pass / rewritten / hand-off / blocked by the guardrail | 41 / 1 / 7 / 0 | 39 / 5 / 5 / 0 |
+| cost of the whole run | $0.12 | $0.19 |
 
-Full rows: `eval/results_live_eager.json`, `eval/results_live_pushy.json`. Most of the pushy run's cost is the web check: the pushy seller states many specs, and each unconfirmed spec costs one Super call with search.
+Full rows: `eval/results_live_full_eager.json`, `eval/results_live_full_pushy.json`. None of the 49 benchmark messages tries to manipulate the bot, so the guardrail let all of them through; it is shown on its own in the demo.
+
+**A correction.** Until 5 November this section said the pushy seller put an invented promise into 8 of 49 replies on 30 October. The scorer counted "warranty 12 months" as 12 payments and "installments over 10 months are not possible" as a promise. With those two bugs fixed (`promised_payments`), the 30 October runs score 2/49 before the guard and 0/49 after, eager and pushy alike. The rows are still in `eval/results_live_eager.json` and `eval/results_live_pushy.json`.
 
 ## Notes on Otari (material for the feedback)
 
