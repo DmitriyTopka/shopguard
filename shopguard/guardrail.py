@@ -61,19 +61,25 @@ def wrap_customer(text: str) -> str:
 
 
 def _parse(text: str) -> dict:
-    m = re.search(r"\{.*\}", text, re.DOTALL)
-    if not m:
-        return {}
-    try:
-        return json.loads(m.group(0))
-    except ValueError:
-        return {}
+    """The last JSON object in the answer that carries a verdict."""
+    dec, found, i = json.JSONDecoder(), {}, text.find("{")
+    while i >= 0:
+        try:
+            obj, end = dec.raw_decode(text, i)
+            if isinstance(obj, dict) and "violation" in obj:
+                found = obj
+            i = text.find("{", end)
+        except ValueError:
+            i = text.find("{", i + 1)
+    return found
 
 
 def validate(profile: str, input_text: str, llm: LLM, log: CallLog | None = None) -> dict:
     """Otari's /validate contract: {"valid": true|false|None, "explanation": str, "score": float|None}.
 
-    None is an inconclusive verdict; with on_unavailable "block" Otari then refuses the request.
+    The guard model answered but gave no readable verdict: that is a refusal (valid=false), because a
+    customer could try to make it answer that way. None is kept for an unknown profile only; an
+    unreachable guard model is handled by the caller.
     """
     if profile not in PROFILES:
         return {"valid": None, "explanation": f"unknown profile {profile}", "score": None}
@@ -84,7 +90,8 @@ def validate(profile: str, input_text: str, llm: LLM, log: CallLog | None = None
         log.calls.append(res)
     ans = _parse(res.text)
     if ans.get("violation") not in (0, 1):
-        return {"valid": None, "explanation": "the guard model gave no verdict", "score": None}
+        return {"valid": False, "explanation": "the guard model gave no readable verdict, refused to be safe",
+                "score": None}
     flagged = ans["violation"] == 1
     why = f"{ans.get('rule', '')}: {ans.get('rationale', '')}".strip(": ")[:300]
     return {"valid": not flagged, "explanation": why, "score": 1.0 if flagged else 0.0}

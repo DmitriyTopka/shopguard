@@ -160,8 +160,8 @@ class OtariLLM(LLM):
             detail = payload.get("detail") if isinstance(payload.get("detail"), dict) else {}
             code = code or str(payload.get("code", "") or detail.get("code", ""))
             if code == "guardrail_violation":
-                raise GuardrailBlocked(list(detail.get("guardrails") or payload.get("guardrails")
-                                            or [{"profile": "?", "explanation": str(payload)[:200]}]))
+                raise GuardrailBlocked(clean_guardrails(detail.get("guardrails") or payload.get("guardrails")
+                                                        or [{"profile": "?", "explanation": "refused by a guardrail"}]))
             if code in SPEND_CODES:
                 raise SpendLimitReached(code, str(payload.get("detail", ""))[:200])
         r.raise_for_status()
@@ -188,15 +188,26 @@ class OtariLLM(LLM):
         )
 
 
+GUARDRAIL_FIELDS = ("profile", "mode", "valid", "score", "status", "reason", "explanation")
+
+
+def clean_guardrails(items) -> list[dict]:
+    """Only these fields reach the page: never a URL (ours carries a token) or a raw gateway payload."""
+    out = []
+    for g in items if isinstance(items, list) else [items]:
+        if isinstance(g, dict):
+            out.append({k: (str(g[k])[:300] if k == "explanation" else g[k]) for k in GUARDRAIL_FIELDS if k in g})
+    return out
+
+
 def _guardrail_header(raw: str) -> list[dict]:
     if not raw:
         return []
     try:
         import json
-        out = json.loads(raw)
-        return out if isinstance(out, list) else [out]
+        return clean_guardrails(json.loads(raw))
     except ValueError:
-        return [{"raw": raw[:300]}]
+        return []
 
 
 def strip_reasoning(text: str) -> str:
