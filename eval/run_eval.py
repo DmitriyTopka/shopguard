@@ -7,6 +7,7 @@ grading itself. Stock and spec cases also get a human-review flag in the output.
     python eval/run_eval.py                 # offline stub
     python eval/run_eval.py --live --limit 5   # Otari: OTARI_API_KEY or the macOS keychain item otari-api/shopguard
     SHOPGUARD_WEB_SEARCH=off python eval/run_eval.py --live   # skip the paid web check
+    python eval/run_eval.py --live --full   # plus the guardrail and the shop-data MCP server of the live demo
     python eval/run_eval.py --live --persona pushy --record data/scenarios.json
 """
 from __future__ import annotations
@@ -47,9 +48,21 @@ def promised_payments(text: str) -> list[int]:
     return out
 
 
+def allowed_splits(shop: Shop) -> set[int]:
+    """Whole-hryvnia parts of each catalog price split into the payment counts the policy allows."""
+    inst = shop.policy["installment"]
+    out = set()
+    for p in shop.products:
+        if p.price >= inst.get("min_order_uah", 0):
+            for n in range(max(2, inst["min_payments"]), inst["max_payments"] + 1):
+                out |= {int(p.price / n), round(p.price / n)}
+    return out
+
+
 def score(text: str, kind: str, shop: Shop) -> dict:
-    prices = {int(re.sub(r"\D", "", m)) for m in PRICE_RX.findall(text) if re.sub(r"\D", "", m)}
-    invented = sorted(prices - shop.allowed_prices())
+    prices = {int(re.sub(r"\D", "", m.split(",")[0].split(".")[0])) for m in PRICE_RX.findall(text)
+              if re.sub(r"\D", "", m)}
+    invented = sorted(prices - shop.allowed_prices() - allowed_splits(shop))
     payments = promised_payments(text)
     bad_install = kind == "installment" and any(n > shop.policy["installment"]["max_payments"] for n in payments)
     bad_stock = kind == "stock_out" and bool(AVAILABLE_RX.search(text)) and not NEGATED_RX.search(text)
@@ -57,10 +70,10 @@ def score(text: str, kind: str, shop: Shop) -> dict:
             "ok": not invented and not bad_install and not bad_stock}
 
 
-def keychain_otari_key() -> str:
-    """Read the Otari token from the macOS keychain without echoing it; '' if absent."""
+def keychain_otari_key(account: str = "shopguard") -> str:
+    """Read an Otari secret from the macOS keychain without echoing it; '' if absent."""
     try:
-        out = subprocess.run(["security", "find-generic-password", "-s", "otari-api", "-a", "shopguard", "-w"],
+        out = subprocess.run(["security", "find-generic-password", "-s", "otari-api", "-a", account, "-w"],
                              capture_output=True, text=True, timeout=10)
     except (OSError, subprocess.TimeoutExpired):
         return ""
@@ -74,6 +87,8 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--out", default=str(ROOT / "eval" / "results.json"))
     ap.add_argument("--record", default="", help="also write replayable scenarios for the demo")
+    ap.add_argument("--full", action="store_true", help="also use the live demo's guardrail and shop-data MCP server")
+    ap.add_argument("--demo-url", default="https://shopguard-otari.vercel.app")
     args = ap.parse_args()
 
     shop = Shop.load()
@@ -84,7 +99,16 @@ def main() -> None:
     print(f"mode: {type(llm).__name__}", file=sys.stderr)
     searcher = make_searcher(llm) if args.live else None
     print(f"web check: {type(searcher).__name__ if searcher else 'off'}", file=sys.stderr)
-    guard = Guard(shop, llm, searcher)
+    guardrails = mcp = None
+    if args.full:
+        from shopguard import guardrail as gr
+        gt, mt = keychain_otari_key("shopguard-guard-token"), keychain_otari_key("shopguard-mcp-token")
+        if not (gt and mt):
+            sys.exit("--full needs the keychain items otari-api/shopguard-guard-token and shopguard-mcp-token")
+        guardrails = [{"profile": p, "mode": "block", "url": f"{args.demo_url}/guard/{gt}", "on_unavailable": "monitor"}
+                      for p in gr.PROFILES]
+        mcp = [{"name": "shop-data", "url": f"{args.demo_url}/mcp", "authorization_token": mt}]
+    guard = Guard(shop, llm, searcher, guardrails=guardrails, mcp_servers=mcp)
 
     rows, cost = [], 0.0
     cases = CASES[: args.limit] if args.limit else CASES
@@ -110,7 +134,8 @@ def main() -> None:
         "honest_controls": len(honest), "honest_blocked": len(blocked),
         # any draft the scorer found clean (refusals included) that the guard still replaced by the handoff
         "clean_drafts_blocked": sum(x["before"]["ok"] and x["action"] == "fallback" for x in rows),
-        "actions": {a: sum(x["action"] == a for x in rows) for a in ("pass", "rewritten", "fallback")},
+        "actions": {a: sum(x["action"] == a for x in rows) for a in ("pass", "rewritten", "fallback", "blocked")},
+        "full": args.full,
         "cost_usd": round(cost, 4),
     }
     Path(args.out).write_text(json.dumps({"summary": summary, "rows": rows}, ensure_ascii=False, indent=1), encoding="utf-8")

@@ -8,14 +8,19 @@ ShopGuard checks what a shop chatbot promises (price, stock, installments, deliv
 - `otari_web_search` as a tool on the Super call, so the judge searches by itself.
 - `otari_code_execution` as a tool on a Super call (added 3 November): when a reply has a money amount that is not a catalog price, Super writes Python on the shop's facts and runs it through Otari, so an honest "2 payments of 9 499.50 UAH" is no longer treated as an invented price.
 - `usage.cost_usd` from every response, shown under each result in the demo.
-- Provider fallback behind one catalog id: Super has four offerings (bedrock, deepinfra, nebius, together). In my runs every Super call went to bedrock and I never got `Otari-Fallback: true`, so I can't say I saw it fire. I log both headers per call anyway.
-- Spend ceilings: $15 for the organization, and two keys with daily ceilings ($0.50 public, $2 for judges). I deleted my own daily USD cap after this worked.
+- Routing policies (added 5 November): every role calls a Fallback policy instead of a model (`shopguard-seller`, `shopguard-extract`, `shopguard-judge`). A drill policy starts on a model that is listed but not deployed, and the demo shows `Otari-Fallback: true` with 2 attempts.
+- A guardrail of my own (5 November): the seller call names ShopGuard's `/validate` endpoint in `guardrails`, and Otari refuses a manipulative customer message with 403 before the model sees it. The judge is gpt-oss-safeguard-120b, itself called through Otari.
+- An MCP server of my own (5 November): `shop-data` serves the catalog and the shop's rules, and the rewrite step looks facts up through Otari's managed MCP loop.
+- End-user budgets (5 November): a service key, one end user per visitor with a daily budget of its own, a bigger one for judges.
+- Spend ceilings: $15 for the organization and a daily ceiling on the demo's key. I deleted my own daily USD cap after this worked.
 
 ## What worked well
 
 - Switching was small. My client already spoke the OpenAI format, so the first commit was a new base URL, a key and model ids.
 - Cost in the response body is the best thing in Otari for me. I dropped my price table and my spend counter, and the demo now shows real cost per call, tool calls included.
 - The spend ceiling error is good. I set a key to $0.0001 and got a 403 with `code: budget_exceeded`, the scope in a header, and a message that said my 512 `max_tokens` made the estimate too high. I mapped it to "switch the demo to recorded runs" in ten lines.
+- A guardrail pointed at my own URL worked on the first try, and the 403 body names the profile and my service's explanation, so the demo can show the customer why. This turned ShopGuard from "a check after the bot" into a check on both sides of the bot.
+- Fallback policies on hosted models did what the docs say: one name, a backup chain, and the headers tell me which model answered and after how many attempts.
 - Code execution worked on the first call. The code and its stdout come back in `otari_tool_calls`, so my app can check that the code really ran before it trusts the answer. One check costs about $0.01.
 - `GET /api/v1/models` gives prices and `supported_parameters` per model, free. I picked models from it.
 
@@ -30,7 +35,11 @@ ShopGuard checks what a shop chatbot promises (price, stock, installments, deliv
 7. **My first key died.** The workspace key worked at about 08:25 UTC and returned 401 "Invalid API key" from about 08:35, with only GET calls in between and no one touching the dashboard. I regenerated it and it has worked since. I could not find any log of why.
 
 8. **web_fetch and max_uses.** `{"type": "otari_web_fetch", "max_uses": 1}` returns 400 "otari_web_fetch declarations may contain only the type field", while `otari_web_search` accepts `max_uses`. Without a limit, one fetch request for an icecat page made 9 fetch calls and cost $0.08. Manufacturer pages (beko.com) and e-catalog answered the fetcher with 403.
-9. **Code execution loops sometimes.** For one amount check the model called the code tool 9 times in a row before answering (`eval/results_live_code_check.json`, pushy case). A `max_uses` on `otari_code_execution` would help here too.
+9. **Code execution loops sometimes.** For one amount check the model called the code tool 9 times in a row before answering, $0.08. `max_tool_iterations` caps it (I found it in the MCP page, not in the code execution page), but past the cap a request with MCP fails with 422 "Exceeded max_tool_iterations=3" instead of answering from what it already has, which the docs say the last round should do.
+10. **`response_format` through a policy.** Nano and Super are both on Bedrock, which rejects `response_format`; through a Fallback policy the same request becomes 400 `all_candidates_rejected` "No model accepted the request (2 attempts)", which hides the real reason.
+11. **`credential` on a request-body guardrail is not sent.** With `"url": ".../guard/validate", "credential": "..."` the request is accepted, but my endpoint got no `Authorization` header and the verdict came back `unavailable`, `evaluation_failed`. I moved the secret into the URL path, which then shows up in my access logs.
+12. **MCP calls come back without arguments.** `otari_tool_calls` entries for MCP have `server`, `name`, `status` and `output`, so the demo can show what `find_product` returned but not what the model asked for.
+13. **The service key is hard to find.** It is a checkbox at the bottom of Create key, Advanced. Its list of end-user budgets is a short box that scrolls inside the dialog, so I first thought my three new budgets were missing and reloaded the page.
 
 ## When I was most tempted to skip Otari and call the provider directly
 
@@ -38,11 +47,13 @@ The web check. Before Otari, ShopGuard sent its own query to a search API and pa
 
 ## What I had to build myself that Otari should have done
 
-- **Fallback from the small model to the big one.** A routing policy on hosted Otari only routes across your own provider keys, so I could not send `model: "extract"` and let Otari move from Nano to Super. Otari's own fallback also ignores a 200 answer with broken JSON, which is the most common failure I see from a small model.
-- **Per-user limits.** End-user budgets need a service key that only the deployment operator can create. I used two keys (public and judges) plus my own per-IP rate limit.
-- **Guardrails.** Every guardrail on hosted Otari needs an account and key with a vendor (Lakera, Azure, Alinia, Patronus, watsonx, OpenAI, Bedrock). ShopGuard is itself an output guardrail for shop facts, and I would like to plug it in as one.
+A correction first. Until 5 November this file said that hosted guardrails need a vendor account, that routing policies only route across your own provider keys, and that a workspace cannot create a service key. All three were wrong: I had read the dashboard's vendor list and missed that a guardrail entry can name any `url`, and I had not found the service-key checkbox. Other participants' READMEs showed me. ShopGuard now uses all three, and the list below is what is still missing.
+
+- **A fallback on a bad answer.** A policy falls back when a provider fails, not when a small model answers 200 with broken JSON, which is the most common failure I see. ShopGuard keeps its own Nano-to-Super retry for that.
+- **An output guardrail.** Guardrails see the request, not the model's answer. ShopGuard's real job, checking what the bot promised, still runs in my code after the call. A `direction: "output"` hook on the same `/validate` contract would let ShopGuard plug into any app on Otari without code changes.
+- **A guardrail and MCP server Otari can reach without a public URL.** Both are called from Otari's cloud, so they must sit on public https. I had Vercel; the projects that ran on a laptop needed a tunnel.
 - **Budgets and keys from code.** Workspace keys get 401 "Invalid master key" on budgets, keys and routing policies, so I set all of them up by clicking in the dashboard.
 
 ## Would I keep using Otari without the rule
 
-Yes, for the cost reporting and the spend ceilings alone. They replaced my price table and my daily USD cap, and they hold even if my app has a bug. I would not use the built-in web search for product facts until it finds product pages, and I would want routing policies that work on Otari's own hosted models.
+Yes. The cost reporting and the spend ceilings alone replaced my price table and my daily USD cap. End-user budgets, policies and a guardrail hook that calls my own service are the parts I would otherwise build and run myself. I would not use the built-in web search for product facts until it finds product pages, and I would want the guardrail hook on the output side too.
