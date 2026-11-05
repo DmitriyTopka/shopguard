@@ -30,6 +30,11 @@ class Verdict:
 
 
 WARRANTY_RX = re.compile(r"warrant|guarantee|гаранті|гаранти", re.IGNORECASE)
+TERM_RX = re.compile(r"(\d+)\s*-?\s*(months?|місяц\w*|міс\.?|месяц\w*|мес\.?|years?|рок\w*|рік|год\w*|лет)", re.IGNORECASE)
+YEAR_UNITS = ("year", "рок", "рік", "год", "лет")
+EXTRA_WARRANTY_RX = re.compile(
+    r"lifetime|extended|forever|free repair|replacement|довічн|пожизн|розширен|расширен|безкоштовн\w* ремонт|"
+    r"бесплатн\w* ремонт|заміна|замена|продовжен|продлен", re.IGNORECASE)
 
 
 def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
@@ -42,11 +47,16 @@ def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
     if c.type != "spec" or not pol or not WARRANTY_RX.search(c.text):
         return None
     months = pol.get("months")
-    said = [int(n) for n in re.findall(r"\d+", c.text)]
-    if not said or said == [months] or set(said) == {months}:
-        return Verdict(c, OK, f"Warranty matches the shop policy: {pol['summary']}", source="policy")
-    return Verdict(c, VIOLATION, f"Warranty of {said[0]} months promised; policy says {months}.",
-                   truth=pol["summary"], source="policy")
+    bad = Verdict(c, VIOLATION, f"Warranty term not in the shop policy ({months} months).", truth=pol["summary"],
+                  source="policy")
+    terms = [(int(n), u.lower()) for n, u in TERM_RX.findall(c.text)]
+    bare_numbers = len(re.findall(r"\d+", c.text)) != len(terms)
+    if EXTRA_WARRANTY_RX.search(c.text) or bare_numbers:
+        return bad  # lifetime, extended, free repair, or a number we cannot read as a term: fail closed
+    said = {n * 12 if u.startswith(YEAR_UNITS) else n for n, u in terms}
+    if said and said != {months}:
+        return bad
+    return Verdict(c, OK, f"Warranty matches the shop policy: {pol['summary']}", source="policy")
 
 
 def check_claim(c: Claim, shop: Shop) -> Verdict:

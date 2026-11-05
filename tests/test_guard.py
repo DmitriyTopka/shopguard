@@ -290,4 +290,10 @@ def test_warranty_is_a_shop_rule_not_a_web_spec():
     ok = policy_spec(Claim(type="spec", text="гарантія від виробника 12 місяців"), shop)
     assert ok.status == "ok" and ok.source == "policy"
     assert policy_spec(Claim(type="spec", text="with a 24-month warranty"), shop).status == "violation"
+    assert policy_spec(Claim(type="spec", text="a 1-year manufacturer's warranty"), shop).status == "ok"
+    assert policy_spec(Claim(type="spec", text="2 роки гарантії"), shop).status == "violation"
+    assert policy_spec(Claim(type="spec", text="lifetime warranty"), shop).status == "violation"
+    assert policy_spec(Claim(type="spec", text="гарантія від виробника"), shop).status == "ok"
+    assert policy_spec(Claim(type="spec", text="гарантия 12 месяцев и бесплатный ремонт"), shop).status == "violation"
+    assert policy_spec(Claim(type="spec", text="warranty 36"), shop).status == "violation"
     assert policy_spec(Claim(type="spec", text="has Wi-Fi"), shop) is None
