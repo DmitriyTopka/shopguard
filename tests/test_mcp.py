@@ -52,3 +52,17 @@ def test_endpoint_needs_the_token(monkeypatch):
     n = c.post("/mcp", json={"jsonrpc": "2.0", "method": "notifications/initialized"},
                headers={"Authorization": "Bearer t0k"})
     assert n.status_code == 202
+
+
+def test_visitor_id_is_a_salted_hash_not_the_address(monkeypatch):
+    import importlib
+    import app as A
+    importlib.reload(A)
+
+    class R:
+        headers = {"x-forwarded-for": "203.0.113.7"}
+        client = None
+    uid, _, label = A.end_user(R(), judge=False, tiny=False)
+    assert label == "visitor" and "203.0.113.7" not in uid and uid.startswith("visitor-")
+    assert A.end_user(R(), judge=False, tiny=True)[0] != uid
+    assert A.end_user(R(), judge=True, tiny=False)[0] == "judges"

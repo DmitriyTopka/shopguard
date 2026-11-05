@@ -89,7 +89,7 @@ class GuardResult:
                  "completion_tokens": c.completion_tokens, "latency_ms": c.latency_ms, "cost_usd": round(c.cost_usd, 6),
                  "provider": c.provider, "gateway_fallback": c.gateway_fallback, "note": c.note,
                  "route": c.route, "served_model": c.served_model, "attempts": c.attempts,
-                 "guardrails": c.guardrails, "mcp_calls": c.mcp_calls,
+                 "guardrails": c.guardrails, "mcp_calls": c.mcp_calls, "end_user_budget": c.end_user_budget,
                  "code_runs": c.code_runs}
                 for c in self.log.calls
             ],

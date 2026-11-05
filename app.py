@@ -1,6 +1,7 @@
 """ShopGuard web app: FastAPI backend + a single static page."""
 from __future__ import annotations
 
+import hashlib
 import hmac
 import json
 import os
@@ -31,6 +32,22 @@ LIVE = isinstance(llm, OtariLLM)
 # Two Otari keys, two daily spend ceilings set on otari.ai: the public pool and the judges' pool.
 # Without a judges' key both pools share the public one.
 judge_llm = OtariLLM(api_key=os.environ["OTARI_JUDGE_API_KEY"]) if LIVE and os.getenv("OTARI_JUDGE_API_KEY") else llm
+# Per-visitor budgets: a service key, and an Otari end user per visitor. Each visitor starts on a small daily
+# budget of its own, judges on a bigger one, and the "tiny budget" demo on one that runs out in a few checks.
+# The guardrail service and the shop-data MCP server keep the plain key above.
+service_llm = OtariLLM(api_key=os.environ["OTARI_SERVICE_KEY"]) if LIVE and os.getenv("OTARI_SERVICE_KEY") else None
+EU_BUDGETS = {"visitor": os.getenv("SHOPGUARD_EU_VISITOR", ""), "judge": os.getenv("SHOPGUARD_EU_JUDGE", ""),
+              "tiny": os.getenv("SHOPGUARD_EU_TINY", "")}
+EU_SALT = os.getenv("SHOPGUARD_EU_SALT", "") or os.getenv("SHOPGUARD_GUARD_TOKEN", "")
+
+
+def end_user(req: Request, judge: bool, tiny: bool) -> tuple[str, str, str]:
+    """(Otari end-user id, its budget id, a label). The id is a salted hash, never the address itself."""
+    if judge:
+        return "judges", EU_BUDGETS["judge"], "judges"
+    kind = "tiny" if tiny else "visitor"
+    digest = hashlib.sha256(f"{EU_SALT}|{kind}|{client_ip(req)}".encode()).hexdigest()[:16]
+    return f"{kind}-{digest}", EU_BUDGETS[kind], kind
 budget = Budget(os.getenv("SHOPGUARD_DB", str(ROOT / "shopguard.db")))
 
 
@@ -108,6 +125,7 @@ class CheckIn(BaseModel):
     draft: str | None = Field(default=None, max_length=1500)
     persona: str = Field(default="eager", pattern="^(standard|eager|pushy)$")
     drill: bool = False  # outage drill: the seller call goes to a policy whose first model is down
+    tiny_budget: bool = False  # this visitor starts on an Otari end-user budget that runs out in a few checks
 
 
 def client_ip(req: Request) -> str:
@@ -142,6 +160,7 @@ def status(req: Request):
         "routes": ROUTES if LIVE and routing_enabled() else {},
         "guardrails": list(gr.PROFILES) if GUARDRAILS else [],
         "mcp": [s["name"] for s in MCP_SERVERS] if MCP_SERVERS else [],
+        "end_user_budgets": bool(service_llm),
         "web_check": searcher is not None,
         "judge": is_judge(req),
         "budget": budget.status(),
@@ -159,12 +178,25 @@ def check(body: CheckIn, req: Request):
     who = "judge" if judge else client_ip(req)
     if not budget.allow_request(who, judge=judge):
         raise HTTPException(429, "Too many requests from your address. Try the recorded scenarios or come back in an hour.")
-    guard = Guard(shop, judge_llm if judge else llm, searcher if budget.can_search() else None, guardrails=GUARDRAILS,
+    eu = None
+    if service_llm:
+        uid, eu_budget, eu_label = end_user(req, judge, body.tiny_budget)
+        run_llm = service_llm.for_user(uid, eu_budget)
+        eu = {"label": eu_label, "id": uid[:20]}
+    else:
+        run_llm = judge_llm if judge else llm
+    guard = Guard(shop, run_llm, searcher if budget.can_search() else None, guardrails=GUARDRAILS,
                   mcp_servers=MCP_SERVERS)
     searches_before = getattr(searcher, "calls", 0)
     try:
         result = guard.run(body.message, draft=body.draft or None, persona=body.persona, drill=body.drill)
     except SpendLimitReached as e:
+        if e.scope == "user":
+            return JSONResponse(status_code=429, content={
+                "detail": "Otari stopped this visitor: its own end-user budget for today is spent "
+                          "(403 budget_exceeded, scope user). Other visitors are not affected.",
+                "replay": True, "otari_code": e.code, "end_user": eu,
+            })
         return JSONResponse(status_code=503, content={
             "detail": "Today's live budget for this demo is used up (Otari spend ceiling). Recorded scenarios still work.",
             "replay": True, "otari_code": e.code,
@@ -173,4 +205,5 @@ def check(body: CheckIn, req: Request):
     budget.record(result.log.cost_usd, searches=searches, judge=judge)
     out = result.to_dict()
     out["live"] = LIVE
+    out["end_user"] = eu
     return out

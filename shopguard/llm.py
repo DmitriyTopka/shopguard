@@ -65,6 +65,7 @@ class LLMResult:
     attempts: int = 1  # Otari-Attempt-Count: candidates tried, the one that served included
     guardrails: list[dict] = field(default_factory=list)  # Otari-Guardrails: verdicts of request-level checks
     mcp_calls: list[dict] = field(default_factory=list)  # gateway-run MCP tool calls: server, tool, result
+    end_user_budget: str = ""  # Otari-End-User-Budget: the budget the end user is billed to
 
     @property
     def cost_usd(self) -> float:
@@ -94,9 +95,10 @@ class GuardrailBlocked(Exception):
 class SpendLimitReached(Exception):
     """Otari refused the call: a spend ceiling (403 budget_exceeded) or an empty balance (402)."""
 
-    def __init__(self, code: str, detail: str = ""):
+    def __init__(self, code: str, detail: str = "", scope: str = ""):
         super().__init__(f"{code}: {detail}")
         self.code, self.detail = code, detail
+        self.scope = scope  # Otari-Budget-Scope: "user" when an end user's own budget ran out
 
 
 SPEND_CODES = {"budget_exceeded", "insufficient_funds"}
@@ -121,15 +123,29 @@ class OtariLLM(LLM):
     KEY_ENV, BASE_ENV, BASE_DEFAULT = "OTARI_API_KEY", "OTARI_BASE_URL", "https://api.otari.ai/api/v1"
 
     def __init__(self, api_key: str | None = None, base_url: str | None = None, timeout: float = 60.0,
-                 http: httpx.Client | None = None):
+                 http: httpx.Client | None = None, end_user: str = "", end_user_budget: str = ""):
         self.api_key = api_key or os.environ[self.KEY_ENV]
         self.base_url = (base_url or os.getenv(self.BASE_ENV, self.BASE_DEFAULT)).rstrip("/")
         self.http = http or httpx.Client(timeout=timeout)
         self.no_json_mode: set[str] = set()  # models whose provider rejected response_format
+        # On a service key every request names an end user; Otari creates it on first sight and bills it
+        # to the budget named in Otari-End-User-Budget (or the key's default), kept for that user after.
+        self.end_user, self.end_user_budget = end_user, end_user_budget
+
+    def for_user(self, end_user: str, end_user_budget: str = "") -> "OtariLLM":
+        """The same client and key, calling for one end user."""
+        twin = OtariLLM(api_key=self.api_key, base_url=self.base_url, http=self.http,
+                        end_user=end_user, end_user_budget=end_user_budget)
+        twin.no_json_mode = self.no_json_mode
+        return twin
 
     def _post(self, body: dict, timeout: float | None = None) -> httpx.Response:
-        return self.http.post(f"{self.base_url}/chat/completions",
-                              headers={"Authorization": f"Bearer {self.api_key}"}, json=body,
+        headers = {"Authorization": f"Bearer {self.api_key}"}
+        if self.end_user:
+            body = {**body, "user": self.end_user}
+            if self.end_user_budget:
+                headers["Otari-End-User-Budget"] = self.end_user_budget
+        return self.http.post(f"{self.base_url}/chat/completions", headers=headers, json=body,
                               timeout=timeout if timeout is not None else self.http.timeout)
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
@@ -174,7 +190,8 @@ class OtariLLM(LLM):
                 raise GuardrailBlocked(clean_guardrails(detail.get("guardrails") or payload.get("guardrails")
                                                         or [{"profile": "?", "explanation": "refused by a guardrail"}]))
             if code in SPEND_CODES:
-                raise SpendLimitReached(code, str(payload.get("detail", ""))[:200])
+                raise SpendLimitReached(code, str(payload.get("detail", ""))[:200],
+                                        scope=r.headers.get("otari-budget-scope", ""))
         r.raise_for_status()
         data = r.json()
         usage = data.get("usage") or {}
@@ -192,6 +209,7 @@ class OtariLLM(LLM):
             attempts=int(r.headers.get("otari-attempt-count", "1") or 1),
             guardrails=_guardrail_header(r.headers.get("otari-guardrails", "")),
             mcp_calls=_mcp_calls(data.get("otari_tool_calls") or []),
+            end_user_budget=r.headers.get("otari-end-user-budget", ""),
             sources=[src["url"] for call in data.get("otari_tool_calls") or [] if call.get("status") == "completed"
                      for src in call.get("sources") or [] if src.get("url")],
             code_runs=[{"code": call.get("code", ""), "stdout": call.get("stdout", "")}

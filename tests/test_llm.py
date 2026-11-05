@@ -102,3 +102,32 @@ def test_guardrail_refusal_is_typed():
         assert e.verdicts[0]["profile"] == "shop-manipulation"
     else:
         raise AssertionError("no GuardrailBlocked")
+
+
+def test_end_user_is_named_on_each_request():
+    seen = []
+
+    def handler(req: httpx.Request) -> httpx.Response:
+        import json
+        seen.append((json.loads(req.read()).get("user"), req.headers.get("otari-end-user-budget")))
+        return httpx.Response(200, headers={"Otari-End-User-Budget": "b1"},
+                              json={"choices": [{"message": {"content": "ok"}}], "usage": {}})
+
+    base = L.OtariLLM(api_key="otk_test", http=httpx.Client(transport=httpx.MockTransport(handler)))
+    res = base.for_user("visitor-abc", "b1").complete([{"role": "user", "content": "x"}], model="m", task="draft")
+    base.complete([{"role": "user", "content": "x"}], model="m", task="draft")
+    assert seen == [("visitor-abc", "b1"), (None, None)] and res.end_user_budget == "b1"
+
+
+def test_end_user_budget_refusal_carries_its_scope():
+    def handler(req: httpx.Request) -> httpx.Response:
+        return httpx.Response(403, headers={"Otari-Error-Code": "budget_exceeded", "Otari-Budget-Scope": "user"},
+                              json={"detail": "User has $0.0001 left", "code": "budget_exceeded"})
+
+    client = L.OtariLLM(api_key="otk_test", http=httpx.Client(transport=httpx.MockTransport(handler)))
+    try:
+        client.complete([{"role": "user", "content": "x"}], model="m", task="draft")
+    except L.SpendLimitReached as e:
+        assert e.scope == "user" and e.code == "budget_exceeded"
+    else:
+        raise AssertionError("no SpendLimitReached")

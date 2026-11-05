@@ -81,6 +81,7 @@ h2{font-size:16px;margin:28px 0 8px}
         <select id="persona"><option value="eager">eager seller</option><option value="standard">standard</option><option value="pushy">pushy (stress test)</option></select>
       </label>
       <label class="opt" title="The seller call goes to the Otari routing policy shopguard-drill, whose first model is not deployed. Otari falls back to Gemma and reports it."><input type="checkbox" id="drill"> simulate a provider outage</label>
+      <label class="opt" title="You become an Otari end user on a daily budget of a few hundredths of a cent. After two or three checks Otari refuses your requests with 403 budget_exceeded (scope: user), while other visitors keep working."><input type="checkbox" id="tiny"> visitor with a tiny budget</label>
       <span style="flex:1"></span>
       <button class="go" id="go">Ask the shop</button>
     </div>
@@ -108,6 +109,7 @@ h2{font-size:16px;margin:28px 0 8px}
   <div class="how">
     <ol>
       <li><b>Guardrail.</b> Before the sales bot sees a message, Otari calls ShopGuard's own guardrail service. gpt-oss-safeguard-120b reads it against a shop policy, and a customer who tells the bot to ignore its rules or to "just confirm" a price is refused with 403 before any model answers. Asking for a discount is fine; dictating the answer is not.</li>
+      <li><b>Budgets.</b> Every visitor is an Otari end user on ShopGuard's service key (a salted hash of the address, never the address), with a daily budget of its own; judges get a bigger one. Otari enforces it: a visitor who spends theirs is refused, nobody else is. Above that sit a daily ceiling on the key and a total ceiling on the organization.</li>
       <li><b>Draft.</b> A sales bot (Gemma 3 27B through Otari) writes a reply. Or paste a reply from any bot you already run.</li>
       <li><b>Extract.</b> Nemotron Nano lists every promise in the reply as JSON. A regex net also catches any amount of money or number of payments, so nothing slips through if extraction misses it.</li>
       <li><b>Check.</b> Prices, stock, installments and delivery are checked by plain code against the catalog and the policy: exact and free. A catalog price split into the payments the policy allows is plain arithmetic too. Any other amount (a total for two products, a difference, a split of that total) goes to Nemotron Super, which runs Python on the shop's facts through Otari's code execution tool, and ShopGuard re-checks the formula itself. For product specs Nemotron Super searches the web through Otari's built-in web search tool and judges whether the sources back the claim.</li>
@@ -176,7 +178,8 @@ function render(r){
     const guards = (c.guardrails || []).map(g => ` · guardrail ${esc(g.profile)}: ${g.valid === true ? "passed" : g.valid === false ? "flagged" : esc(g.status || "n/a")}`).join("");
     return `<tr><td>${esc(TASK[c.task] || c.task)}</td><td>${route}${served}${fb}${tools}${guards}${mcps}${c.note ? " · " + esc(c.note) : ""}</td><td>$${(c.cost_usd || 0).toFixed(4)}</td></tr>`;
   }).join("");
-  $("pipe").innerHTML = ms + `<div>${(r.calls || []).length} model calls · $${r.cost_usd.toFixed(4)}</div>`
+  const eu = r.end_user ? `<div>Otari end user <code>${esc(r.end_user.id)}</code> on the ${esc(r.end_user.label)} budget</div>` : "";
+  $("pipe").innerHTML = ms + `<div>${(r.calls || []).length} model calls · $${r.cost_usd.toFixed(4)}</div>` + eu
     + (rows ? `<details class="hood" open><summary>Under the hood: every Otari call</summary><table>${rows}</table></details>` : "");
 }
 
@@ -185,7 +188,7 @@ $("go").onclick = async () => {
   if(!message) return;
   $("go").disabled = true; $("err").textContent = "";
   try{
-    const body = {message, persona: $("persona").value, drill: $("drill").checked};
+    const body = {message, persona: $("persona").value, drill: $("drill").checked, tiny_budget: $("tiny").checked};
     if($("byo").checked && $("draftIn").value.trim()) body.draft = $("draftIn").value.trim();
     const res = await fetch("/api/check", {method:"POST", headers, body: JSON.stringify(body)});
     const data = await res.json();
