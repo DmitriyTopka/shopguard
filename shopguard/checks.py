@@ -38,7 +38,8 @@ EXTRA_WARRANTY_RX = re.compile(
     r"lifetime|extended|forever|free repair|replacement|довічн|пожизн|розширен|расширен|безкоштовн\w* ремонт|"
     r"бесплатн\w* ремонт|заміна|замена|продовжен|продлен|money.back|price|satisfaction|unconditional|unlimited|"
     r"for life|повернення|возврат|безумовн|безусловн|цін|цен|необмежен|неогранич", re.IGNORECASE)
-JOINED_RX = re.compile(r",|;|\+|&|\b(and|plus|also)\b|(?<!\w)(і|й|та|и|также|також)(?!\w)", re.IGNORECASE)
+JOINED_RX = re.compile(r",|;|\+|&|\b(and|plus|also|including|covers?)\b|(?<!\w)(і|й|та|и|также|також|включ\w*|покрива\w*)(?!\w)",
+                       re.IGNORECASE)
 
 
 def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
@@ -62,10 +63,28 @@ def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
     said = {n * 12 if u.startswith(YEAR_UNITS) else n for n, u in terms}
     if said and said != {months}:
         return bad
-    if not said or JOINED_RX.search(c.text):
-        # no explicit term, or more than the warranty in one claim: the usual spec check decides (fail closed)
+    if not said or JOINED_RX.search(c.text) or not _only_warranty_words(c.text, shop):
+        # no explicit term, or anything besides the warranty in the claim: the usual spec check decides
         return None
     return Verdict(c, OK, f"Warranty matches the shop policy: {pol['summary']}", source="policy")
+
+
+# Allowlist: a claim is a plain warranty statement only if every word is one of these, a term (number and
+# unit), a warranty word or a word of a catalog product's name. Anything else ("covers", "включає", "Wi-Fi")
+# sends the claim to the usual spec check.
+WARRANTY_FILLER = set("""
+a an the of on for is has have comes with full standard official manufacturer manufacturer's manufacturers from by its it
+від виробника виробник на діє є становить складає офіційна стандартна повна з із цей ця ця цього його неї нього
+от производителя производитель действует есть составляет официальная стандартная полная с со этот эта его нее него
+""".split())
+
+
+def _only_warranty_words(text: str, shop: Shop) -> bool:
+    names = {w for p in shop.products for w in re.findall(r"\w+", (p.name + " " + " ".join(p.aliases)).lower())}
+    rest = TERM_RX.sub(" ", text.lower())
+    rest = WARRANTY_RX.sub(" ", rest)
+    words = re.findall(r"[\w']+", rest)
+    return all(w in WARRANTY_FILLER or w in names for w in words)
 
 
 def check_claim(c: Claim, shop: Shop) -> Verdict:

@@ -315,3 +315,12 @@ def test_warranty_ok_only_with_an_explicit_policy_term():
         assert policy_spec(Claim(type="spec", text=t), shop).status == "violation", t
     for t in ("twelve-month warranty", "гарантія дванадцять місяців", "manufacturer's warranty"):
         assert policy_spec(Claim(type="spec", text=t), shop) is None, t
+
+
+def test_warranty_allowlist_sends_anything_else_to_the_spec_check():
+    from shopguard.checks import policy_spec
+    from shopguard.claims import Claim
+    for t in ("12-month warranty with free delivery", "гарантія 12 місяців включає заміну",
+              "12-month warranty covering water damage", "Wi-Fi 12 month warranty"):
+        v = policy_spec(Claim(type="spec", text=t), shop)
+        assert v is None or v.status == "violation", t
