@@ -15,7 +15,8 @@ from . import mathcheck
 from .claims import Claim, extract_claims
 from .facts import Searcher, fact_check
 from .claims import ExtractionFailed
-from .llm import LLM, MODEL_FAST, MODEL_SELLER, MODEL_SMART, ROUTE_DRILL, CallLog
+from . import guardrail as gr
+from .llm import LLM, MODEL_FAST, MODEL_SELLER, MODEL_SMART, ROUTE_DRILL, CallLog, GuardrailBlocked
 from .shop import Shop
 
 MAX_WEB_CHECKS = 2
@@ -62,10 +63,11 @@ class GuardResult:
     draft: str
     verdicts: list[Verdict]
     final: str
-    action: str  # pass | rewritten | fallback
+    action: str  # pass | rewritten | fallback | blocked
     recheck: list[Verdict] = field(default_factory=list)
     stages: list[Stage] = field(default_factory=list)
     log: CallLog = field(default_factory=CallLog)
+    guardrails: list[dict] = field(default_factory=list)  # Otari guardrail verdicts on a refused request
 
     @property
     def problems(self) -> list[Verdict]:
@@ -85,10 +87,12 @@ class GuardResult:
                  "completion_tokens": c.completion_tokens, "latency_ms": c.latency_ms, "cost_usd": round(c.cost_usd, 6),
                  "provider": c.provider, "gateway_fallback": c.gateway_fallback, "note": c.note,
                  "route": c.route, "served_model": c.served_model, "attempts": c.attempts,
+                 "guardrails": c.guardrails,
                  "code_runs": c.code_runs}
                 for c in self.log.calls
             ],
             "cost_usd": round(self.log.cost_usd, 6),
+            "guardrails": self.guardrails,
         }
 
 
@@ -106,18 +110,20 @@ def detect_lang(text: str) -> str:
 
 
 class Guard:
-    def __init__(self, shop: Shop, llm: LLM, searcher: Searcher | None = None):
-        self.shop, self.llm, self.searcher = shop, llm, searcher
+    def __init__(self, shop: Shop, llm: LLM, searcher: Searcher | None = None, guardrails: list[dict] | None = None):
+        # guardrails: Otari request-level checks for the seller call, e.g. our own /validate service
+        self.shop, self.llm, self.searcher, self.guardrails = shop, llm, searcher, guardrails
 
     def seller_messages(self, customer: str, persona: str) -> list[dict]:
         system = SELLER_PERSONAS.get(persona, SELLER_PERSONAS["standard"]).format(shop=self.shop.name)
         system += f"\n\nPolicy:\n{self.shop.policy_text()}\n\nCatalog (price, stock):\n{self.shop.catalog_text()}"
-        return [{"role": "system", "content": system}, {"role": "user", "content": customer}]
+        return [{"role": "system", "content": system}, {"role": "user", "content": gr.wrap_customer(customer)}]
 
     def draft(self, customer: str, persona: str, log: CallLog, drill: bool = False) -> str:
         # drill: the seller call names shopguard-drill, whose first model is not deployed, so Otari falls back
         res = self.llm.complete(self.seller_messages(customer, persona), model=MODEL_SELLER, task="draft",
-                                max_tokens=300, temperature=0.7, route=ROUTE_DRILL if drill else None)
+                                max_tokens=300, temperature=0.7, route=ROUTE_DRILL if drill else None,
+                                guardrails=self.guardrails)
         log.calls.append(res)
         return res.text
 
@@ -158,7 +164,13 @@ class Guard:
         stages: list[Stage] = []
         t = time.monotonic()
         if draft is None:
-            draft = self.draft(customer, persona, log, drill=drill)
+            try:
+                draft = self.draft(customer, persona, log, drill=drill)
+            except GuardrailBlocked as e:
+                # Otari refused the seller call: no model saw the message, a manager answers instead
+                stages.append(Stage("guardrail", _ms(t), f"blocked by Otari guardrail: {e}"[:300]))
+                return GuardResult(customer, "", [], FALLBACK[detect_lang(customer)], "blocked",
+                                   stages=stages, log=log, guardrails=e.verdicts)
             stages.append(Stage("draft", _ms(t), MODEL_SELLER))
         t = time.monotonic()
         handoff = FALLBACK[detect_lang(customer)]

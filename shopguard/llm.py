@@ -61,6 +61,7 @@ class LLMResult:
     route: str = ""  # the Otari routing policy the call named, if any
     served_model: str = ""  # Otari-Model: the model that answered
     attempts: int = 1  # Otari-Attempt-Count: candidates tried, the one that served included
+    guardrails: list[dict] = field(default_factory=list)  # Otari-Guardrails: verdicts of request-level checks
 
     @property
     def cost_usd(self) -> float:
@@ -79,6 +80,14 @@ class CallLog:
         return sum(c.cost_usd for c in self.calls)
 
 
+class GuardrailBlocked(Exception):
+    """Otari refused the request (403 guardrail_violation) before any model saw it."""
+
+    def __init__(self, verdicts: list[dict]):
+        super().__init__("; ".join(f"{g.get('profile')}: {g.get('explanation')}" for g in verdicts))
+        self.verdicts = verdicts
+
+
 class SpendLimitReached(Exception):
     """Otari refused the call: a spend ceiling (403 budget_exceeded) or an empty balance (402)."""
 
@@ -93,7 +102,7 @@ SPEND_CODES = {"budget_exceeded", "insufficient_funds"}
 class LLM:
     def complete(self, messages: list[dict], *, model: str, task: str, max_tokens: int = 512,
                  temperature: float = 0.0, json_mode: bool = False, tools: list[dict] | None = None,
-                 timeout: float | None = None, route: str | None = None) -> LLMResult:
+                 timeout: float | None = None, route: str | None = None, guardrails: list[dict] | None = None) -> LLMResult:
         """`model` is the catalog id of the role; `route` names an Otari policy to send instead."""
         raise NotImplementedError
 
@@ -120,12 +129,14 @@ class OtariLLM(LLM):
                               timeout=timeout if timeout is not None else self.http.timeout)
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
-                 timeout=None, route=None):
+                 timeout=None, route=None, guardrails=None):
         if route is None and routing_enabled():
             route = ROUTES.get(model)
         body = {"model": route or model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
         if tools:
             body["tools"] = tools
+        if guardrails:
+            body["guardrails"] = guardrails
         # A policy may put both candidates on Bedrock, which rejects response_format, and Otari then answers
         # 400 all_candidates_rejected. The prompts ask for JSON anyway, so a routed call goes without it.
         if json_mode and not route and model not in self.no_json_mode:
@@ -145,7 +156,12 @@ class OtariLLM(LLM):
                 payload = r.json()
             except ValueError:
                 payload = {}
-            code = code or str(payload.get("code", ""))
+            # a guardrail refusal nests its code: {"detail": {"code": "guardrail_violation", "guardrails": [...]}}
+            detail = payload.get("detail") if isinstance(payload.get("detail"), dict) else {}
+            code = code or str(payload.get("code", "") or detail.get("code", ""))
+            if code == "guardrail_violation":
+                raise GuardrailBlocked(list(detail.get("guardrails") or payload.get("guardrails")
+                                            or [{"profile": "?", "explanation": str(payload)[:200]}]))
             if code in SPEND_CODES:
                 raise SpendLimitReached(code, str(payload.get("detail", ""))[:200])
         r.raise_for_status()
@@ -163,12 +179,24 @@ class OtariLLM(LLM):
             route=route or "",
             served_model=r.headers.get("otari-model", ""),
             attempts=int(r.headers.get("otari-attempt-count", "1") or 1),
+            guardrails=_guardrail_header(r.headers.get("otari-guardrails", "")),
             sources=[src["url"] for call in data.get("otari_tool_calls") or [] if call.get("status") == "completed"
                      for src in call.get("sources") or [] if src.get("url")],
             code_runs=[{"code": call.get("code", ""), "stdout": call.get("stdout", "")}
                        for call in data.get("otari_tool_calls") or []
                        if call.get("type") == "code_execution" and call.get("status") == "completed"],
         )
+
+
+def _guardrail_header(raw: str) -> list[dict]:
+    if not raw:
+        return []
+    try:
+        import json
+        out = json.loads(raw)
+        return out if isinstance(out, list) else [out]
+    except ValueError:
+        return [{"raw": raw[:300]}]
 
 
 def strip_reasoning(text: str) -> str:
@@ -186,7 +214,7 @@ class StubLLM(LLM):
         self.calls: list[tuple[str, list[dict]]] = []
 
     def complete(self, messages, *, model, task, max_tokens=512, temperature=0.0, json_mode=False, tools=None,
-                 timeout=None, route=None):
+                 timeout=None, route=None, guardrails=None):
         self.calls.append((task, messages))
         fn = self.handlers.get(task)
         text = fn(messages) if fn else ""

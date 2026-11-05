@@ -85,3 +85,20 @@ def test_routing_can_be_switched_off(monkeypatch):
     seen = []
     _routing_client(seen).complete([{"role": "user", "content": "x"}], model=L.MODEL_SMART, task="rewrite")
     assert seen == [L.MODEL_SMART]
+
+
+def test_guardrail_refusal_is_typed():
+    def handler(req: httpx.Request) -> httpx.Response:
+        return httpx.Response(403, json={"detail": {"message": "Request blocked by guardrail policy.",
+                                                    "code": "guardrail_violation",
+                                                    "guardrails": [{"profile": "shop-manipulation",
+                                                                    "explanation": "M1: override", "score": 1.0}]}})
+
+    client = L.OtariLLM(api_key="otk_test", http=httpx.Client(transport=httpx.MockTransport(handler)))
+    try:
+        client.complete([{"role": "user", "content": "x"}], model=L.MODEL_SELLER, task="draft",
+                        guardrails=[{"profile": "shop-manipulation", "mode": "block", "url": "https://x"}])
+    except L.GuardrailBlocked as e:
+        assert e.verdicts[0]["profile"] == "shop-manipulation"
+    else:
+        raise AssertionError("no GuardrailBlocked")

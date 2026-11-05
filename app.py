@@ -10,6 +10,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 
+from shopguard import guardrail as gr
 from shopguard.budget import Budget
 from shopguard.facts import make_searcher
 from shopguard.guard import Guard
@@ -33,6 +34,43 @@ budget = Budget(os.getenv("SHOPGUARD_DB", str(ROOT / "shopguard.db")))
 
 
 searcher = make_searcher(llm, cache=budget)
+
+# Our guardrail service, called by Otari's cloud before the seller model sees a customer message.
+# A secret token in the path keeps strangers from spending our guard model: Otari sends a request-body
+# entry's `credential` only for organization mandates (checked 05.11), so the token rides in the URL.
+GUARD_TOKEN = os.getenv("SHOPGUARD_GUARD_TOKEN", "")
+PUBLIC_URL = os.getenv("SHOPGUARD_PUBLIC_URL", "").rstrip("/")
+GUARD_URL = f"{PUBLIC_URL}/guard/{GUARD_TOKEN}" if LIVE and GUARD_TOKEN and PUBLIC_URL.startswith("https://") else ""
+GUARDRAILS = [{"profile": p, "mode": "block", "url": GUARD_URL, "on_unavailable": "monitor"}
+              for p in gr.PROFILES] if GUARD_URL else None
+
+
+class ValidateIn(BaseModel):
+    profile: str
+    input_text: str = Field(max_length=200_000)
+    validate_kwargs: dict = Field(default_factory=dict)
+
+
+def _guard_token_ok(token: str) -> bool:
+    return bool(GUARD_TOKEN) and hmac.compare_digest(token, GUARD_TOKEN)
+
+
+@app.get("/guard/{token}/profiles")
+def guard_profiles(token: str):
+    if not _guard_token_ok(token):
+        raise HTTPException(404)
+    return [{"name": p, "guardrail_name": desc} for p, desc in gr.PROFILES.items()]
+
+
+@app.post("/guard/{token}/validate")
+def guard_validate(token: str, body: ValidateIn):
+    if not _guard_token_ok(token):
+        raise HTTPException(404)
+    try:
+        result = gr.validate(body.profile, body.input_text, llm)
+    except Exception as e:  # an unreachable guard model is an inconclusive verdict, Otari decides what follows
+        result = {"valid": None, "explanation": f"guard model unavailable: {type(e).__name__}", "score": None}
+    return {"profile": body.profile, "result": result}
 
 
 class CheckIn(BaseModel):
@@ -72,6 +110,7 @@ def status(req: Request):
         "live": LIVE,
         "models": {"fast": MODEL_FAST, "smart": MODEL_SMART, "seller": MODEL_SELLER},
         "routes": ROUTES if LIVE and routing_enabled() else {},
+        "guardrails": list(gr.PROFILES) if GUARDRAILS else [],
         "web_check": searcher is not None,
         "judge": is_judge(req),
         "budget": budget.status(),
@@ -89,7 +128,7 @@ def check(body: CheckIn, req: Request):
     who = "judge" if judge else client_ip(req)
     if not budget.allow_request(who, judge=judge):
         raise HTTPException(429, "Too many requests from your address. Try the recorded scenarios or come back in an hour.")
-    guard = Guard(shop, judge_llm if judge else llm, searcher if budget.can_search() else None)
+    guard = Guard(shop, judge_llm if judge else llm, searcher if budget.can_search() else None, guardrails=GUARDRAILS)
     searches_before = getattr(searcher, "calls", 0)
     try:
         result = guard.run(body.message, draft=body.draft or None, persona=body.persona, drill=body.drill)
