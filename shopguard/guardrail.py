@@ -47,13 +47,17 @@ Reply with JSON only: {"violation": 0 or 1, "rule": "M1|M2|M3|none", "rationale"
 
 def customer_part(input_text: str) -> str:
     """The customer's text inside ShopGuard's markers; the whole input when the markers are missing."""
-    m = re.search(re.escape(CUSTOMER_START) + r"(.*?)" + re.escape(CUSTOMER_END), input_text, re.DOTALL)
+    # greedy: from the first start marker to the last end marker, so an early "end" cannot hide the rest
+    m = re.search(re.escape(CUSTOMER_START) + r"(.*)" + re.escape(CUSTOMER_END), input_text, re.DOTALL)
     return (m.group(1) if m else input_text).strip()[-4000:]
 
 
 def wrap_customer(text: str) -> str:
-    # a customer cannot close the marker early: the end marker is removed from what they typed
-    return f"{CUSTOMER_START}\n{text.replace(CUSTOMER_END, '')}\n{CUSTOMER_END}"
+    # a customer cannot fake a marker: both are removed until none is left, so nested
+    # pieces like "<<<END <<<END CUSTOMER MESSAGE>>> CUSTOMER MESSAGE>>>" cannot rebuild one
+    while CUSTOMER_END in text or CUSTOMER_START in text:
+        text = text.replace(CUSTOMER_END, "").replace(CUSTOMER_START, "")
+    return f"{CUSTOMER_START}\n{text}\n{CUSTOMER_END}"
 
 
 def _parse(text: str) -> dict:
