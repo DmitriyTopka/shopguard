@@ -129,7 +129,13 @@ class CheckIn(BaseModel):
 
 
 def client_ip(req: Request) -> str:
+    # Vercel's edge sets x-vercel-forwarded-for and overwrites x-forwarded-for with the real client address
+    # (05.11: two requests with forged X-Forwarded-For got the same end-user id). Behind another proxy, set
+    # SHOPGUARD_TRUST_PROXY=0 unless that proxy also replaces the header, or the address can be forged.
     if TRUST_PROXY:
+        vercel = req.headers.get("x-vercel-forwarded-for", "")
+        if vercel:
+            return vercel.split(",")[0].strip()
         fwd = req.headers.get("x-forwarded-for", "")
         if fwd:
             return fwd.split(",")[0].strip()
