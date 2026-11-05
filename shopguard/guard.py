@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
-from .checks import OK, UNVERIFIED, VIOLATION, Verdict, check_claim
+from .checks import OK, UNVERIFIED, VIOLATION, Verdict, check_claim, policy_spec
 from . import mathcheck
 from .claims import Claim, extract_claims
 from .facts import Searcher, fact_check
@@ -136,7 +136,9 @@ class Guard:
         claims = extract_claims(reply, customer, self.shop, self.llm, log)
         verdicts, web_used, math_used = [], 0, 0
         for c in claims:
-            if c.type == "spec":
+            if c.type == "spec" and policy_spec(c, self.shop):
+                verdicts.append(policy_spec(c, self.shop))
+            elif c.type == "spec":
                 if web and web_used < MAX_WEB_CHECKS:
                     web_used += 1
                     verdicts.append(fact_check(c, self.shop, self.searcher, self.llm, log))
@@ -155,8 +157,9 @@ class Guard:
         if self.mcp_servers:
             # Otari runs the shop-data tools for Super: it looks up what it writes instead of reading a pasted policy
             facts = ("\n\nLook up every price, stock status, installment term and delivery term you write with the "
-                     "shop-data tools (find_product, list_in_stock, get_policy, installment_plan). If the product is "
-                     "out of stock, you may offer an in-stock alternative from list_in_stock.")
+                     "shop-data tools (find_product, list_in_stock, get_policy, installment_plan). Use them only to "
+                     "correct what the draft says: do not add facts the draft did not state, such as the warranty. "
+                     "If the product is out of stock, you may offer an in-stock alternative from list_in_stock.")
         else:
             facts = f"\n\nShop policy for reference:\n{self.shop.policy_text()}"
         def ask(facts_text: str, servers: list[dict] | None):

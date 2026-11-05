@@ -282,3 +282,12 @@ def test_formula_tricks_with_comments_or_names_are_refused():
     assert not mathcheck._involves("21499 + 4299", c, shop)
     c2 = Claim(type="price", text="together 23 298 UAH", value={"amount": 23298}, source="llm", sku="KH-101")
     assert mathcheck._involves("18999 + 4299", c2, shop)
+
+
+def test_warranty_is_a_shop_rule_not_a_web_spec():
+    from shopguard.checks import policy_spec
+    from shopguard.claims import Claim
+    ok = policy_spec(Claim(type="spec", text="гарантія від виробника 12 місяців"), shop)
+    assert ok.status == "ok" and ok.source == "policy"
+    assert policy_spec(Claim(type="spec", text="with a 24-month warranty"), shop).status == "violation"
+    assert policy_spec(Claim(type="spec", text="has Wi-Fi"), shop) is None

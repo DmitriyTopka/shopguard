@@ -5,6 +5,8 @@ facts the shop already has, so code checks them exactly and for free.
 """
 from __future__ import annotations
 
+import re
+
 from dataclasses import dataclass, asdict
 
 from .claims import Claim
@@ -25,6 +27,26 @@ class Verdict:
         d = asdict(self)
         d["claim"] = self.claim.to_dict()
         return d
+
+
+WARRANTY_RX = re.compile(r"warrant|guarantee|гаранті|гаранти", re.IGNORECASE)
+
+
+def policy_spec(c: Claim, shop: Shop) -> Verdict | None:
+    """A "characteristic" that is really a shop rule: the warranty. Checked against policy.json, no web call.
+
+    Found 05.11: the MCP rewrite read get_policy("warranty") and wrote "12-month manufacturer's warranty";
+    as a spec it went unconfirmed in the re-check (no web there) and honest replies were handed off.
+    """
+    pol = shop.policy.get("warranty")
+    if c.type != "spec" or not pol or not WARRANTY_RX.search(c.text):
+        return None
+    months = pol.get("months")
+    said = [int(n) for n in re.findall(r"\d+", c.text)]
+    if not said or said == [months] or set(said) == {months}:
+        return Verdict(c, OK, f"Warranty matches the shop policy: {pol['summary']}", source="policy")
+    return Verdict(c, VIOLATION, f"Warranty of {said[0]} months promised; policy says {months}.",
+                   truth=pol["summary"], source="policy")
 
 
 def check_claim(c: Claim, shop: Shop) -> Verdict:
