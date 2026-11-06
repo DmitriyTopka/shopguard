@@ -158,7 +158,12 @@ class OtariLLM(LLM):
         if guardrails:
             body["guardrails"] = guardrails
         if mcp_servers:
-            body["mcp_servers"] = mcp_servers
+            inline = [s for s in mcp_servers if "url" in s]
+            ids = [s["id"] for s in mcp_servers if "url" not in s and s.get("id")]
+            if inline:
+                body["mcp_servers"] = inline
+            if ids:
+                body["mcp_server_ids"] = ids  # registered under Tools > MCP servers; Otari holds url and token
         if tools or mcp_servers:
             # caps Otari's tool loop: without it one amount check ran code 8 times for $0.08. A rewrite with
             # MCP needs more rounds (product, installment rules, delivery rules, then the answer); past the

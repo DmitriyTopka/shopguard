@@ -87,3 +87,33 @@ def test_forwarded_headers_are_ignored_unless_trusted(monkeypatch):
     monkeypatch.setenv("VERCEL", "1")
     importlib.reload(A)
     assert A.client_ip(R()) == "198.51.100.2"
+
+
+def test_guard_service_with_a_bearer_token(monkeypatch):
+    import importlib
+    monkeypatch.setenv("SHOPGUARD_GUARD_TOKEN", "g0k")
+    import app as A
+    importlib.reload(A)
+    from fastapi.testclient import TestClient
+    c = TestClient(A.app)
+    body = {"profile": "nope", "input_text": "hi"}
+    assert c.post("/guard/validate", json=body).status_code == 401
+    assert c.post("/guard/validate", json=body, headers={"Authorization": "Bearer bad"}).status_code == 401
+    r = c.post("/guard/validate", json=body, headers={"Authorization": "Bearer g0k"})
+    assert r.status_code == 200 and r.json()["result"]["valid"] is None  # unknown profile, no model call
+    assert c.get("/guard/profiles", headers={"Authorization": "Bearer g0k"}).json()[0]["name"] == "shop-manipulation"
+
+
+def test_registered_mcp_server_goes_by_id():
+    import httpx
+    from shopguard import llm as L
+    seen = []
+
+    def handler(req):
+        import json
+        seen.append(json.loads(req.read()))
+        return httpx.Response(200, json={"choices": [{"message": {"content": "ok"}}], "usage": {}})
+
+    c = L.OtariLLM(api_key="otk_test", http=httpx.Client(transport=httpx.MockTransport(handler)))
+    c.complete([{"role": "user", "content": "x"}], model="m", task="rewrite", mcp_servers=[{"id": "abc"}])
+    assert seen[0]["mcp_server_ids"] == ["abc"] and "mcp_servers" not in seen[0]

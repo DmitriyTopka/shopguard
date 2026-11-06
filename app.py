@@ -63,15 +63,23 @@ searcher = make_searcher(llm, cache=budget)
 GUARD_TOKEN = os.getenv("SHOPGUARD_GUARD_TOKEN", "")
 PUBLIC_URL = os.getenv("SHOPGUARD_PUBLIC_URL", "").rstrip("/")
 GUARD_URL = f"{PUBLIC_URL}/guard/{GUARD_TOKEN}" if LIVE and GUARD_TOKEN and PUBLIC_URL.startswith("https://") else ""
+# SHOPGUARD_GUARDRAIL=policy: the guardrail is mandated on the shopguard-seller and shopguard-drill routing
+# policies on otari.ai ("Always check"), so requests carry no guardrail of their own and Otari still runs it.
+GUARDRAIL_MODE = os.getenv("SHOPGUARD_GUARDRAIL", "request")
 GUARDRAILS = [{"profile": p, "mode": "block", "url": GUARD_URL, "on_unavailable": "monitor"}
-              for p in gr.PROFILES] if GUARD_URL else None
+              for p in gr.PROFILES] if GUARD_URL and GUARDRAIL_MODE == "request" else None
 
 
 # shop-data MCP server for Otari's managed loop; Otari sends authorization_token as a Bearer header.
 MCP_TOKEN = os.getenv("SHOPGUARD_MCP_TOKEN", "")
-MCP_SERVERS = [{"name": "shop-data", "url": f"{PUBLIC_URL}/mcp", "authorization_token": MCP_TOKEN,
-                "purpose_hint": "The shop's own catalog and rules: use it for every price, stock, installment and delivery fact."}
-               ] if LIVE and MCP_TOKEN and PUBLIC_URL.startswith("https://") else None
+MCP_SERVER_ID = os.getenv("SHOPGUARD_MCP_SERVER_ID", "")  # shop-data registered under Tools > MCP servers
+if LIVE and MCP_SERVER_ID:
+    MCP_SERVERS = [{"id": MCP_SERVER_ID}]
+elif LIVE and MCP_TOKEN and PUBLIC_URL.startswith("https://"):
+    MCP_SERVERS = [{"name": "shop-data", "url": f"{PUBLIC_URL}/mcp", "authorization_token": MCP_TOKEN,
+                    "purpose_hint": "The shop's own catalog and rules: use it for every price, stock, installment and delivery fact."}]
+else:
+    MCP_SERVERS = None
 
 
 @app.post("/mcp")
@@ -106,6 +114,26 @@ def _guard_token_ok(token: str) -> bool:
     return bool(GUARD_TOKEN) and hmac.compare_digest(token, GUARD_TOKEN)
 
 
+def _guard_bearer_ok(req: Request) -> bool:
+    auth = req.headers.get("authorization", "")
+    return auth.lower().startswith("bearer ") and _guard_token_ok(auth[7:])
+
+
+@app.get("/guard/profiles")
+def guard_profiles_bearer(req: Request):
+    # the organization's guardrail service on otari.ai: Otari sends its stored credential as a Bearer header
+    if not _guard_bearer_ok(req):
+        raise HTTPException(401)
+    return [{"name": p, "guardrail_name": desc} for p, desc in gr.PROFILES.items()]
+
+
+@app.post("/guard/validate")
+def guard_validate_bearer(body: ValidateIn, req: Request):
+    if not _guard_bearer_ok(req):
+        raise HTTPException(401)
+    return _validate(body)
+
+
 @app.get("/guard/{token}/profiles")
 def guard_profiles(token: str):
     if not _guard_token_ok(token):
@@ -117,6 +145,10 @@ def guard_profiles(token: str):
 def guard_validate(token: str, body: ValidateIn):
     if not _guard_token_ok(token):
         raise HTTPException(404)
+    return _validate(body)
+
+
+def _validate(body) -> dict:
     try:
         result = gr.validate(body.profile, body.input_text, llm)
     except Exception as e:  # an unreachable guard model is an inconclusive verdict, Otari decides what follows
@@ -168,7 +200,8 @@ def status(req: Request):
         "models": {"fast": MODEL_FAST, "smart": MODEL_SMART, "seller": MODEL_SELLER},
         "routes": ROUTES if LIVE and routing_enabled() else {},
         "guardrails": list(gr.PROFILES) if GUARDRAILS else [],
-        "mcp": [s["name"] for s in MCP_SERVERS] if MCP_SERVERS else [],
+        "mcp": ["shop-data"] if MCP_SERVERS else [],
+        "guardrail_mode": GUARDRAIL_MODE if GUARD_TOKEN else "off",
         "end_user_budgets": bool(service_llm),
         "web_check": searcher is not None,
         "judge": is_judge(req),
