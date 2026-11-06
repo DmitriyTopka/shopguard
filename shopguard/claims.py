@@ -169,11 +169,12 @@ def _extract_items(reply: str, customer_msg: str, llm: LLM, log: CallLog) -> lis
     return items
 
 
-def extract_claims(reply: str, customer_msg: str, shop: Shop, llm: LLM, log: CallLog) -> list[Claim]:
+def extract_claims(reply: str, customer_msg: str, shop: Shop, llm: LLM, log: CallLog,
+                   prompt_customer: str | None = None) -> list[Claim]:
     claims = [
         Claim(type=i["type"], text=str(i.get("text", "")), product=str(i.get("product", "")),
               value=i.get("value") if isinstance(i.get("value"), dict) else {})
-        for i in _extract_items(reply, customer_msg, llm, log)
+        for i in _extract_items(reply, prompt_customer or customer_msg, llm, log)
     ]
     # attach catalog SKUs; if the reply names no product, fall back to the customer's message
     for c in claims:

@@ -132,8 +132,11 @@ class Guard:
         log.calls.append(res)
         return res.text
 
-    def check(self, reply: str, customer: str, log: CallLog, web: bool = True) -> list[Verdict]:
-        claims = extract_claims(reply, customer, self.shop, self.llm, log)
+    def check(self, reply: str, customer: str, log: CallLog, web: bool = True, mark_customer: bool = False) -> list[Verdict]:
+        # mark_customer: the reply was pasted, so no seller call carried the customer's message to the guardrail;
+        # the extraction call carries it between markers instead, and a workspace mandate judges it there
+        claims = extract_claims(reply, customer, self.shop, self.llm, log,
+                                prompt_customer=gr.wrap_customer(customer) if mark_customer else None)
         verdicts, web_used, math_used = [], 0, 0
         for c in claims:
             if c.type == "spec" and policy_spec(c, self.shop):
@@ -187,6 +190,7 @@ class Guard:
         log = CallLog()
         stages: list[Stage] = []
         t = time.monotonic()
+        pasted = draft is not None
         if draft is None:
             try:
                 draft = self.draft(customer, persona, log, drill=drill)
@@ -203,7 +207,10 @@ class Guard:
         t = time.monotonic()
         handoff = FALLBACK[detect_lang(customer)]
         try:
-            verdicts = self.check(draft, customer, log, web=web)
+            verdicts = self.check(draft, customer, log, web=web, mark_customer=pasted)
+        except GuardrailBlocked as e:
+            stages.append(Stage("guardrail", _ms(t), f"blocked by Otari guardrail: {e}"[:300]))
+            return GuardResult(customer, draft, [], handoff, "blocked", stages=stages, log=log, guardrails=e.verdicts)
         except ExtractionFailed as e:
             # fail closed: a reply whose promises could not be read is never sent unchecked
             stages.append(Stage("check", _ms(t), f"extraction failed: {e}"))
