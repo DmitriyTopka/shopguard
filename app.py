@@ -203,7 +203,7 @@ def status(req: Request):
         "live": LIVE,
         "models": {"fast": MODEL_FAST, "smart": MODEL_SMART, "seller": MODEL_SELLER},
         "routes": ROUTES if LIVE and routing_enabled() else {},
-        "guardrails": list(gr.PROFILES) if GUARDRAILS else [],
+        "guardrails": list(gr.PROFILES) if GUARD_TOKEN and LIVE else [],
         "mcp": ["shop-data"] if MCP_SERVERS else [],
         "guardrail_mode": GUARDRAIL_MODE if GUARD_TOKEN else "off",
         "end_user_budgets": bool(service_llm),
