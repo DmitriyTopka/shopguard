@@ -39,6 +39,9 @@ judge_llm = OtariLLM(api_key=os.environ["OTARI_JUDGE_API_KEY"]) if LIVE and os.g
 # Per-visitor budgets: a service key, and an Otari end user per visitor. Each visitor starts on a small daily
 # budget of its own, judges on a bigger one, and the "tiny budget" demo on one that runs out in a few checks.
 # The guardrail service and the shop-data MCP server keep the plain key above.
+# The guard model is called with a key from a separate workspace (shopguard-guard), outside the mandate,
+# so the guardrail's own calls are not sent back to the guardrail.
+guard_llm = OtariLLM(api_key=os.environ["OTARI_GUARD_API_KEY"]) if LIVE and os.getenv("OTARI_GUARD_API_KEY") else llm
 service_llm = OtariLLM(api_key=os.environ["OTARI_SERVICE_KEY"]) if LIVE and os.getenv("OTARI_SERVICE_KEY") else None
 EU_BUDGETS = {"visitor": os.getenv("SHOPGUARD_EU_VISITOR", ""), "judge": os.getenv("SHOPGUARD_EU_JUDGE", ""),
               "tiny": os.getenv("SHOPGUARD_EU_TINY", "")}
@@ -129,9 +132,10 @@ def guard_profiles_bearer(req: Request):
 
 @app.post("/guard/validate")
 def guard_validate_bearer(body: ValidateIn, req: Request):
+    # the mandate on otari.ai: every request of the Default workspace comes here, the seller call included
     if not _guard_bearer_ok(req):
         raise HTTPException(401)
-    return _validate(body)
+    return _validate(body, require_markers=True)
 
 
 @app.get("/guard/{token}/profiles")
@@ -148,9 +152,9 @@ def guard_validate(token: str, body: ValidateIn):
     return _validate(body)
 
 
-def _validate(body) -> dict:
+def _validate(body, require_markers: bool = False) -> dict:
     try:
-        result = gr.validate(body.profile, body.input_text, llm)
+        result = gr.validate(body.profile, body.input_text, guard_llm, require_markers=require_markers)
     except Exception as e:  # an unreachable guard model is an inconclusive verdict, Otari decides what follows
         result = {"valid": None, "explanation": f"guard model unavailable: {type(e).__name__}", "score": None}
     return {"profile": body.profile, "result": result}

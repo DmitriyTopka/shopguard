@@ -82,7 +82,12 @@ def _parse(text: str) -> dict:
     return next((v for v in verdicts if v["violation"] == 1), verdicts[0])
 
 
-def validate(profile: str, input_text: str, llm: LLM, log: CallLog | None = None) -> dict:
+def has_customer_text(input_text: str) -> bool:
+    return CUSTOMER_START in input_text and CUSTOMER_END in input_text
+
+
+def validate(profile: str, input_text: str, llm: LLM, log: CallLog | None = None,
+             require_markers: bool = False) -> dict:
     """Otari's /validate contract: {"valid": true|false|None, "explanation": str, "score": float|None}.
 
     The guard model answered but gave no readable verdict: that is a refusal (valid=false), because a
@@ -91,6 +96,10 @@ def validate(profile: str, input_text: str, llm: LLM, log: CallLog | None = None
     """
     if profile not in PROFILES:
         return {"valid": None, "explanation": f"unknown profile {profile}", "score": None}
+    if require_markers and not has_customer_text(input_text):
+        # mandated on the whole workspace, Otari also sends ShopGuard's own calls (extraction, checks, rewrite);
+        # only the seller call carries the customer's message between markers, so only it is judged
+        return {"valid": True, "explanation": "no customer message in this request", "score": 0.0}
     text = customer_part(input_text)
     res = llm.complete([{"role": "system", "content": POLICY}, {"role": "user", "content": f"MESSAGE:\n{text}"}],
                        model=GUARD_MODEL, task="guardrail", max_tokens=1200, timeout=12.0)  # it reasons first
