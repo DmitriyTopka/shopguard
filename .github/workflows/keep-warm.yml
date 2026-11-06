@@ -1,0 +1,12 @@
+# Keeps the public demo's serverless function warm while judging runs, so a judge does not wait for a
+# cold start. One GET of /api/status every 10 minutes; no model call, no Otari spend.
+name: keep-warm
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" https://shopguard-otari.vercel.app/api/status

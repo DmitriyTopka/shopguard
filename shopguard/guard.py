@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 
 import httpx
@@ -137,22 +138,33 @@ class Guard:
         # the extraction call carries it between markers instead, and a workspace mandate judges it there
         claims = extract_claims(reply, customer, self.shop, self.llm, log,
                                 prompt_customer=gr.wrap_customer(customer) if mark_customer else None)
-        verdicts, web_used, math_used = [], 0, 0
-        for c in claims:
+        # Plain checks run at once; the slow ones (a web search, a code run) run in parallel, each with its own
+        # call log merged back in claim order, so a reply with two specs waits for one search, not two.
+        verdicts: list = [None] * len(claims)
+        slow: list[tuple[int, CallLog, object]] = []
+        web_used = math_used = 0
+        for i, c in enumerate(claims):
             if c.type == "spec" and policy_spec(c, self.shop):
-                verdicts.append(policy_spec(c, self.shop))
+                verdicts[i] = policy_spec(c, self.shop)
             elif c.type == "spec":
                 if web and web_used < MAX_WEB_CHECKS:
                     web_used += 1
-                    verdicts.append(fact_check(c, self.shop, self.searcher, self.llm, log))
+                    slow.append((i, CallLog(), lambda lg, c=c: fact_check(c, self.shop, self.searcher, self.llm, lg)))
                 else:
-                    verdicts.append(fact_check(c, self.shop, None, self.llm, log))
+                    verdicts[i] = fact_check(c, self.shop, None, self.llm, log)
             else:
                 v = check_claim(c, self.shop)
                 if mathcheck.needs_math(v) and mathcheck.enabled() and math_used < mathcheck.MAX_MATH_CHECKS:
                     math_used += 1
-                    v = mathcheck.math_check(v, reply, self.shop, self.llm, log)
-                verdicts.append(v)
+                    slow.append((i, CallLog(), lambda lg, v=v: mathcheck.math_check(v, reply, self.shop, self.llm, lg)))
+                else:
+                    verdicts[i] = v
+        if slow:
+            with ThreadPoolExecutor(max_workers=len(slow)) as pool:
+                futures = [(i, lg, pool.submit(fn, lg)) for i, lg, fn in slow]
+                for i, lg, fut in futures:
+                    verdicts[i] = fut.result()
+                    log.calls.extend(lg.calls)
         return verdicts
 
     def rewrite(self, customer: str, draft: str, problems: list[Verdict], log: CallLog) -> str:

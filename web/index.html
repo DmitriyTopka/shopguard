@@ -57,6 +57,7 @@ label.opt{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:cen
 h2{font-size:16px;margin:28px 0 8px}
 .how{color:var(--muted);font-size:14px}
 .how ol{padding-left:18px}
+.progress{margin:10px 0;padding:10px 14px;border-radius:8px;background:#eef4f1;color:#234;font-size:14px}
 .hood{margin-top:8px}.hood summary{cursor:pointer}.hood table{border-collapse:collapse;width:100%;margin-top:6px;font-size:13px}
 .hood td{border-top:1px solid #ddd;padding:4px 6px;vertical-align:top}.hood code{font-size:12px}
 .mcp{font-size:12px;color:#355;margin-top:2px}.fb{background:#fff1c2;color:#7a5200;border-radius:4px;padding:0 5px;font-weight:600}
@@ -103,6 +104,7 @@ h2{font-size:16px;margin:28px 0 8px}
     <div class="claims" id="claims"></div>
     <div class="pipe" id="pipe"></div>
   </div>
+  <div class="progress hidden" id="progress"></div>
   <div class="err" id="err"></div>
 
   <h2>How it works</h2>
@@ -187,6 +189,14 @@ $("go").onclick = async () => {
   const message = $("msg").value.trim();
   if(!message) return;
   $("go").disabled = true; $("err").textContent = "";
+  const steps = $("byo").checked
+    ? ["Nemotron Nano reads every promise in the reply", "Plain code checks price, stock, installments and delivery",
+       "Nemotron Super checks specs on the web and sums with code", "Nemotron Super fixes the reply through the shop-data MCP server", "Checking the fixed reply again"]
+    : ["Otari runs ShopGuard's guardrail on the message", "Gemma 3 27B writes the shop bot's reply", "Nemotron Nano reads every promise in the reply",
+       "Plain code checks price, stock, installments and delivery", "Nemotron Super checks specs on the web and fixes the reply if needed"];
+  const t0 = Date.now(), pr = $("progress"); pr.classList.remove("hidden");
+  const tick = () => { const s = Math.floor((Date.now() - t0) / 1000); pr.textContent = `${steps[Math.min(steps.length - 1, Math.floor(s / 3))]}... ${s} s`; };
+  tick(); const timer = setInterval(tick, 500);
   try{
     const body = {message, persona: $("persona").value, drill: $("drill").checked, tiny_budget: $("tiny").checked};
     if($("byo").checked && $("draftIn").value.trim()) body.draft = $("draftIn").value.trim();
@@ -195,7 +205,7 @@ $("go").onclick = async () => {
     if(!res.ok) throw new Error((data.detail || res.statusText) + (data.replay ? " Pick a recorded run below the box." : ""));
     render(data);
   }catch(e){ $("err").textContent = String(e.message || e); }
-  finally{ $("go").disabled = false; loadStatus(); }
+  finally{ clearInterval(timer); pr.classList.add("hidden"); $("go").disabled = false; loadStatus(); }
 };
 async function loadRecorded(){
   try{
