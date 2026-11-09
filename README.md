@@ -17,6 +17,14 @@
 | Budgets | $15 for the organization, $0.50 a day on the demo key | 2:56 |
 | Per-user budgets | tick "tiny budget": Otari stops only this visitor (403, scope `user`) | 2:56 |
 
+**What you will see.** A pasted bot reply with a fake price, 12 payments and same-day dispatch, caught and fixed before it reaches the customer (live run, 9 November):
+
+![ShopGuard fixes a reply with a wrong price, installment plan and delivery promise](docs/img/fixed_reply.png)
+
+And a customer who tells the bot to ignore its rules: Otari calls ShopGuard's guardrail first and refuses the request with 403, so no model ever answers it:
+
+![Otari guardrail blocks a prompt injection before the seller model](docs/img/guardrail_block.png)
+
 **Back to Otari.** 10 issues. For two of them (#2958, #2959) I sent a fix, [mozilla-ai/otari#2965](https://github.com/mozilla-ai/otari/pull/2965). The Otari team confirmed both bugs and fixed them at the source instead, in [mozilla-ai/any-llm#1628](https://github.com/mozilla-ai/any-llm/pull/1628). Details and written feedback: [FEEDBACK.md](FEEDBACK.md).
 
 **Your shop chatbot just promised a discount that does not exist. ShopGuard checks every promise (price, stock, installments, specs) against the shop's data and the web, and fixes the reply before the customer sees it. Open models via Otari.**
@@ -118,6 +126,15 @@ Full rows: `eval/results_live_full_eager.json`, `eval/results_live_full_pushy.js
 - MCP calls in `otari_tool_calls` carry server, tool name and output, but not the arguments the model passed.
 - Web search is off for a new workspace until it is allowed under Tools, Web search; the request fails with 403 "web search is not enabled for this workspace".
 - Keys, budgets and routing policies cannot be created with a workspace key (401 "Invalid master key"); all of ours were made by clicking in the dashboard. The service-key checkbox is at the bottom of Create key, Advanced, and its list of end-user budgets scrolls inside a short box, so new budgets are easy to miss.
+
+## Known limitations
+
+- The shop is made up. KitchenHub's prices, stock and policy are fictional; the product models and their specs are real.
+- `otari_web_search` often returns company pages and finance news instead of product pages, so many spec claims stay unconfirmed and are cut from the reply. A reply checks at most 2 specs on the web.
+- Otari's guardrail sees only the customer's message. The bot's reply is checked by ShopGuard itself, not by an Otari guardrail.
+- The per-IP limit and the daily web-check cap live in SQLite on each Vercel instance, so they are best effort. The hard money limits are the Otari budgets.
+- When the live budget is used up, the demo asks the visitor to pick a recorded run instead. Those runs sit under their own "Recorded runs" label on the page.
+- The independent scorer in `eval/` only knows prices, payment counts and stock, so it under-counts wrong specs and delivery promises.
 
 ## Running it
 
