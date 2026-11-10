@@ -4,7 +4,7 @@
 
 **What it is.** A guard between a shop chatbot and the customer. It checks every promise in a reply (price, stock, installments, delivery, specs) against the shop's data and the web, and fixes the reply before the customer sees it.
 
-**Try it.** [Live demo](https://shopguard-otari.vercel.app): click a scenario, a real check runs through Otari in about 5 seconds. **Watch it.** [2-minute tour in English, my own voice](https://shopguard-otari.vercel.app/tour.mp4) · [full 5-minute video](https://shopguard-otari.vercel.app/demo.mp4) (my own voice in Russian, English subtitles).
+**Try it.** [Live demo](https://shopguard-otari.vercel.app): click a scenario, a real check runs through Otari in about 5 seconds. **Watch it.** [2.5-minute tour in English, my own voice](https://shopguard-otari.vercel.app/tour.mp4) · [full 5-minute video](https://shopguard-otari.vercel.app/demo.mp4) (my own voice in Russian, English subtitles).
 
 | Otari feature | What to look at | In the 5-min video | otari-request-id ([all](EVIDENCE.md)) |
 |---|---|---|---|
