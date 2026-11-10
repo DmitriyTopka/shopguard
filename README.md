@@ -27,7 +27,7 @@ And a customer who tells the bot to ignore its rules: Otari calls ShopGuard's gu
 
 ![Otari guardrail blocks a prompt injection before the seller model](docs/img/guardrail_block.png)
 
-**Back to Otari.** 10 issues. For two of them (#2958, #2959) I sent a fix, [mozilla-ai/otari#2965](https://github.com/mozilla-ai/otari/pull/2965). The Otari team confirmed both bugs and fixed them at the source instead, in [mozilla-ai/any-llm#1628](https://github.com/mozilla-ai/any-llm/pull/1628). Details and written feedback: [FEEDBACK.md](FEEDBACK.md).
+**Back to Otari.** 10 issues. For two of them (#2958, #2959) I sent a fix, [mozilla-ai/otari#2965](https://github.com/mozilla-ai/otari/pull/2965). The Otari team confirmed both bugs and fixed them at the source instead, in [mozilla-ai/any-llm#1628](https://github.com/mozilla-ai/any-llm/pull/1628). Feedback: [a 5-minute video, me on camera over screen recordings](https://shopguard-otari.vercel.app/feedback.mp4) and written, [FEEDBACK.md](FEEDBACK.md).
 
 **Your shop chatbot just promised a discount that does not exist. ShopGuard checks every promise (price, stock, installments, specs) against the shop's data and the web, and fixes the reply before the customer sees it. Open models via Otari.**
 

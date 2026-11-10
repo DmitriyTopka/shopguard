@@ -1,5 +1,7 @@
 # Otari feedback from building ShopGuard
 
+Video version of this feedback, me on camera over screen recordings (4:48): https://shopguard-otari.vercel.app/feedback.mp4
+
 ShopGuard checks what a shop chatbot promises (price, stock, installments, delivery, specs) before the customer reads it. Until this hackathon it had never run on a live model. I moved it to hosted Otari on 30 October 2026 and ran 49 test messages several times. By 5 November the organization had spent $4.14 against its $15 ceiling, all experiments included; the two 49-message runs with every feature on cost $0.31 of it.
 
 ## What I used
