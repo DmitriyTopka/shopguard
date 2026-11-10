@@ -35,7 +35,7 @@ Online shops put LLM bots behind the "chat with us" button, and those bots make 
 
 ShopGuard sits between any shop bot and the customer. Before a reply is sent, every promise in it is checked against the shop's own data and, for product specs, against the open web. Wrong or unconfirmed promises are fixed. If the fix still fails the check, the customer gets a polite hand-off to a manager instead of a lie.
 
-> Built for Mozilla's Developers Wilding: Online hackathon, on the hosted [Otari](https://github.com/mozilla-ai/otari) gateway. Live demo: [shopguard-otari.vercel.app](https://shopguard-otari.vercel.app) · Video (5 min, a screen recording of the live demo with my own voice in Russian and English subtitles): [shopguard-otari.vercel.app/demo.mp4](https://shopguard-otari.vercel.app/demo.mp4) · Issues opened on Otari: [mozilla-ai/otari#2717](https://github.com/mozilla-ai/otari/issues/2717) (fixed by the team on 31 October), [#2954](https://github.com/mozilla-ai/otari/issues/2954) (empty code run reported as completed), [#2955](https://github.com/mozilla-ai/otari/issues/2955) (`credential` on a request-body guardrail is not sent), [#2956](https://github.com/mozilla-ai/otari/issues/2956) (422 past `max_tool_iterations` through a routing policy), [#2957](https://github.com/mozilla-ai/otari/issues/2957) (catalog lists `response_format` for Nano); from two automated test passes on 6 November (docs vs behavior, and one request along paths that should match): [#2958](https://github.com/mozilla-ai/otari/issues/2958), [#2959](https://github.com/mozilla-ai/otari/issues/2959), [#2960](https://github.com/mozilla-ai/otari/issues/2960) (streamed usage and cost), [#2961](https://github.com/mozilla-ai/otari/issues/2961) (`/responses` on Nebius), [#2962](https://github.com/mozilla-ai/otari/issues/2962) (empty ids from Bedrock). Pull request with a fix for #2958 and #2959: [mozilla-ai/otari#2965](https://github.com/mozilla-ai/otari/pull/2965), closed by the team in favor of the same fix made upstream in [mozilla-ai/any-llm#1628](https://github.com/mozilla-ai/any-llm/pull/1628)
+> Built for Mozilla's Developers Wilding: Online hackathon, on the hosted [Otari](https://github.com/mozilla-ai/otari) gateway. Live demo: [shopguard-otari.vercel.app](https://shopguard-otari.vercel.app) · Videos: [2.5-minute tour in English](https://shopguard-otari.vercel.app/tour.mp4), [5-minute demo](https://shopguard-otari.vercel.app/demo.mp4) (my own voice in Russian, English subtitles) · Issues and the PR I opened on Otari: [below](#issues-and-prs-on-otari).
 
 ## How it works
 
@@ -75,7 +75,7 @@ Design choices:
 - A model asked to fix a reply can add a new mistake, so the rewrite goes through the same checks again before it is sent.
 - The `draft` field of the API accepts a reply from a bot you already run, so the guard can sit in front of an existing bot.
 
-## Otari: what we use and how
+## Otari in the code, feature by feature
 
 All model calls go through the hosted gateway at `https://api.otari.ai/api/v1` (`shopguard/llm.py`, class `OtariLLM`). The first commit where Otari came in: [`d0920d9`](https://github.com/DmitriyTopka/shopguard/commit/d0920d9221602e1482c65f4962d40e9424a37123) on branch `otari-hackathon`. Under each result the demo lists every Otari call: the policy it named, the model and provider that answered, fallbacks, guardrail verdicts, MCP calls, code runs and cost.
 
@@ -128,6 +128,10 @@ Full rows: `eval/results_live_full_eager.json`, `eval/results_live_full_pushy.js
 - MCP calls in `otari_tool_calls` carry server, tool name and output, but not the arguments the model passed.
 - Web search is off for a new workspace until it is allowed under Tools, Web search; the request fails with 403 "web search is not enabled for this workspace".
 - Keys, budgets and routing policies cannot be created with a workspace key (401 "Invalid master key"); all of ours were made by clicking in the dashboard. The service-key checkbox is at the bottom of Create key, Advanced, and its list of end-user budgets scrolls inside a short box, so new budgets are easy to miss.
+
+## Issues and PRs on Otari
+
+Issues opened on Otari: [mozilla-ai/otari#2717](https://github.com/mozilla-ai/otari/issues/2717) (fixed by the team on 31 October), [#2954](https://github.com/mozilla-ai/otari/issues/2954) (empty code run reported as completed), [#2955](https://github.com/mozilla-ai/otari/issues/2955) (`credential` on a request-body guardrail is not sent), [#2956](https://github.com/mozilla-ai/otari/issues/2956) (422 past `max_tool_iterations` through a routing policy), [#2957](https://github.com/mozilla-ai/otari/issues/2957) (catalog lists `response_format` for Nano); from two automated test passes on 6 November (docs vs behavior, and one request along paths that should match): [#2958](https://github.com/mozilla-ai/otari/issues/2958), [#2959](https://github.com/mozilla-ai/otari/issues/2959), [#2960](https://github.com/mozilla-ai/otari/issues/2960) (streamed usage and cost), [#2961](https://github.com/mozilla-ai/otari/issues/2961) (`/responses` on Nebius), [#2962](https://github.com/mozilla-ai/otari/issues/2962) (empty ids from Bedrock). Pull request with a fix for #2958 and #2959: [mozilla-ai/otari#2965](https://github.com/mozilla-ai/otari/pull/2965), closed by the team in favor of the same fix made upstream in [mozilla-ai/any-llm#1628](https://github.com/mozilla-ai/any-llm/pull/1628).
 
 ## Known limitations
 
